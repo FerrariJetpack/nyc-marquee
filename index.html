@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marquee — NYC Showtimes, August 2026</title>
+<style>
+  :root{
+    --bg:#f6efdf; --panel:#fdf8ec; --panel2:#efe6cd; --ink:#13275c; --muted:#5b628a;
+    --line:#ddd2b6; --orange:#e85d10; --orange-ink:#c14a08; --blue:#1d4fb8; --blue-ink:#153d92;
+    --yellow:#ffc933; --chip:#ece2c8; --shadow:rgba(19,39,92,.10);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0a1330; --panel:#111d42; --panel2:#16244f; --ink:#f2ecdc; --muted:#95a1c8;
+      --line:#243468; --orange:#ff7a2f; --orange-ink:#ffa068; --blue:#5b83e0; --blue-ink:#8aa8ec;
+      --yellow:#ffd24a; --chip:#1b2a5a; --shadow:rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a1330; --panel:#111d42; --panel2:#16244f; --ink:#f2ecdc; --muted:#95a1c8;
+    --line:#243468; --orange:#ff7a2f; --orange-ink:#ffa068; --blue:#5b83e0; --blue-ink:#8aa8ec;
+    --yellow:#ffd24a; --chip:#1b2a5a; --shadow:rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --bg:#f6efdf; --panel:#fdf8ec; --panel2:#efe6cd; --ink:#13275c; --muted:#5b628a;
+    --line:#ddd2b6; --orange:#e85d10; --orange-ink:#c14a08; --blue:#1d4fb8; --blue-ink:#153d92;
+    --yellow:#ffc933; --chip:#ece2c8; --shadow:rgba(19,39,92,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+    font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .cond{font-family:"Avenir Next Condensed","Arial Narrow","Helvetica Neue Condensed","Roboto Condensed",-apple-system,sans-serif}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-variant-numeric:tabular-nums}
+  .wrap{max-width:1020px;margin:0 auto;padding:0 20px}
+
+  /* ——— header ——— */
+  header{background:var(--panel);border-bottom:4px solid var(--orange);box-shadow:0 4px 0 var(--blue)}
+  .head-in{max-width:1020px;margin:0 auto;padding:22px 20px 18px;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap}
+  .eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:10.5px;color:var(--orange);font-weight:800}
+  h1{margin:6px 0 0;font-size:clamp(30px,5.2vw,50px);line-height:.94;text-transform:uppercase;
+     font-weight:800;color:var(--blue-ink);text-wrap:balance}
+  h1 .hl{background:var(--yellow);color:#13275c;display:inline-block;padding:1px 10px 3px}
+  .headstat{font-size:12px;color:var(--muted);text-align:right;line-height:1.7}
+  .headstat b{color:var(--orange-ink);font-size:15px}
+
+  /* ——— day picker ——— */
+  .picker{padding-top:26px}
+  .ptitle{display:flex;align-items:baseline;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+  .ptitle h2{margin:0;font-size:19px;text-transform:uppercase;letter-spacing:.05em;font-weight:800;color:var(--ink)}
+  .ptitle span{color:var(--muted);font-size:13px}
+  .days{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 12px;scroll-snap-type:x proximity}
+  .days::-webkit-scrollbar{height:7px}
+  .days::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+  .daycard{flex:0 0 auto;min-width:104px;scroll-snap-align:start;cursor:pointer;text-align:left;
+    background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:10px 12px 11px;
+    color:var(--ink);font:inherit;box-shadow:0 1px 2px var(--shadow)}
+  .daycard .dw{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800}
+  .daycard .dn{font-size:30px;font-weight:800;line-height:1.05;letter-spacing:-.01em}
+  .daycard .dc{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .daycard .dc b{color:var(--orange-ink);font-weight:700}
+  .daycard.today{border-color:var(--orange);border-width:2px;padding:9px 11px 10px}
+  .daycard[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 3px 0 var(--blue-ink)}
+  .daycard[aria-pressed=true] .dw,.daycard[aria-pressed=true] .dc{color:#cfdcfb}
+  .daycard[aria-pressed=true] .dc b{color:var(--yellow)}
+  .daycard:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+  .monthbtn{flex:0 0 auto;align-self:stretch;min-width:104px;cursor:pointer;background:transparent;
+    border:1px dashed var(--line);border-radius:5px;color:var(--blue-ink);font:inherit;font-weight:700;
+    font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;padding:10px}
+  .monthbtn[aria-pressed=true]{background:var(--blue);border-style:solid;border-color:var(--blue);color:#fff}
+
+  /* ——— refine ——— */
+  .refine{border:1px solid var(--line);border-radius:5px;background:var(--panel);margin-bottom:26px}
+  .rbar{display:flex;gap:10px;align-items:center;padding:9px 10px}
+  .rbar input[type=search]{flex:1;min-width:0;background:var(--bg);color:var(--ink);
+    border:1px solid var(--line);border-radius:3px;padding:9px 11px;font:inherit;font-size:14px}
+  .rbar input[type=search]:focus{outline:2px solid var(--orange);outline-offset:1px}
+  summary,.rtoggle{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;
+    font:inherit;font-size:12.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    background:transparent;padding:9px 14px;border:2px solid var(--blue);border-radius:3px;
+    color:var(--blue-ink);white-space:nowrap}
+  summary::-webkit-details-marker{display:none}
+  summary:focus-visible,.rtoggle:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+  .caret{transition:transform .18s ease;font-size:10px}
+  details[open] > summary .caret,.rtoggle[aria-expanded=true] .caret{transform:rotate(180deg)}
+  .rtoggle[aria-expanded=true]{background:var(--blue);color:#fff}
+  .badge{background:var(--yellow);color:#13275c;border-radius:10px;padding:1px 7px;font-size:11px}
+  .rpanel{border-top:1px solid var(--line);padding:14px 12px 4px;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .rpanel[hidden]{display:none}
+  .ctl{display:flex;flex-direction:column}
+  .ctl label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;font-weight:700}
+  .ctl select{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:3px;
+    padding:8px 9px;font:inherit;font-size:13.5px}
+  .ctl select:focus{outline:2px solid var(--orange);outline-offset:1px}
+  .presets{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap;padding:2px 0 12px}
+  .preset{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:20px;
+    padding:6px 14px;font-size:12.5px;cursor:pointer;font-weight:700}
+  .preset[aria-pressed=true]{background:var(--yellow);border-color:var(--yellow);color:#13275c}
+  .preset.clear{background:transparent;border-style:dashed;color:var(--muted)}
+
+  /* ——— picks ——— */
+  .picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:30px}
+  .pick{background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--yellow);
+    border-radius:5px;padding:13px 14px 12px;display:flex;flex-direction:column;gap:6px;
+    box-shadow:0 2px 4px var(--shadow)}
+  .why{font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--orange-ink)}
+  .pick .pt{font-size:19px;font-weight:800;text-transform:uppercase;line-height:1.1}
+  .pick .py{color:var(--blue-ink);font-weight:800;font-size:14px;margin-left:5px}
+  .pick .pm{font-size:12.5px;color:var(--muted)}
+  .pick .pm b{color:var(--ink);font-weight:600}
+  .pwhen{font-size:14px;font-weight:800;color:var(--orange-ink)}
+
+  /* ——— schedule ——— */
+  .slot{display:flex;align-items:center;gap:12px;margin:26px 0 10px}
+  .slot .sn{font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--blue-ink)}
+  .slot .sc{font-size:11.5px;color:var(--muted);font-weight:700}
+  .slot .rule{flex:1;height:2px;background:var(--blue);opacity:.2}
+  .rows{display:flex;flex-direction:column;gap:6px}
+  .row{display:grid;grid-template-columns:82px 1fr auto;gap:12px;align-items:center;
+    background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px 12px}
+  .row.ind{border-left:4px solid var(--orange)}
+  .row.maj{border-left:4px solid var(--blue)}
+  .rt{color:var(--orange-ink);font-weight:800;font-size:14.5px}
+  .rtitle{font-weight:800;text-transform:uppercase;font-size:16px}
+  .ryear{color:var(--blue-ink);font-weight:800;font-size:13.5px;margin-left:6px}
+  .rfmt{background:var(--yellow);color:#13275c;font-size:10px;font-weight:800;letter-spacing:.06em;
+    text-transform:uppercase;padding:1px 6px;margin-left:6px;vertical-align:2px}
+  .rsub{color:var(--muted);font-size:12.5px;margin-top:2px}
+  .rsub b{color:var(--ink);font-weight:600}
+  .racts{display:flex;gap:6px}
+  .bsm{text-decoration:none;font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    padding:7px 11px;border-radius:3px;border:2px solid var(--orange);color:var(--orange-ink);white-space:nowrap}
+  .bsm.tix{background:var(--orange);color:#fff}
+  .bsm.tr{border-color:var(--blue);color:var(--blue-ink)}
+  .bsm:hover{filter:brightness(1.08)}
+  .bsm:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+  /* ——— ongoing ——— */
+  .ongwrap{margin-top:32px;border:1px solid var(--line);border-radius:5px;background:var(--panel)}
+  .ongwrap > summary{border:none;border-radius:0;width:100%;justify-content:space-between;
+    padding:13px 15px;color:var(--orange-ink);font-size:13px}
+  .ongwrap[open] > summary{background:transparent;color:var(--orange-ink);border-bottom:1px solid var(--line)}
+  .onggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;padding:14px 15px 16px}
+  .rcard{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:11px 13px;
+    display:flex;flex-direction:column;gap:5px}
+  .rcard.ind{border-left:4px solid var(--orange)}
+  .rcard.maj{border-left:4px solid var(--blue)}
+  .runlbl{font-size:11.5px;color:var(--ink);background:var(--panel);border:1px dashed var(--line);
+    border-radius:2px;padding:3px 8px;display:inline-block}
+
+  /* ——— month grid ——— */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:15px;
+    display:flex;flex-direction:column;gap:8px}
+  .card.ind{border-left:4px solid var(--orange)}
+  .card.maj{border-left:4px solid var(--blue)}
+  .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .film{font-size:18px;font-weight:800;line-height:1.12;text-transform:uppercase}
+  .year{font-size:15px;color:var(--blue-ink);font-weight:800;white-space:nowrap}
+  .dir{color:var(--muted);font-size:12.5px;margin-top:-4px}
+  .meta{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:2px;
+    background:var(--chip);color:var(--muted);font-weight:700}
+  .tag.fmt{background:var(--yellow);color:#13275c}
+  .tag.dist-ind{color:var(--orange-ink)}
+  .tag.dist-maj{color:var(--blue-ink)}
+  .venue{font-size:13px}
+  .series{font-size:12.5px;color:var(--orange-ink);font-style:italic}
+  .times{display:flex;flex-wrap:wrap;gap:5px}
+  .st{font-size:12px;padding:3px 8px;border:1px solid var(--line);border-radius:2px;background:var(--bg)}
+  .st .h{color:var(--muted)}
+  .more{font-size:12px;color:var(--orange-ink);background:none;border:none;cursor:pointer;font-weight:800}
+  .acts{display:flex;gap:8px;margin-top:auto;padding-top:8px;border-top:1px solid var(--line)}
+  .btn{flex:1;text-align:center;text-decoration:none;font-size:12.5px;font-weight:800;letter-spacing:.06em;
+    text-transform:uppercase;padding:8px 6px;border-radius:3px;border:2px solid var(--blue);color:var(--blue-ink)}
+  .btn.tix{background:var(--orange);border-color:var(--orange);color:#fff}
+
+  .empty{padding:50px 20px;text-align:center;color:var(--muted)}
+  .empty b{display:block;font-size:18px;color:var(--ink);margin-bottom:6px}
+  main{padding-bottom:60px}
+  footer{border-top:1px solid var(--line);color:var(--muted);font-size:12px;padding:18px 20px;max-width:1020px;margin:0 auto}
+
+  @media (prefers-reduced-motion: no-preference){
+    .row,.card,.rcard,.pick,.daycard{transition:transform .12s ease,box-shadow .12s ease}
+    .row:hover,.card:hover,.pick:hover{transform:translateY(-1px)}
+    .daycard:hover{transform:translateY(-2px)}
+    #stage{animation:rise .28s ease both}
+    @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  }
+  @media (max-width:620px){
+    .row{grid-template-columns:70px 1fr}
+    .racts{grid-column:1/-1;justify-content:flex-end}
+    .rbar{flex-wrap:wrap}
+    .rbar input[type=search]{flex:1 1 100%}
+  }
+</style>
+
+<header>
+  <div class="head-in">
+    <div>
+      <div class="eyebrow cond">Now Showing · New York City · August 2026</div>
+      <h1 class="cond">Every screen.<br><span class="hl">One marquee.</span></h1>
+    </div>
+    <div class="headstat cond" id="headstat"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="picker">
+    <div class="ptitle">
+      <h2 class="cond">Pick a day</h2>
+      <span id="ptip">Tonight's repertory, revivals and 70mm — all in one place.</span>
+    </div>
+    <div class="days" id="days" role="group" aria-label="Choose a date"></div>
+  </section>
+
+  <div class="refine">
+    <div class="rbar">
+      <input id="q" type="search" placeholder="Search a film, director, theater or series…" aria-label="Search">
+      <button class="rtoggle" id="rtoggle" aria-expanded="false" aria-controls="rpanel">
+        <span>Filters &amp; sort</span><span class="badge" id="fbadge" hidden></span><span class="caret">▼</span></button>
+    </div>
+    <div class="rpanel" id="rpanel" hidden>
+      <div class="ctl"><label for="fTheater">Theater</label>
+        <select id="fTheater"><option value="">All theaters</option></select></div>
+      <div class="ctl"><label for="fGenre">Genre</label>
+        <select id="fGenre"><option value="">All genres</option></select></div>
+      <div class="ctl"><label for="fTime">Time of day</label>
+        <select id="fTime">
+          <option value="">Any time</option>
+          <option value="am">Morning (before noon)</option>
+          <option value="mat">Matinee (12–5)</option>
+          <option value="eve">Evening (5–9)</option>
+          <option value="late">Late night (after 9)</option>
+        </select></div>
+      <div class="ctl"><label for="fDist">Indie or studio</label>
+        <select id="fDist">
+          <option value="">Indie + major</option>
+          <option value="ind">Independent only</option>
+          <option value="maj">Major studio only</option>
+        </select></div>
+      <div class="ctl"><label for="sort">Sort by</label>
+        <select id="sort">
+          <option value="time">Showtime — earliest first</option>
+          <option value="yearAsc">Year — oldest first</option>
+          <option value="yearDesc">Year — newest first</option>
+          <option value="indie">Independent films first</option>
+          <option value="major">Major studio first</option>
+          <option value="title">Title A–Z</option>
+          <option value="theater">Theater A–Z</option>
+        </select></div>
+      <div class="presets">
+        <button class="preset" id="pClassics" aria-pressed="false">Classics — pre-1990</button>
+        <button class="preset" id="pRep" aria-pressed="false">Revivals only</button>
+        <button class="preset" id="p70" aria-pressed="false">70mm &amp; 35mm prints</button>
+        <button class="preset clear" id="pReset">Clear all</button>
+      </div>
+    </div>
+  </div>
+
+  <main id="stage">
+    <div class="picks" id="picks"></div>
+    <div id="schedule"></div>
+    <div class="grid" id="grid"></div>
+    <div id="ongoing"></div>
+    <div class="empty" id="empty" hidden><b>Nothing matches those filters.</b>Loosen one and the marquee lights back up.</div>
+  </main>
+</div>
+
+<footer>
+  Listings compiled Aug 7, 2026 from each theater's published August calendar. Chain multiplexes post exact showtimes about
+  a week out — those entries link straight to the box office. Repertory series marked "dates vary" have
+  day-by-day schedules on the theater's own site. Always confirm before heading out.
+</footer>
+
+<script>
+const THEATERS = {
+  filmforum:{n:"Film Forum",a:"Greenwich Village, Manhattan",t:"ind",u:"https://filmforum.org"},
+  metrograph:{n:"Metrograph",a:"Lower East Side, Manhattan",t:"ind",u:"https://metrograph.com"},
+  ifc:{n:"IFC Center",a:"Greenwich Village, Manhattan",t:"ind",u:"https://www.ifccenter.com"},
+  nitehawkW:{n:"Nitehawk Williamsburg",a:"Williamsburg, Brooklyn",t:"ind",u:"https://nitehawkcinema.com/williamsburg"},
+  nitehawkPP:{n:"Nitehawk Prospect Park",a:"Park Slope, Brooklyn",t:"ind",u:"https://nitehawkcinema.com/prospectpark"},
+  anthology:{n:"Anthology Film Archives",a:"East Village, Manhattan",t:"ind",u:"http://anthologyfilmarchives.org"},
+  bam:{n:"BAM Rose Cinemas",a:"Fort Greene, Brooklyn",t:"ind",u:"https://www.bam.org/film"},
+  quad:{n:"Quad Cinema",a:"Greenwich Village, Manhattan",t:"ind",u:"https://quadcinema.com"},
+  roxy:{n:"Roxy Cinema",a:"Tribeca, Manhattan",t:"ind",u:"https://www.roxycinemanewyork.com"},
+  paris:{n:"Paris Theater",a:"Midtown, Manhattan",t:"ind",u:"https://paristheaternyc.com"},
+  momi:{n:"Museum of the Moving Image",a:"Astoria, Queens",t:"ind",u:"https://movingimage.org"},
+  flc:{n:"Film at Lincoln Center",a:"Upper West Side, Manhattan",t:"ind",u:"https://www.filmlinc.org"},
+  alamoLM:{n:"Alamo Drafthouse Lower Manhattan",a:"Financial District, Manhattan",t:"chain",u:"https://drafthouse.com/nyc"},
+  alamoBK:{n:"Alamo Drafthouse Downtown Brooklyn",a:"Downtown Brooklyn",t:"chain",u:"https://drafthouse.com/nyc"},
+  amcLS:{n:"AMC Lincoln Square 13 (IMAX)",a:"Upper West Side, Manhattan",t:"chain",u:"https://www.amctheatres.com"},
+  amcE:{n:"AMC Empire 25",a:"Times Square, Manhattan",t:"chain",u:"https://www.amctheatres.com"},
+  regalUS:{n:"Regal Union Square",a:"Union Square, Manhattan",t:"chain",u:"https://www.regmovies.com"},
+  angelika:{n:"Angelika Film Center",a:"SoHo, Manhattan",t:"ind",u:"https://angelikafilmcenter.com/nyc"},
+  villageE:{n:"Village East by Angelika",a:"East Village, Manhattan",t:"ind",u:"https://angelikafilmcenter.com/villageeast"}
+};
+
+// F(title, year, director, genres, theaterKey, dist, showings, opts)
+// showings: "day@HHMM,day@HHMM" (24h, Aug 2026) — null when the run has no published times
+// opts: {r:[startDay,endDay(>31 = runs into Sep)], fmt, ser, note}
+const D=[]; function F(t,y,d,g,th,dist,s,o){D.push({t,y,d,g:g.split("/"),th,dist,s,o:o||{}});}
+
+/* ——— METROGRAPH — verified showtimes, Aug 1–15 (back half of month TBA) ——— */
+F("Good Morning",1959,"Yasujirō Ozu","Comedy","metrograph","ind","1@1100,6@1145");
+F("The Triplets of Belleville",2003,"Sylvain Chomet","Animation","metrograph","ind","1@1115");
+F("Stavisky",1974,"Alain Resnais","Drama","metrograph","ind","1@1300");
+F("Sholay",1975,"Ramesh Sippy","Action/Adventure","metrograph","ind","1@1300");
+F("Arabesque",1966,"Stanley Donen","Thriller/Comedy","metrograph","maj","1@1530,3@1545");
+F("Jonah Who Will Be 25 in the Year 2000",1976,"Alain Tanner","Drama","metrograph","ind","1@1700");
+F("L'Argent",1983,"Robert Bresson","Drama","metrograph","ind","1@1745");
+F("The Eight Diagram Pole Fighter",1984,"Lau Kar-leung","Martial Arts/Action","metrograph","ind","1@1935");
+F("The Green Room",1978,"François Truffaut","Drama","metrograph","ind","1@1940");
+F("Wake in Fright",1971,"Ted Kotcheff","Thriller","metrograph","ind","1@2140,5@1415");
+F("Drunken Master II",1994,"Lau Kar-leung","Martial Arts/Comedy","metrograph","ind","1@2145");
+F("Extreme Prejudice",1987,"Walter Hill","Action/Western","metrograph","ind","2@1515");
+F("Before Sunrise",1995,"Richard Linklater","Romance/Drama","metrograph","ind","2@1520");
+F("Fallen Angels",1995,"Wong Kar-wai","Crime/Romance","metrograph","ind","2@1730");
+F("The Hole",1998,"Tsai Ming-liang","Drama/Musical","metrograph","ind","2@1735,7@1340",{fmt:"35mm",note:"Newly struck print"});
+F("Europa",1991,"Lars von Trier","Drama/Thriller","metrograph","ind","2@1935");
+F("Good Time",2017,"Josh & Benny Safdie","Crime/Thriller","metrograph","ind","2@1940");
+F("Angel Heart",1987,"Alan Parker","Horror/Noir","metrograph","ind","2@2150");
+F("Tampopo",1985,"Juzo Itami","Comedy","metrograph","ind","2@2150");
+F("La Haine",1995,"Mathieu Kassovitz","Drama/Crime","metrograph","ind","3@1500");
+F("El Topo",1970,"Alejandro Jodorowsky","Western/Experimental","metrograph","ind","3@1700");
+F("Lebanon in Turmoil + South Lebanon",1975,"Jocelyne Saab","Documentary","metrograph","ind","3@1800");
+F("Linda Linda Linda",2005,"Nobuhiro Yamashita","Comedy/Music","metrograph","ind","3@1930");
+F("3 Women",1977,"Robert Altman","Drama/Mystery","metrograph","ind","3@2150");
+F("Jacob's Ladder",1990,"Adrian Lyne","Horror/Thriller","metrograph","ind","3@2200");
+F("Vertigo",1958,"Alfred Hitchcock","Thriller/Mystery","metrograph","maj","5@1400,7@1100");
+F("Chocolat",1988,"Claire Denis","Drama","metrograph","ind","5@1630,6@1400");
+F("Conversation Piece",1974,"Luchino Visconti","Drama","metrograph","ind","5@1635,7@1845");
+F("Paranoid Park",2007,"Gus Van Sant","Drama","metrograph","ind","5@1840,10@1510");
+F("Collateral",2004,"Michael Mann","Thriller/Crime","metrograph","maj","5@1915");
+F("The Milk of Sorrow",2009,"Claudia Llosa","Drama","metrograph","ind","5@2030,10@1715");
+F("Hannibal",2001,"Ridley Scott","Thriller/Horror","metrograph","maj","5@2200,9@1730");
+F("Scene of the Crime",1986,"André Téchiné","Drama/Crime","metrograph","ind","5@2230,7@2130");
+F("Le amiche",1955,"Michelangelo Antonioni","Drama","metrograph","ind","6@1150,7@1330");
+F("The Warriors",1979,"Walter Hill","Action/Crime","metrograph","maj","6@1350,8@1400");
+F("The Chaser",2008,"Na Hong-jin","Thriller/Crime","metrograph","ind","6@1550,7@2115");
+F("Otar Iosseliani Early Shorts",1958,"Otar Iosseliani","Experimental","metrograph","ind","6@1615,10@1300",{ser:"Otar Iosseliani retrospective"});
+F("First Blood",1982,"Ted Kotcheff","Action","metrograph","ind","6@1825");
+F("The Night Is Short, Walk On Girl",2017,"Masaaki Yuasa","Animation/Romance","metrograph","ind","6@1830");
+F("Girlhood",2014,"Céline Sciamma","Drama","metrograph","ind","6@2025,7@1115");
+F("Dumplings",2004,"Fruit Chan","Horror","metrograph","ind","6@2045");
+F("Millennium Mambo",2001,"Hou Hsiao-hsien","Drama/Romance","metrograph","ind","6@2245");
+F("In the Mood for Love",2000,"Wong Kar-wai","Romance/Drama","metrograph","ind","6@2250,11@1500,14@1500");
+F("The Kid",1921,"Charlie Chaplin","Comedy/Silent","metrograph","ind","7@1540");
+F("Rebecca",1940,"Alfred Hitchcock","Thriller/Romance","metrograph","ind","7@1610");
+F("Favorites of the Moon",1984,"Otar Iosseliani","Comedy","metrograph","ind","7@1700",{ser:"Otar Iosseliani retrospective"});
+F("And Then There Was Light",1989,"Otar Iosseliani","Drama","metrograph","ind","7@1915",{ser:"Otar Iosseliani retrospective"});
+F("Les Bonnes Femmes",1960,"Claude Chabrol","Drama","metrograph","ind","8@1345,10@1930");
+F("La Notte",1962,"Michelangelo Antonioni","Drama","metrograph","ind","8@1550,10@1915,11@1745,14@1745");
+F("Deliverance",1972,"John Boorman","Thriller/Adventure","metrograph","maj","8@1610,9@1510");
+F("Nil by Mouth",1997,"Gary Oldman","Drama","metrograph","ind","8@1820,9@1735");
+F("Walkabout",1971,"Nicolas Roeg","Drama/Adventure","metrograph","ind","8@1830,10@1250");
+F("The Hunger",1983,"Tony Scott","Horror","metrograph","ind","8@2045,10@2150");
+F("Obsession",1976,"Brian De Palma","Thriller/Mystery","metrograph","ind","8@2050,9@2020");
+F("Chungking Express",1994,"Wong Kar-wai","Romance/Comedy","metrograph","ind","8@2250,9@2225,10@2145,11@1245,14@1245");
+F("Irréversible",2002,"Gaspar Noé","Thriller","metrograph","ind","8@2300,9@2230");
+F("The Dark Knight",2008,"Christopher Nolan","Action/Crime","metrograph","maj","9@1200,11@1715,13@1330,14@1715");
+F("A Day in the Country + People on Sunday",1930,"Renoir / Siodmak & Ulmer","Drama/Silent","metrograph","ind","9@1230");
+F("Two by Robb Moss",1991,"Robb Moss","Documentary","metrograph","ind","9@1500");
+F("The Others",2001,"Alejandro Amenábar","Horror/Mystery","metrograph","ind","9@2015,11@1530,14@1530");
+F("Four Adventures of Reinette and Mirabelle",1987,"Éric Rohmer","Comedy/Drama","metrograph","ind","10@1100");
+F("The Jungle Book",1967,"Wolfgang Reitherman","Animation/Family","metrograph","maj","10@1100,13@1100,15@1100");
+F("Falling Leaves",1966,"Otar Iosseliani","Drama","metrograph","ind","10@1500",{ser:"Otar Iosseliani retrospective"});
+F("There Once Was a Singing Blackbird",1969,"Otar Iosseliani","Comedy/Drama","metrograph","ind","10@1700",{ser:"Otar Iosseliani retrospective"});
+F("Withnail and I",1987,"Bruce Robinson","Comedy","metrograph","ind","11@1315,13@1625,14@1315,15@1625");
+F("What Lies Beneath",2000,"Robert Zemeckis","Horror/Thriller","metrograph","maj","11@2015,12@1950,14@2015");
+F("True Romance",1993,"Tony Scott","Crime/Romance","metrograph","maj","11@2030,12@1700,14@2030");
+F("Raw",2016,"Julia Ducournau","Horror","metrograph","ind","11@2250,14@2250");
+F("House (Hausu)",1977,"Nobuhiko Ôbayashi","Horror/Comedy","metrograph","ind","11@2300,14@2300");
+F("When Marnie Was There",2014,"Hiromasa Yonebayashi","Animation/Family","metrograph","ind","12@1200,13@1240,15@1240");
+F("Happy Hour",2015,"Ryusuke Hamaguchi","Drama","metrograph","ind","12@1410");
+F("Days and Nights in the Forest",1970,"Satyajit Ray","Drama","metrograph","ind","12@1430");
+F("Bram Stoker's Dracula",1992,"Francis Ford Coppola","Horror/Romance","metrograph","maj","12@1945,13@1840,15@1840");
+F("Women on the Verge of a Nervous Breakdown",1988,"Pedro Almodóvar","Comedy","metrograph","ind","12@2230");
+F("Spider Baby",1967,"Jack Hill","Horror/Comedy","metrograph","ind","12@2235");
+F("E.T. the Extra-Terrestrial",1982,"Steven Spielberg","Family/Sci-Fi","metrograph","maj","13@1100,15@1100");
+F("Petite Maman",2021,"Céline Sciamma","Drama/Family","metrograph","ind","13@1445,15@1445");
+F("Pastorale",1975,"Otar Iosseliani","Drama","metrograph","ind","13@1630,15@1630",{ser:"Otar Iosseliani retrospective"});
+F("Chasing Butterflies",1992,"Otar Iosseliani","Comedy","metrograph","ind","13@1845,15@1845",{ser:"Otar Iosseliani retrospective"});
+F("In My Skin",2002,"Marina de Van","Horror/Drama","metrograph","ind","13@2115,15@2115");
+F("After Hours",1985,"Martin Scorsese","Comedy/Thriller","metrograph","maj","13@2120,15@2120");
+
+/* ——— FILM FORUM ——— */
+const FFW={note:"Fri–Thu weekly schedule — confirm exact daily times"};
+F("White Nights",1957,"Luchino Visconti","Romance/Drama","filmforum","ind","7@1220,7@1435,7@1650,7@1900,8@1220,8@1435,8@1650,8@1900,9@1220,9@1435,9@1650,9@1900,10@1435,10@1650,10@1900,11@1435,11@1650,12@1435,12@1650,12@1900,13@1435,13@1650",{...FFW,note:"Held over through Aug 13"});
+F("The Third Man",1949,"Carol Reed","Noir/Thriller","filmforum","ind",null,{r:[1,6],fmt:"35mm",note:"Ended Aug 6"});
+F("Sherman's March",1986,"Ross McElwee","Documentary","filmforum","ind","7@1520,7@1840,8@1520,8@1840,9@1520,9@1840,10@1840,11@1840,12@1520,12@1840,13@1520,13@1840",{...FFW,note:"Held over through Aug 13"});
+F("Dread Beat an Blood",1979,"Franco Rosso","Documentary/Music","filmforum","ind","7@2110,8@2110,9@2110,10@2110,11@2110,12@2110,13@2110",FFW);
+F("Remake",2026,"—","Drama","filmforum","ind","7@1250,8@1250,9@1250",{note:"Ends soon"});
+F("The French Connection",1971,"William Friedkin","Crime/Thriller","filmforum","maj","11@1920",{fmt:"35mm",ser:"NYC In Transit"});
+F("Late Fame",2026,"Kent Jones","Drama","filmforum","ind","7@1215,7@1425,7@1640,7@1850,7@2100,8@1215,8@1425,8@1640,8@1850,8@2100,9@1215,9@1425,9@1640,9@1850,10@1215,10@1425,10@1640,10@1850,11@1215,11@1425,11@1640,11@1850,12@1215,12@1425,12@1640,12@1850,13@1215,13@1425,13@1640,13@1850",{...FFW,note:"Q&As with Kent Jones, Willem Dafoe & Edmund Donovan"});
+F("Center Stage",1991,"Stanley Kwan","Drama","filmforum","ind","7@1215,7@1520,7@1830,8@1215,8@1520,8@1830,9@1215,9@1520,9@1830,10@1300,10@1610,10@1920,11@1300,11@1610,12@1300,12@1610,12@1920,13@1300,13@1610,13@1920",{...FFW,note:"New restoration — director conversation, co-presented with NY Asian Film Festival"});
+F("Billy Liar",1963,"John Schlesinger","Comedy/Drama","filmforum","ind",null,{r:[14,20],note:"One week only"});
+F("The Son of the Sheik",1926,"George Fitzmaurice","Silent/Romance","filmforum","ind","23",{fmt:"35mm",note:"Rudolph Valentino centennial screening"});
+const COP={r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"};
+F("The Godfather",1972,"Francis Ford Coppola","Crime/Drama","filmforum","maj",null,COP);
+F("The Godfather Part II",1974,"Francis Ford Coppola","Crime/Drama","filmforum","maj",null,COP);
+F("The Conversation",1974,"Francis Ford Coppola","Thriller/Mystery","filmforum","maj",null,COP);
+F("Apocalypse Now",1979,"Francis Ford Coppola","War/Drama","filmforum","maj",null,COP);
+F("The Rain People",1969,"Francis Ford Coppola","Drama","filmforum","maj",null,COP);
+F("The Outsiders",1983,"Francis Ford Coppola","Drama","filmforum","maj",null,COP);
+F("Rumble Fish",1983,"Francis Ford Coppola","Drama","filmforum","maj",null,COP);
+F("One From the Heart",1981,"Francis Ford Coppola","Musical/Romance","filmforum","maj",null,COP);
+F("Megalopolis",2024,"Francis Ford Coppola","Sci-Fi/Drama","filmforum","ind",null,COP);
+
+/* ——— IFC CENTER ——— */
+F("Manhunter: The Final Cut",1986,"Michael Mann","Thriller/Crime","ifc","ind",null,{r:[1,6],note:"With special introductions"});
+F("Heat",1995,"Michael Mann","Crime/Thriller","ifc","maj",null,{r:[1,2],note:"Final days"});
+F("Thief",1981,"Michael Mann","Crime/Noir","ifc","maj",null,{r:[1,2],ser:"Waverly Midnights",note:"Midnight screenings"});
+F("CatVideoFest 2026",2026,"Will Braden","Documentary/Family","ifc","ind",null,{r:[8,14]});
+F("Train to Busan",2016,"Yeon Sang-ho","Horror/Action","ifc","ind",null,{r:[14,20],note:"10th-anniversary revival"});
+F("Mysterious Skin",2004,"Gregg Araki","Drama","ifc","ind",null,{r:[14,20],note:"Revival run"});
+F("Gandahar",1987,"René Laloux","Animation/Sci-Fi","ifc","ind",null,{r:[28,34],note:"Revival run"});
+F("The Samurai and the Prisoner",2026,"Kiyoshi Kurosawa","Drama","ifc","ind",null,{r:[1,13],note:"Director in person opening weekend"});
+F("Maddie's Secret",2026,"John Early","Comedy","ifc","ind",null,{r:[1,13]});
+F("The Big Cheese",2026,"—","Comedy","ifc","ind",null,{r:[7,20],note:"Opens Aug 7"});
+F("It Ends",2026,"Alexander Ullom","Horror/Thriller","ifc","ind",null,{r:[21,34],note:"Opens Aug 21"});
+F("The Fence",2026,"Claire Denis","Drama","ifc","ind",null,{r:[7,20],note:"Opens Aug 7"});
+F("Wild Inside",2026,"Penny Lane","Documentary","ifc","ind",null,{r:[1,13],note:"Flaco the owl documentary — director Q&As"});
+F("Julian",2026,"Cato Kusters","Drama","ifc","ind",null,{r:[1,13],note:"Director Q&As Aug 7–8"});
+F("A Child of My Own",2026,"—","Drama","ifc","ind",null,{r:[7,20]});
+F("Union County",2026,"—","Drama","ifc","ind",null,{r:[14,20],note:"Sneak preview + cast Q&A Aug 13"});
+F("How to Divorce During the War",2026,"—","Documentary","ifc","ind",null,{r:[21,34],note:"Opens Aug 21"});
+F("Crows Are White",2026,"—","Documentary","ifc","ind",null,{r:[26,34],note:"Opens Aug 26"});
+F("Colony",2026,"—","Documentary","ifc","ind",null,{r:[28,34],note:"Opens Aug 28"});
+
+/* ——— NITEHAWK ——— */
+F("Welcome to the Dollhouse",1995,"Todd Solondz","Comedy/Drama","nitehawkW","ind",null,{r:[1,2],ser:"Weekend brunch",note:"Brunch screenings, Aug 1–2"});
+F("Orphan",2009,"Jaume Collet-Serra","Horror/Thriller","nitehawkW","ind",null,{r:[1,2],ser:"Midnite",note:"Late-night screenings"});
+F("Blue Heron",2025,"Sophy Romvari","Drama","nitehawkW","ind",null,{r:[1,2]});
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","nitehawkW","maj",null,{r:[1,31],note:"Multiple showtimes daily"});
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","nitehawkW","maj",null,{r:[1,31],note:"Multiple showtimes daily"});
+F("The Invite",2026,"—","Horror/Thriller","nitehawkW","ind",null,{r:[1,14],note:"With themed food & drink specials"});
+F("Talladega Nights",2006,"Adam McKay","Comedy","nitehawkPP","maj",null,{r:[1,2],ser:"Weekend brunch",note:"Brunch screenings, Aug 1–2"});
+F("Space Jam",1996,"Joe Pytka","Family/Comedy","nitehawkPP","maj",null,{r:[1,2],ser:"Weekend brunch",note:"Brunch screenings, Aug 1–2"});
+F("Her Private Hell",1968,"Norman J. Warren","Drama/Cult","nitehawkPP","ind",null,{r:[1,6],note:"Late-slot revival"});
+F("Moana",2026,"Thomas Kail","Family/Adventure","nitehawkPP","maj",null,{r:[1,31],note:"All-ages screenings daily"});
+F("I Want Your Sex",2026,"Gregg Araki","Comedy/Thriller","nitehawkPP","ind",null,{r:[1,14]});
+
+/* ——— ANTHOLOGY FILM ARCHIVES ——— */
+F("City Lights",1931,"Charlie Chaplin","Comedy/Silent","anthology","ind",null,{r:[1,9],ser:"Essential Cinema"});
+F("The Gold Rush",1925,"Charlie Chaplin","Comedy/Silent","anthology","ind",null,{r:[1,9],ser:"Essential Cinema"});
+F("Beauty and the Beast",1946,"Jean Cocteau","Fantasy/Romance","anthology","ind","7@2015,8@2030,9@1800",{ser:"Jean Cocteau retrospective"});
+F("The Blood of a Poet",1930,"Jean Cocteau","Experimental/Fantasy","anthology","ind","7@1830",{ser:"Jean Cocteau retrospective"});
+F("Orpheus",1950,"Jean Cocteau","Fantasy/Drama","anthology","ind","8@1800,9@2030",{ser:"Jean Cocteau retrospective"});
+F("The Shooting",1966,"Monte Hellman","Western","anthology","ind","7@1845",{ser:"Experimental Westerns, Part 2"});
+F("Time to Die",1966,"Arturo Ripstein","Western/Drama","anthology","ind","7@2100,11@1845",{ser:"Experimental Westerns, Part 2"});
+F("Nobody Wanted to Die",1966,"Vytautas Žalakevičius","Western/Drama","anthology","ind","8@1600,12@1830",{ser:"Experimental Westerns, Part 2"});
+F("The Belle Starr Story",1968,"Lina Wertmüller","Western","anthology","ind","12@2100",{ser:"Experimental Westerns, Part 2"});
+F("Little Peach (Anzukko)",1958,"Mikio Naruse","Drama","anthology","ind","13@1900",{ser:"Kyoko Kagawa rarities"});
+F("The Salamander",1971,"Alain Tanner","Drama/Comedy","anthology","ind",null,{r:[1,4],note:"Aug 1 & 4"});
+F("Marcel Duchamp: Ready-Made Films",1926,"Marcel Duchamp & others","Experimental","anthology","ind",null,{r:[1,9],ser:"Duchamp series"});
+F("Black God, White Devil",1964,"Glauber Rocha","Drama/Western","anthology","ind",null,{r:[13,16]});
+F("Lemonade Joe",1964,"Oldřich Lipský","Comedy/Western","anthology","ind",null,{r:[13,16],ser:"Westerns series"});
+F("Queen of Thursdays",2026,"—","Documentary","anthology","ind",null,{r:[13,16],note:"Premiere run"});
+F("Dead Man",1995,"Jim Jarmusch","Western/Drama","anthology","ind",null,{r:[22,31],ser:"Westerns series"});
+F("Meek's Cutoff",2010,"Kelly Reichardt","Western/Drama","anthology","ind",null,{r:[22,31],ser:"Westerns series"});
+F("The Ballad of Little Jo",1993,"Maggie Greenwald","Western/Drama","anthology","ind",null,{r:[22,31],ser:"Westerns series"});
+F("Maya Deren Program",1943,"Maya Deren","Experimental","anthology","ind",null,{r:[27,31],ser:"Essential Cinema"});
+F("Ganz + Streeter",2026,"Ganz & Streeter","Experimental/Documentary","anthology","ind",null,{r:[28,31],note:"Filmmakers in person Aug 28–29"});
+
+/* ——— BAM ——— */
+F("Welcome II the Terrordome",1995,"Ngozi Onwurah","Sci-Fi/Drama","bam","ind",null,{r:[1,6]});
+F("The Samurai and the Prisoner",2026,"Kiyoshi Kurosawa","Drama","bam","ind",null,{r:[6,31],note:"Opens Aug 6"});
+F("Teenage Sex and Death at Camp Miasma",2026,"Jane Schoenbrun","Horror/Comedy","bam","ind",null,{r:[13,31],note:"Opens Aug 13"});
+F("Rites of Cinema: António Reis & Margarida Cordeiro",1976,"Reis & Cordeiro","Drama/Documentary","bam","ind",null,{r:[7,13],ser:"Series — newly restored prints",note:"Full lineup on site"});
+F("High and Low",1963,"Akira Kurosawa","Crime/Drama","bam","ind",null,{r:[14,20],ser:"Summer in Japan",note:"Dates vary — see site"});
+F("Summer Wars",2009,"Mamoru Hosoda","Animation/Sci-Fi","bam","ind",null,{r:[14,20],ser:"Summer in Japan",note:"Dates vary — see site"});
+F("Casting Blossoms to the Sky",2012,"Nobuhiko Ôbayashi","Drama","bam","ind",null,{r:[14,20],ser:"Summer in Japan",note:"Dates vary — see site"});
+F("The Island Closest to Heaven",1984,"Nobuhiko Ôbayashi","Drama","bam","ind",null,{r:[14,20],ser:"Summer in Japan",note:"Dates vary — see site"});
+F("Arthouse Sci-Fi (series)",1972,"Godard, Tarkovsky, Cronenberg…","Sci-Fi/Classics","bam","ind",null,{r:[21,27],ser:"Series",note:"Full lineup on site"});
+F("Kino Canines (series)",1974,"Various","Family/Classics","bam","ind",null,{r:[28,34],ser:"Dogs on film through cinema history",note:"Full lineup on site"});
+
+/* ——— QUAD ——— */
+F("The Asphalt Jungle",1950,"John Huston","Noir/Crime","quad","maj","4@2005,5@2005",{ser:"John Huston: Hollywood Maverick"});
+F("John Huston: Hollywood Maverick (series)",1948,"John Huston","Classics/Noir","quad","ind",null,{r:[4,27],ser:"Retrospective, Aug 4–27",note:"Full lineup on site"});
+F("Dark Continent: The Films of Agnieszka Holland",1990,"Agnieszka Holland","Drama","quad","ind",null,{r:[17,19],ser:"Retrospective"});
+F("The Rocky Horror Picture Show",1975,"Jim Sharman","Musical/Cult","quad","ind",null,{r:[1,31],note:"Late-night participation screenings"});
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","quad","maj",null,{r:[1,14],fmt:"35mm",note:"35mm engagement"});
+F("A Sad and Beautiful World",2025,"Cyril Aris","Drama/Romance","quad","ind",null,{r:[1,13]});
+
+/* ——— ROXY ——— */
+F("Bigger Than Life",1956,"Nicholas Ray","Drama","roxy","ind","1@1500",{fmt:"35mm"});
+F("Rebel Without a Cause",1955,"Nicholas Ray","Drama","roxy","maj","1@1700,8@1630",{fmt:"35mm"});
+F("The Ember Knight Show",2026,"—","Comedy","roxy","ind","1@1915",{note:"With Q&A"});
+F("Crocodile Dose",2026,"—","Experimental","roxy","ind","1@2100",{note:"With Q&A"});
+F("Rose of Nevada",2025,"Mark Jenkin","Mystery/Drama","roxy","ind","2@1230",{fmt:"35mm"});
+F("Peculiar Puppets",2026,"—","Documentary/Family","roxy","ind","2@1500",{fmt:"16mm"});
+F("Party Girl",1995,"Daisy von Scherler Mayer","Comedy","roxy","ind","2@1730",{fmt:"35mm"});
+F("A. Rimbaud",2025,"—","Documentary","roxy","ind","2@1930,30@1330");
+F("No Picnic",1987,"Philip Hartman","Drama","roxy","ind","3@1900",{fmt:"4K restoration",note:"With Q&A"});
+F("The Piano",1993,"Jane Campion","Drama/Romance","roxy","ind","3@2115,8@1400,9@1500",{fmt:"4K restoration"});
+F("American Movie",1999,"Chris Smith","Documentary/Comedy","roxy","ind","4@1900,7@1700",{fmt:"35mm",note:"Aug 4 with Q&A"});
+F("Obsession",1976,"Brian De Palma","Thriller/Mystery","roxy","ind","4@2200,12@2130");
+F("Characters Disappearing",2026,"—","Drama","roxy","ind","5@1900,19@1900");
+F("After Dark, My Sweet",1990,"James Foley","Noir/Crime","roxy","ind","5@2130,6@1900",{fmt:"35mm",note:"With Q&A"});
+F("The Invite",2026,"—","Horror/Thriller","roxy","ind","6@1645,8@1900,9@1730,10@2115,13@1645");
+F("Barrio Triste",2025,"Stillz","Horror/Drama","roxy","ind","6@2145,11@2130,13@2130,15@1430");
+F("The Fountain",2006,"Darren Aronofsky","Sci-Fi/Romance","roxy","maj","7@1900,16@1715",{fmt:"35mm"});
+F("In the Glow of Darkness",2026,"—","Drama","roxy","ind","7@2130",{note:"With Q&A"});
+F("Uncut Gems",2019,"Josh & Benny Safdie","Crime/Thriller","roxy","ind","8@2115",{fmt:"35mm"});
+F("Black Book",2006,"Paul Verhoeven","War/Thriller","roxy","ind","9@1945,12@1845,15@1630",{fmt:"35mm"});
+F("Disclosure Day",2026,"—","Sci-Fi","roxy","ind","10@1830,14@1600");
+F("Session 9",2001,"Brad Anderson","Horror","roxy","ind","11@1900",{note:"With Q&A"});
+F("Gail Daughtry and the Celebrity Sex Pass",2026,"—","Comedy","roxy","ind","14@1900,15@1930,18@2130,20@1630,21@1700");
+F("Dead Souls",2026,"—","Drama","roxy","ind","14@2100,17@2100,19@2115,20@1900");
+F("Magic Lanterns 2",2026,"—","Experimental","roxy","ind","15@2145");
+F("54: The Director's Cut",1998,"Mark Christopher","Drama/Music","roxy","ind","16@1500,20@2100,23@1900",{note:"With Q&A"});
+F("Incorrectional: A Memorial Service",2026,"—","Documentary","roxy","ind","16@1930");
+F("Crank",2006,"Neveldine/Taylor","Action","roxy","ind","17@1900,21@2130,22@1630,23@1700",{fmt:"35mm"});
+F("Click",2006,"Frank Coraci","Comedy","roxy","maj","18@1900,22@1400,23@1445",{fmt:"35mm"});
+F("Lockjaw",2025,"—","Horror","roxy","ind","21@1900,22@2130",{note:"With Q&A"});
+F("In the Hand of Dante",2025,"Julian Schnabel","Drama","roxy","ind","22@1830,28@1615");
+F("The Wind That Shakes the Barley",2006,"Ken Loach","War/Drama","roxy","ind","24@1900,29@1430",{fmt:"35mm"});
+F("Maddie's Secret",2026,"John Early","Comedy","roxy","ind","24@2130,26@2145,27@1900");
+F("When We Saw Each Other More Often",2026,"—","Drama","roxy","ind","25@1900,30@1700",{note:"With Q&A"});
+F("The Black Dahlia",2006,"Brian De Palma","Noir/Crime","roxy","maj","25@2130,28@1915",{fmt:"35mm"});
+F("In the Family",2011,"Patrick Wang","Drama","roxy","ind","26@1800",{fmt:"35mm",note:"With Q&A"});
+F("I Want Your Sex",2026,"Gregg Araki","Comedy/Thriller","roxy","ind","28@2145,29@1945,30@2000");
+F("The Lake House",2006,"Alejandro Agresti","Romance/Fantasy","roxy","maj","31@1900",{fmt:"35mm"});
+F("The Straight Story",1999,"David Lynch","Drama","roxy","ind","31@2100",{fmt:"35mm"});
+F("Her Private Hell",1968,"Norman J. Warren","Drama/Cult","roxy","ind","28@1700");
+F("City Dudes",2026,"—","Comedy","roxy","ind","29@2145");
+
+/* ——— PARIS THEATER — Big & Loud, Aug 21–Sep 15 ——— */
+const BL={r:[21,46],ser:"Big & Loud 2026 — Aug 21–Sep 15",note:"Dates vary — 43-film series, Sofia Coppola & Isabella Rossellini Q&As"};
+F("West Side Story",1961,"Wise & Robbins","Musical/Romance","paris","maj",null,{...BL,fmt:"70mm"});
+F("The Sound of Music",1965,"Robert Wise","Musical/Family","paris","maj",null,{...BL,fmt:"70mm"});
+F("Aliens",1986,"James Cameron","Sci-Fi/Action","paris","maj",null,{...BL,fmt:"70mm"});
+F("Batman",1989,"Tim Burton","Action/Superhero","paris","maj",null,{...BL,fmt:"70mm"});
+F("One From the Heart",1981,"Francis Ford Coppola","Musical/Romance","paris","maj",null,{...BL,fmt:"70mm",note:"First-ever NYC 70mm screening"});
+F("The Razor's Edge",1984,"John Byrum","Drama","paris","maj",null,{...BL,fmt:"70mm",note:"First NYC 70mm showing in 40+ years"});
+F("White Nights",1985,"Taylor Hackford","Drama/Music","paris","maj",null,{...BL,fmt:"70mm",note:"First NYC 70mm showing in 40+ years"});
+F("Inherent Vice",2014,"Paul Thomas Anderson","Comedy/Noir","paris","maj",null,{...BL,fmt:"70mm"});
+F("The Master",2012,"Paul Thomas Anderson","Drama","paris","ind",null,{...BL,fmt:"70mm"});
+F("Babylon",2022,"Damien Chazelle","Drama/Comedy","paris","maj",null,{...BL,fmt:"70mm"});
+F("Kill Bill: The Whole Bloody Affair",2011,"Quentin Tarantino","Action/Martial Arts","paris","ind",null,BL);
+F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","paris","maj",null,{...BL,fmt:"70mm"});
+F("2001: A Space Odyssey",1968,"Stanley Kubrick","Sci-Fi","paris","maj",null,{...BL,fmt:"70mm"});
+F("Vertigo",1958,"Alfred Hitchcock","Thriller/Mystery","paris","maj",null,{...BL,fmt:"70mm"});
+F("Spartacus",1960,"Stanley Kubrick","Drama/Adventure","paris","maj",null,{...BL,fmt:"70mm"});
+F("Boogie Nights",1997,"Paul Thomas Anderson","Drama","paris","maj",null,{...BL,fmt:"70mm"});
+F("Once Upon a Time in Hollywood",2019,"Quentin Tarantino","Comedy/Drama","paris","maj",null,{...BL,fmt:"70mm"});
+F("Marie Antoinette",2006,"Sofia Coppola","Drama","paris","ind",null,{...BL,fmt:"4K restoration",note:"20th-anniversary restoration — Sofia Coppola Q&A"});
+F("New York, New York",1977,"Martin Scorsese","Musical/Drama","paris","maj",null,{...BL,fmt:"4K restoration",note:"East Coast restoration premiere"});
+F("Panic Room",2002,"David Fincher","Thriller","paris","maj",null,{...BL,fmt:"4K restoration",note:"NY restoration premiere"});
+F("Morvern Callar",2002,"Lynne Ramsay","Drama","paris","ind",null,{...BL,fmt:"35mm"});
+F("Elevator to the Gallows",1958,"Louis Malle","Crime/Noir","paris","ind",null,{...BL,fmt:"35mm"});
+F("Sorcerer",1977,"William Friedkin","Thriller","paris","maj",null,{...BL,note:"Restored"});
+F("Heat",1995,"Michael Mann","Crime/Thriller","paris","maj",null,{...BL,note:"Restored"});
+F("Fight Club",1999,"David Fincher","Drama","paris","maj",null,{...BL,note:"Restored"});
+F("Sweet Charity",1969,"Bob Fosse","Musical","paris","maj",null,{...BL,note:"Restored roadshow version"});
+F("All That Jazz",1979,"Bob Fosse","Musical/Drama","paris","maj",null,BL);
+F("Die Hard",1988,"John McTiernan","Action","paris","maj",null,BL);
+F("Phantom of the Paradise",1974,"Brian De Palma","Musical/Horror","paris","ind",null,BL);
+F("Speed Racer",2008,"The Wachowskis","Action/Sci-Fi","paris","maj",null,BL);
+F("Josie and the Pussycats",2001,"Kaplan & Elfont","Comedy/Music","paris","maj",null,BL);
+F("Alice in Wonderland",1951,"Clyde Geronimi","Animation/Family","paris","maj",null,{...BL,note:"Restored"});
+
+/* ——— MoMI — See It Big: 70mm, Jul 31–Aug 30 ——— */
+const SIB={r:[1,30],ser:"See It Big: 70mm",note:"Select dates — see calendar"};
+F("2001: A Space Odyssey",1968,"Stanley Kubrick","Sci-Fi","momi","maj",null,{...SIB,fmt:"70mm"});
+F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","momi","maj",null,{...SIB,fmt:"70mm"});
+F("Amadeus",1984,"Miloš Forman","Drama/Music","momi","maj",null,{...SIB,fmt:"70mm",note:"Producer Paul Zaentz in person Aug 9"});
+F("Hamlet",1996,"Kenneth Branagh","Drama","momi","maj",null,{...SIB,fmt:"70mm"});
+F("The Untouchables",1987,"Brian De Palma","Crime/Drama","momi","maj",null,{...SIB,fmt:"70mm"});
+F("It's a Mad, Mad, Mad, Mad World",1963,"Stanley Kramer","Comedy","momi","maj",null,{...SIB,fmt:"70mm"});
+F("Summer of Sound: Dolby Atmos (series)",2013,"Various","Classics/Music","momi","ind",null,{r:[1,29],ser:"Saturdays through Aug 29",note:"Full lineup on site"});
+
+/* ——— FILM AT LINCOLN CENTER ——— */
+F("Late Fame",2026,"Kent Jones","Drama","flc","ind",null,{r:[7,20],note:"Opens Aug 7"});
+F("Scary Movies (festival)",2026,"Various","Horror","flc","ind",null,{r:[12,20],ser:"16 new films + classic rediscoveries",note:"Full lineup on site"});
+F("Marketa Lazarová",1967,"František Vláčil","Drama/Classics","flc","ind",null,{r:[1,13],note:"Summer restoration run — select dates"});
+
+/* ——— CHAINS & FIRST-RUN HOUSES ——— */
+const DAILY={r:[1,31],note:"Multiple showtimes daily — exact times post ~1 week out"};
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","amcLS","maj",null,{...DAILY,fmt:"IMAX 70mm"});
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcLS","maj",null,DAILY);
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcE","maj",null,DAILY);
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","amcE","maj",null,DAILY);
+F("Moana",2026,"Thomas Kail","Family/Adventure","amcE","maj",null,DAILY);
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","regalUS","maj",null,DAILY);
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","regalUS","maj",null,DAILY);
+F("Moana",2026,"Thomas Kail","Family/Adventure","regalUS","maj",null,DAILY);
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","alamoLM","maj",null,DAILY);
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","alamoBK","maj",null,DAILY);
+F("A Sad and Beautiful World",2025,"Cyril Aris","Drama/Romance","angelika","ind",null,{r:[1,13]});
+F("The Floaters",2025,"—","Comedy","angelika","ind",null,{r:[1,13]});
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","villageE","maj",null,DAILY);
+F("Cookie Queens",2026,"Alysa Nahmias","Documentary","angelika","ind",null,{r:[7,20],note:"Opens Aug 7 — Q&A after opening-night 7:00 show"});
+F("The Furious",2026,"Kenji Tanigaki","Action/Thriller","nitehawkW","ind",null,{r:[7,20],note:"Dates vary — see site"});
+F("Tony",2026,"Matt Johnson","Biography/Comedy","nitehawkW","ind",null,{r:[7,20],note:"Dates vary — see site"});
+F("Teenage Sex and Death at Camp Miasma",2026,"Jane Schoenbrun","Horror/Comedy","nitehawkW","ind",null,{r:[7,20],note:"Cannes Queer Palm winner"});
+F("Wuthering Heights",2026,"Emerald Fennell","Drama/Romance","nitehawkPP","maj",null,{r:[7,20],note:"Multiple showtimes daily"});
+F("Evil Dead Burn",2026,"Sébastien Vaniček","Horror","amcE","maj",null,DAILY);
+F("Ice Cream Man",2026,"Eli Roth","Horror","amcE","maj",null,{r:[7,31],note:"Opens Aug 7 — multiple showtimes daily"});
+F("One Night Only",2026,"Will Gluck","Romance/Comedy","regalUS","maj",null,{r:[7,31],note:"Opens Aug 7 — multiple showtimes daily"});
+F("Super Troopers 3",2026,"Jay Chandrasekhar","Comedy","alamoBK","maj",null,DAILY);
+F("Minions & Monsters",2026,"—","Animation/Family","alamoLM","maj",null,DAILY);
+F("First Man",2018,"Damien Chazelle","Drama/Biography","momi","maj","8@1230",{note:"Dolby Atmos presentation"});
+F("CatVideoFest 2026",2026,"Will Braden","Documentary/Family","momi","ind","8@1300,9@1300");
+
+/* ————— app ————— */
+const DOWS=["Sat","Sun","Mon","Tue","Wed","Thu","Fri"];
+const DOWL=["Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"];
+function dow(d){return DOWS[(d-1)%7];}
+function dowFull(d){return DOWL[(d-1)%7];}
+function parseShow(s){ if(!s) return [];
+  return s.split(",").map(x=>{const[d,t]=x.split("@");
+    return {d:+d,t:t?(+t.slice(0,-2)*60 + +t.slice(-2)):null};});}
+function fmtT(m){ if(m==null) return "";
+  let h=Math.floor(m/60),n=m%60,ap=h>=12?"PM":"AM"; h=h%12||12;
+  return h+":"+String(n).padStart(2,"0")+" "+ap;}
+function bucket(m){ if(m<720)return"am"; if(m<1020)return"mat"; if(m<1260)return"eve"; return"late";}
+const SLOTS=[["am","Morning"],["mat","Matinee"],["eve","Evening"],["late","Late night"]];
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+
+D.forEach(f=>{ f.shows=parseShow(f.s); f.r=f.o.r||null;
+  f.tr="https://www.youtube.com/results?search_query="+encodeURIComponent(f.t+" "+(f.y<2025?f.y+" ":"")+"trailer");
+  f.tk=THEATERS[f.th].u;});
+
+const _now=new Date();
+const TD=(_now.getFullYear()===2026&&_now.getMonth()===7)?_now.getDate():(_now<new Date(2026,7,1)?1:31);
+
+const $=id=>document.getElementById(id);
+const state={q:"",theater:"",genre:"",time:"",dist:"",sort:"time",
+  day:TD,view:"day",classics:false,rep:false,film:false};
+
+const tKeys=Object.keys(THEATERS).filter(k=>D.some(f=>f.th===k))
+  .sort((a,b)=>THEATERS[a].n.localeCompare(THEATERS[b].n));
+tKeys.forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=THEATERS[k].n;$("fTheater").append(o);});
+[...new Set(D.flatMap(f=>f.g))].sort().forEach(g=>{const o=document.createElement("option");o.value=g;o.textContent=g;$("fGenre").append(o);});
+
+function matchesBase(f){
+  if(state.q){const q=state.q.toLowerCase();
+    const hay=(f.t+" "+f.d+" "+THEATERS[f.th].n+" "+(f.o.ser||"")+" "+f.g.join(" ")).toLowerCase();
+    if(!hay.includes(q))return false;}
+  if(state.theater&&f.th!==state.theater)return false;
+  if(state.genre&&!f.g.includes(state.genre))return false;
+  if(state.dist&&f.dist!==state.dist)return false;
+  if(state.classics&&!(f.y&&f.y<1990))return false;
+  if(state.rep&&f.y>=2025)return false;
+  if(state.film&&!f.o.fmt)return false;
+  return true;
+}
+const sorts={
+  time:(a,b)=>0,
+  yearAsc:(a,b)=>(a.y||9999)-(b.y||9999)||a.t.localeCompare(b.t),
+  yearDesc:(a,b)=>(b.y||0)-(a.y||0)||a.t.localeCompare(b.t),
+  indie:(a,b)=>(a.dist>b.dist?-1:a.dist<b.dist?1:0)||(a.y||9999)-(b.y||9999),
+  major:(a,b)=>(a.dist<b.dist?-1:a.dist>b.dist?1:0)||(a.y||9999)-(b.y||9999),
+  title:(a,b)=>a.t.localeCompare(b.t),
+  theater:(a,b)=>THEATERS[a.th].n.localeCompare(THEATERS[b.th].n)||(a.y||9999)-(b.y||9999)
+};
+function sortRows(rows){
+  if(state.sort==="time") return rows.sort((x,y)=>(x.t==null)-(y.t==null)||((x.t||0)-(y.t||0)));
+  return rows.sort((x,y)=>sorts[state.sort](x.f,y.f));
+}
+function rowsFor(day,base){
+  const rows=[];
+  base.forEach(f=>f.shows.forEach(s=>{
+    if(s.d===day&&(!state.time||(s.t!=null&&bucket(s.t)===state.time))) rows.push({f,t:s.t});}));
+  return rows;
+}
+function runsFor(day,base){
+  return base.filter(f=>f.r&&f.r[0]<=day&&Math.min(f.r[1],31)>=day&&!f.shows.length).sort(sorts.yearAsc);
+}
+function activeFilters(){
+  return [state.q,state.theater,state.genre,state.time,state.dist].filter(Boolean).length
+    +(state.classics?1:0)+(state.rep?1:0)+(state.film?1:0);
+}
+
+/* ——— day picker ——— */
+function buildPicker(){
+  const base=D.filter(matchesBase);
+  const el=$("days"); el.innerHTML="";
+  for(let d=TD;d<=31;d++){
+    const rows=rowsFor(d,base), runs=runsFor(d,base);
+    const old=new Set(rows.filter(r=>r.f.y<1990).map(r=>r.f.t)).size;
+    const b=document.createElement("button");
+    b.className="daycard"+(d===TD?" today":""); b.dataset.d=d;
+    b.setAttribute("aria-pressed",String(state.view==="day"&&state.day===d));
+    const label=d===TD?"Today":(d===TD+1?"Tomorrow":dow(d));
+    const meta=rows.length?("<b>"+rows.length+"</b> showtime"+(rows.length===1?"":"s")+(old?" · "+old+" pre-'90":""))
+      :(runs.length?"<b>"+runs.length+"</b> run"+(runs.length===1?"":"s"):"—");
+    b.innerHTML='<div class="dw cond">'+label+'</div><div class="dn cond mono">'+d+'</div><div class="dc">'+meta+"</div>";
+    b.onclick=()=>{state.view="day";state.day=d;render();
+      b.scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});};
+    el.append(b);
+  }
+  const m=document.createElement("button");
+  m.className="monthbtn cond"; m.textContent="Browse the whole month";
+  m.setAttribute("aria-pressed",String(state.view==="month"));
+  m.onclick=()=>{state.view="month";render();};
+  el.append(m);
+}
+
+/* ——— picks ——— */
+function pickFor(rows){
+  const out=[],used=new Set();
+  const take=(r,why)=>{const k=r.f.t+"@"+r.t; if(!r||used.has(k))return; used.add(k); out.push({...r,why});};
+  const byYear=[...rows].filter(r=>r.f.y<1990).sort((a,b)=>a.f.y-b.f.y);
+  if(byYear[0]) take(byYear[0],"Oldest on a screen today");
+  const onFilm=rows.filter(r=>r.f.o.fmt&&/mm/.test(r.f.o.fmt))
+    .sort((a,b)=>(/70/.test(b.f.o.fmt)?1:0)-(/70/.test(a.f.o.fmt)?1:0));
+  for(const r of onFilm){ if(out.length<3&&!used.has(r.f.t+"@"+r.t)){take(r,"On real film — "+r.f.o.fmt);break;} }
+  const late=rows.filter(r=>r.t!=null&&r.t>=1260).sort((a,b)=>b.t-a.t);
+  for(const r of late){ if(out.length<3&&!used.has(r.f.t+"@"+r.t)){take(r,"After dark");break;} }
+  const rare=rows.filter(r=>r.f.o.ser);
+  for(const r of rare){ if(out.length<3&&!used.has(r.f.t+"@"+r.t)){take(r,"From a series — "+r.f.o.ser.split("—")[0].trim());break;} }
+  for(const r of rows){ if(out.length<3&&!used.has(r.f.t+"@"+r.t)) take(r,r.f.dist==="ind"?"Independent":"Also playing"); }
+  return out.slice(0,3);
+}
+function pickHtml(p){
+  const th=THEATERS[p.f.th];
+  return '<article class="pick"><div class="why cond">'+esc(p.why)+"</div>"+
+    '<div><span class="pt cond">'+esc(p.f.t)+'</span><span class="py mono">'+(p.f.y||"")+"</span></div>"+
+    '<div class="pwhen mono">'+(p.t!=null?fmtT(p.t):"see site")+"</div>"+
+    '<div class="pm"><b>'+esc(th.n)+"</b> · "+esc(th.a)+"</div>"+
+    '<div class="racts">'+
+      '<a class="bsm tix" href="'+p.f.tk+'" target="_blank" rel="noopener">Tickets</a>'+
+      '<a class="bsm tr" href="'+p.f.tr+'" target="_blank" rel="noopener">&#9654; Trailer</a></div></article>';
+}
+
+/* ——— rows / cards ——— */
+function rowHtml(f,t){
+  const th=THEATERS[f.th];
+  return '<div class="row '+f.dist+'">'+
+    '<span class="rt mono">'+(t!=null?fmtT(t):"see site")+"</span>"+
+    '<div><span class="rtitle cond">'+esc(f.t)+'</span><span class="ryear mono">'+(f.y||"")+"</span>"+
+      (f.o.fmt?'<span class="rfmt">'+esc(f.o.fmt)+"</span>":"")+
+      '<div class="rsub"><b>'+esc(th.n)+"</b> · "+esc(f.g.slice(0,2).join(", "))+
+      (f.d&&f.d!=="—"?" · "+esc(f.d):"")+(f.o.ser?" · <i>"+esc(f.o.ser)+"</i>":"")+"</div></div>"+
+    '<div class="racts"><a class="bsm tix" href="'+f.tk+'" target="_blank" rel="noopener">Tickets</a>'+
+    '<a class="bsm tr" href="'+f.tr+'" target="_blank" rel="noopener">&#9654; Trailer</a></div></div>';
+}
+function runCard(f){
+  const th=THEATERS[f.th];
+  const end=f.r[1]>31?"– into Sep":(f.r[0]===f.r[1]?"":"–"+Math.min(f.r[1],31));
+  return '<div class="rcard '+f.dist+'">'+
+    '<div><span class="rtitle cond">'+esc(f.t)+'</span><span class="ryear mono">'+(f.y||"")+"</span>"+
+      (f.o.fmt?'<span class="rfmt">'+esc(f.o.fmt)+"</span>":"")+"</div>"+
+    '<div class="rsub"><b>'+esc(th.n)+"</b> · "+esc(th.a)+(f.o.ser?" · <i>"+esc(f.o.ser)+"</i>":"")+"</div>"+
+    '<span class="runlbl mono">Aug '+f.r[0]+(end?" "+end:"")+" · "+esc(f.o.note||"see site for times")+"</span>"+
+    '<div class="racts"><a class="bsm tix" href="'+f.tk+'" target="_blank" rel="noopener">Tickets</a>'+
+    '<a class="bsm tr" href="'+f.tr+'" target="_blank" rel="noopener">&#9654; Trailer</a></div></div>';
+}
+function card(f){
+  const th=THEATERS[f.th];
+  let times="";
+  if(f.shows.length){
+    const chips=f.shows.map(s=>'<span class="st mono"><b>Aug '+s.d+"</b> "+
+      (s.t!=null?'<span class="h">'+fmtT(s.t)+"</span>":'<span class="h">see site</span>')+"</span>");
+    times='<div class="times">'+chips.slice(0,6).join("")+
+      (chips.length>6?'<button class="more" data-rest="'+encodeURIComponent(chips.slice(6).join(""))+
+      '">+'+(chips.length-6)+" more</button>":"")+"</div>";
+  }else if(f.r){
+    const end=f.r[1]>31?"– into Sep":(f.r[0]===f.r[1]?"":"–"+Math.min(f.r[1],31));
+    times='<div class="times"><span class="runlbl mono">Aug '+f.r[0]+(end?" "+end:"")+" · "+
+      esc(f.o.note||"see site for times")+"</span></div>";
+  }
+  return '<article class="card '+f.dist+'">'+
+    '<div class="top"><div class="film cond">'+esc(f.t)+'</div><div class="year mono">'+(f.y||"—")+"</div></div>"+
+    (f.d&&f.d!=="—"?'<div class="dir">'+esc(f.d)+"</div>":"")+
+    '<div class="meta"><span class="tag dist-'+f.dist+'">'+(f.dist==="ind"?"Independent":"Major studio")+"</span>"+
+      f.g.map(g=>'<span class="tag">'+esc(g)+"</span>").join("")+
+      (f.o.fmt?'<span class="tag fmt">'+esc(f.o.fmt)+"</span>":"")+"</div>"+
+    '<div class="venue"><b>'+esc(th.n)+"</b> · "+esc(th.a)+"</div>"+
+    (f.o.ser?'<div class="series">'+esc(f.o.ser)+"</div>":"")+times+
+    '<div class="acts"><a class="btn tix" href="'+f.tk+'" target="_blank" rel="noopener">Tickets ↗</a>'+
+    '<a class="btn" href="'+f.tr+'" target="_blank" rel="noopener">&#9654; Trailer</a></div></article>';
+}
+
+/* ——— render ——— */
+function render(){
+  const base=D.filter(matchesBase);
+  buildPicker();
+  const n=activeFilters();
+  $("fbadge").hidden=!n; $("fbadge").textContent=n+" on";
+  ["pClassics","pRep","p70"].forEach((id,i)=>
+    $(id).setAttribute("aria-pressed",String([state.classics,state.rep,state.film][i])));
+
+  const stage=$("stage");
+  stage.style.animation="none"; void stage.offsetWidth; stage.style.animation="";
+
+  if(state.view==="month"){
+    const list=base.filter(f=>!state.time||f.shows.some(s=>s.t!=null&&bucket(s.t)===state.time))
+      .sort(sorts[state.sort==="time"?"yearAsc":state.sort]);
+    $("picks").innerHTML=""; $("schedule").innerHTML=""; $("ongoing").innerHTML="";
+    $("grid").innerHTML=list.map(card).join("");
+    $("empty").hidden=list.length>0;
+    $("ptip").textContent="Every August listing — "+list.length+" in all.";
+  }else{
+    const d=state.day, rows=rowsFor(d,base), runs=state.time?[]:runsFor(d,base);
+    $("grid").innerHTML="";
+    $("picks").innerHTML=rows.length>2?pickFor(sortRows([...rows].sort((a,b)=>(a.t||0)-(b.t||0)))).map(pickHtml).join(""):"";
+    let html="";
+    if(rows.length){
+      const label=d===TD?"Today, "+dowFull(d)+" Aug "+d:dowFull(d)+", Aug "+d;
+      html+='<div class="slot"><span class="sn cond">'+esc(label)+'</span>'+
+        '<span class="sc">'+rows.length+" showtime"+(rows.length===1?"":"s")+"</span>"+
+        '<div class="rule"></div></div>';
+      if(state.sort==="time"){
+        SLOTS.forEach(([key,name])=>{
+          const sub=rows.filter(r=>r.t!=null&&bucket(r.t)===key);
+          if(!sub.length)return;
+          sortRows(sub);
+          html+='<div class="slot"><span class="sn cond">'+name+'</span><span class="sc">'+sub.length+
+            "</span><div class=\"rule\"></div></div>";
+          html+='<div class="rows">'+sub.map(r=>rowHtml(r.f,r.t)).join("")+"</div>";
+        });
+        const untimed=rows.filter(r=>r.t==null);
+        if(untimed.length) html+='<div class="rows">'+untimed.map(r=>rowHtml(r.f,r.t)).join("")+"</div>";
+      }else{
+        html+='<div class="rows">'+sortRows(rows).map(r=>rowHtml(r.f,r.t)).join("")+"</div>";
+      }
+    }
+    $("schedule").innerHTML=html;
+    $("ongoing").innerHTML=runs.length?
+      '<details class="ongwrap"><summary><span>Also playing Aug '+d+
+      ' — '+runs.length+' run'+(runs.length===1?"":"s")+' &amp; series without set times</span><span class="caret">▼</span></summary>'+
+      '<div class="onggrid">'+runs.map(runCard).join("")+"</div></details>":"";
+    $("empty").hidden=(rows.length+runs.length)>0;
+    $("ptip").textContent=rows.length?
+      (d===TD?"Tonight's repertory, revivals and 70mm — all in one place.":"What's on "+dowFull(d)+", August "+d+".")
+      :"No exact showtimes posted for Aug "+d+" yet.";
+  }
+  document.querySelectorAll(".more").forEach(x=>x.onclick=()=>{
+    x.insertAdjacentHTML("beforebegin",decodeURIComponent(x.dataset.rest)); x.remove();});
+}
+
+$("rtoggle").onclick=()=>{
+  const open=$("rtoggle").getAttribute("aria-expanded")==="true";
+  $("rtoggle").setAttribute("aria-expanded",String(!open));
+  $("rpanel").hidden=open;};
+$("q").oninput=e=>{state.q=e.target.value;render();};
+$("fTheater").onchange=e=>{state.theater=e.target.value;render();};
+$("fGenre").onchange=e=>{state.genre=e.target.value;render();};
+$("fTime").onchange=e=>{state.time=e.target.value;render();};
+$("fDist").onchange=e=>{state.dist=e.target.value;render();};
+$("sort").onchange=e=>{state.sort=e.target.value;render();};
+$("pClassics").onclick=()=>{state.classics=!state.classics;render();};
+$("pRep").onclick=()=>{state.rep=!state.rep;render();};
+$("p70").onclick=()=>{state.film=!state.film;render();};
+$("pReset").onclick=()=>{
+  Object.assign(state,{q:"",theater:"",genre:"",time:"",dist:"",sort:"time",classics:false,rep:false,film:false});
+  $("q").value="";["fTheater","fGenre","fTime","fDist"].forEach(i=>$(i).value="");$("sort").value="time";
+  render();};
+
+const allFilms=new Set(D.map(f=>f.t)).size;
+const pre90=new Set(D.filter(f=>f.y<1990).map(f=>f.t)).size;
+$("headstat").innerHTML="<b>"+allFilms+"</b> films · <b>"+tKeys.length+"</b> theaters<br>"+
+  "<b>"+pre90+"</b> of them made before 1990";
+render();
+</script>
+
+</html>
