@@ -819,7 +819,10 @@ async function copyText(text,okMsg){
   try{ await navigator.clipboard.writeText(text); toast(okMsg||"Copied"); }
   catch{ toast("Couldn't copy — select and copy manually"); }
 }
-function closeCalMenu(){ $("calMenu").hidden=true; }
+let calMenuLeaveT=null;
+function closeCalMenu(){ clearTimeout(calMenuLeaveT); $("calMenu").hidden=true; }
+function scheduleCalMenuClose(){ clearTimeout(calMenuLeaveT); calMenuLeaveT=setTimeout(closeCalMenu,250); }
+function cancelCalMenuClose(){ clearTimeout(calMenuLeaveT); }
 function openCalMenu(btn,f,day,mins){
   if(mins==null){ toast("No exact time posted yet — check tickets link"); return; }
   const ev=calEvent(f,day,mins), menu=$("calMenu");
@@ -830,6 +833,8 @@ function openCalMenu(btn,f,day,mins){
   menu.style.top=(r.bottom+6)+"px";
   menu.hidden=false;
   $("calCopy").onclick=()=>{copyText(eventText(ev),"Event details copied — paste into any calendar app");closeCalMenu();};
+  menu.onmouseenter=cancelCalMenuClose; menu.onmouseleave=scheduleCalMenuClose;
+  btn.onmouseenter=cancelCalMenuClose; btn.onmouseleave=scheduleCalMenuClose;
 }
 async function doShare(f,day,mins){
   const text=shareText(f,day,mins);
