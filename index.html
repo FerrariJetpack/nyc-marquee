@@ -859,6 +859,12 @@ document.addEventListener("click",e=>{
     doShare(f,day,mins); return; }
   if(!e.target.closest("#calMenu")) closeCalMenu();
 });
+// iOS Safari doesn't reliably bubble a "click" from a tap on a plain non-interactive
+// element up to document, so the click-away close above can silently no-op on touch.
+// touchstart always fires regardless of what's tapped — use it as the real dismiss path.
+document.addEventListener("touchstart",e=>{
+  if(!$("calMenu").hidden && !e.target.closest("#calMenu") && !e.target.closest(".cal")) closeCalMenu();
+},{passive:true});
 function calBtn(f,d,t,cls){
   if(t==null) return "";
   return '<button type="button" class="'+cls+' cal" data-fi="'+f.i+'" data-d="'+(d==null?"":d)+'" data-t="'+t+'" aria-label="Add to calendar">📅</button>';
