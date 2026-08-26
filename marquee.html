@@ -432,6 +432,8 @@ const THEATERS = {
 // showings: "day@HHMM,day@HHMM" (24h, Aug 2026) — null when the run has no published times
 // opts: {r:[startDay,endDay(>31 = runs into Sep)], fmt, ser, note}
 const D=[]; function F(t,y,d,g,th,dist,s,o){D.push({t,y,d,g:g.split("/"),th,dist,s,o:o||{}});}
+// daily(startDay,endDay,["HHMM",...]) — build a repeating "day@time" string for a run with known daily showtimes
+function daily(a,b,times){ const out=[]; for(let d=a;d<=Math.min(b,31);d++) times.forEach(t=>out.push(d+"@"+t)); return out.join(","); }
 
 /* ——— METROGRAPH — exact showtimes Aug 17–30 (31–Sep 6 unannounced; closed Aug 25 for private event) ——— */
 F("2046",2004,"Wong Kar-wai","Sci-Fi/Romance","metrograph","ind","29@1740,30@1900",{tix:"https://metrograph.com/film/?vista_film_id=9999004396",ser:"Like the Wind: Lensed by Christopher Doyle"});
@@ -521,15 +523,15 @@ F("The Bend in the River",2025,"—","Drama","filmforum","ind","13@1220,13@1415,
 F("Billy Liar",1963,"John Schlesinger","Comedy/Drama","filmforum","ind","13@1230,13@1440,13@1650,13@1900,13@2110,14@1230,14@1440,14@1650,14@1900,14@2110,15@1230,15@1440,15@1650,15@1900,15@2110,16@1230,16@1440,16@1650,16@1900,16@2110,17@1230,17@1440,17@1650,17@1900,17@2110,18@1230,18@1440,18@1650,18@1900,18@2110,19@1300,19@1530,19@1800",{tix:"https://filmforum.org/film/billy-liar",note:"New restoration"});
 F("The Taking of Pelham One Two Three",1974,"Joseph Sargent","Crime/Thriller","filmforum","maj","18@2010",{tix:"https://filmforum.org/film/the-taking-of-pelham-123-nyc-in-transit",fmt:"35mm",ser:"NYC In Transit"});
 F("The Son of the Sheik",1926,"George Fitzmaurice","Silent/Romance","filmforum","ind","23@1900",{tix:"https://filmforum.org/film/the-son-of-the-sheik",fmt:"35mm",note:"Rudolph Valentino centennial"});
-F("The Godfather",1972,"Francis Ford Coppola","Crime/Drama","filmforum","maj",null,{tix:"https://filmforum.org/film/the-godfather-coppola",r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"});
-F("The Godfather Part II",1974,"Francis Ford Coppola","Crime/Drama","filmforum","maj",null,{tix:"https://filmforum.org/film/the-godfather-part-ii-coppola",r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"});
-F("The Conversation",1974,"Francis Ford Coppola","Thriller/Mystery","filmforum","maj",null,{tix:"https://filmforum.org/film/the-conversation-coppola",r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"});
-F("Apocalypse Now",1979,"Francis Ford Coppola","War/Drama","filmforum","maj",null,{tix:"https://filmforum.org/film/apocalypse-now-final-cut-coppola",r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"});
-F("The Rain People",1969,"Francis Ford Coppola","Drama","filmforum","maj",null,{tix:"https://filmforum.org/film/the-rain-people-coppola",r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"});
-F("The Outsiders",1983,"Francis Ford Coppola","Drama","filmforum","maj",null,{tix:"https://filmforum.org/film/the-outsiders-coppola",r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"});
-F("Rumble Fish",1983,"Francis Ford Coppola","Drama","filmforum","maj",null,{tix:"https://filmforum.org/film/rumble-fish-coppola",r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"});
-F("One From the Heart",1982,"Francis Ford Coppola","Musical/Romance","filmforum","maj",null,{tix:"https://filmforum.org/film/one-from-the-heart-reprise-coppola",r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"});
-F("Megalopolis",2024,"Francis Ford Coppola","Sci-Fi/Drama","filmforum","ind",null,{tix:"https://filmforum.org/film/megalopolis-coppola",r:[21,41],ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Dates vary — see calendar"});
+F("The Godfather",1972,"Francis Ford Coppola","Crime/Drama","filmforum","maj","25@1900,29@1500",{tix:"https://filmforum.org/film/the-godfather-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
+F("The Godfather Part II",1974,"Francis Ford Coppola","Crime/Drama","filmforum","maj","25@2215",{tix:"https://filmforum.org/film/the-godfather-part-ii-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
+F("The Conversation",1974,"Francis Ford Coppola","Thriller/Mystery","filmforum","maj","26@1900",{tix:"https://filmforum.org/film/the-conversation-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
+F("Apocalypse Now",1979,"Francis Ford Coppola","War/Drama","filmforum","maj","26@2130",{tix:"https://filmforum.org/film/apocalypse-now-final-cut-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
+F("The Rain People",1969,"Francis Ford Coppola","Drama","filmforum","maj","27@1700",{tix:"https://filmforum.org/film/the-rain-people-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
+F("The Outsiders",1983,"Francis Ford Coppola","Drama","filmforum","maj","27@1930",{tix:"https://filmforum.org/film/the-outsiders-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
+F("Rumble Fish",1983,"Francis Ford Coppola","Drama","filmforum","maj","28@1700",{tix:"https://filmforum.org/film/rumble-fish-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
+F("One From the Heart",1982,"Francis Ford Coppola","Musical/Romance","filmforum","maj","28@1930",{tix:"https://filmforum.org/film/one-from-the-heart-reprise-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
+F("Megalopolis",2024,"Francis Ford Coppola","Sci-Fi/Drama","filmforum","ind","30@1900,31@1500",{tix:"https://filmforum.org/film/megalopolis-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
 
 /* ——— IFC CENTER — exact showtimes Aug 13–19 ——— */
 F("Union County",2026,"—","Drama","ifc","ind","13@1900,14@1130,14@1430,14@1630,14@1900,14@2130,15@1430,15@1635,15@1900,15@2130,16@1400,16@1630,16@1900,16@2130,17@1130,17@1430,17@1645,17@1910,17@2135,18@1130,18@1430,18@1645,18@1910,18@2135,19@1145,19@1430,19@1645,19@1910,19@2135",{tix:"https://www.ifccenter.com/films/union-county/",note:"Opens Aug 14 after sneak preview"});
@@ -544,17 +546,15 @@ F("Maddie's Secret",2025,"John Early","Comedy","ifc","ind","13@1110,13@1500,13@2
 F("National Theatre Live: All My Sons",2026,"—","Drama","ifc","ind","15@1100,16@1100,17@1830",{tix:"https://www.ifccenter.com/films/national-theatre-live-all-my-sons-2026/",note:"Filmed stage production"});
 F("CatVideoFest 2026",2026,"Will Braden","Documentary/Family","ifc","ind","15@1105,16@1105",{tix:"https://www.ifccenter.com/films/catvideofest-2026/",note:"Benefit for cat charities"});
 F("Boyhood",2014,"Richard Linklater","Drama","ifc","ind","19@1815",{tix:"https://www.ifccenter.com/films/boyhood/"});
-F("It Ends",2025,"Alexander Ullom","Horror/Thriller","ifc","ind",null,{tix:"https://www.ifccenter.com/films/it-ends/",r:[21,34],note:"Opens Aug 21"});
-F("How to Divorce During the War",2026,"—","Documentary","ifc","ind",null,{tix:"https://www.ifccenter.com/films/how-to-divorce-during-the-war/",r:[21,34],note:"Opens Aug 21"});
-F("Crows Are White",2022,"—","Documentary","ifc","ind",null,{tix:"https://www.ifccenter.com/films/crows-are-white-2/",r:[26,34],note:"Opens Aug 26"});
-F("Gandahar",1987,"René Laloux","Animation/Sci-Fi","ifc","ind",null,{tix:"https://www.ifccenter.com/films/gandahar/",r:[28,34],note:"Revival run"});
-F("Colony",2026,"—","Documentary","ifc","ind",null,{tix:"https://www.ifccenter.com/films/colony-3/",r:[28,34],note:"Opens Aug 28"});
+F("It Ends",2025,"Alexander Ullom","Horror/Thriller","ifc","ind",daily(25,31,["1245","1500","1730","2000","2230"]),{tix:"https://www.ifccenter.com/films/it-ends/"});
+F("How to Divorce During the War",2026,"—","Documentary","ifc","ind",daily(25,31,["1300","1545","1815","2045"]),{tix:"https://www.ifccenter.com/films/how-to-divorce-during-the-war/"});
+F("Crows Are White",2022,"—","Documentary","ifc","ind",daily(26,31,["1400","1630","1900","2130"]),{tix:"https://www.ifccenter.com/films/crows-are-white-2/",note:"Opens Aug 26"});
+F("Gandahar",1987,"René Laloux","Animation/Sci-Fi","ifc","ind","28@2359,29@2359",{tix:"https://www.ifccenter.com/films/gandahar/",ser:"Waverly Midnights"});
+F("Colony",2026,"—","Documentary","ifc","ind",daily(28,31,["1300","1545","1815","2045"]),{tix:"https://www.ifccenter.com/films/colony-3/",note:"Opens Aug 28"});
 
 /* ——— QUAD — exact showtimes Aug 13 ——— */
-F("The Asphalt Jungle",1950,"John Huston","Noir/Crime","quad","maj",null,{r:[14,27],ser:"John Huston: Hollywood Maverick",note:"Dates vary — see site"});
-F("John Huston: Hollywood Maverick (series)",NaN,"John Huston","Classics/Noir","quad","ind",null,{r:[14,27],ser:"Retrospective through Aug 27",note:"Full lineup on site"});
-F("Dark Continent: The Films of Agnieszka Holland",NaN,"Agnieszka Holland","Drama","quad","ind",null,{r:[17,19],ser:"Retrospective"});
-F("The Rocky Horror Picture Show",1975,"Jim Sharman","Musical/Cult","quad","ind",null,{r:[14,31],note:"Late-night participation screenings"});
+F("The Asphalt Jungle",1950,"John Huston","Noir/Crime","quad","maj","26@1830,27@1600",{ser:"John Huston: Hollywood Maverick"});
+F("The Rocky Horror Picture Show",1975,"Jim Sharman","Musical/Cult","quad","ind","28@2359,29@2359",{note:"Weekend late-night participation screenings"});
 
 /* ——— ANTHOLOGY FILM ARCHIVES — exact showtimes Aug 7–20 ——— */
 F("Time to Die",1966,"Arturo Ripstein","Western/Drama","anthology","ind","7@2100,11@1845,16@2000",{ser:"Experimental Westerns, Part 2"});
@@ -570,18 +570,14 @@ F("Deadlock",1970,"Roland Klick","Western/Thriller","anthology","ind","19@2100",
 F("Joseph Cornell",1936,"Joseph Cornell","Experimental","anthology","ind","20@1815",{ser:"Essential Cinema"});
 F("Conner / Conrad",NaN,"Bruce Conner & Tony Conrad","Experimental","anthology","ind","20@2030",{ser:"Essential Cinema"});
 F("Mad Dog Morgan",1976,"Philippe Mora","Western/Drama","anthology","ind","20@2100",{ser:"Experimental Westerns, Part 2"});
-F("Dead Man",1995,"Jim Jarmusch","Western/Drama","anthology","ind",null,{r:[22,31],ser:"Experimental Westerns, Part 2",note:"Dates vary — see site"});
-F("Meek's Cutoff",2010,"Kelly Reichardt","Western/Drama","anthology","ind",null,{r:[22,31],ser:"Experimental Westerns, Part 2",note:"Dates vary — see site"});
-F("The Ballad of Little Jo",1993,"Maggie Greenwald","Western/Drama","anthology","ind",null,{r:[22,31],ser:"Experimental Westerns, Part 2",note:"Dates vary — see site"});
-F("Maya Deren Program",1943,"Maya Deren","Experimental","anthology","ind",null,{r:[27,31],ser:"Essential Cinema",note:"Dates vary — see site"});
-F("Ganz + Streeter",NaN,"Ganz & Streeter","Experimental/Documentary","anthology","ind",null,{r:[28,31],note:"Filmmakers in person Aug 28–29"});
+F("Dead Man",1995,"Jim Jarmusch","Western/Drama","anthology","ind","29@2100,30@1900",{ser:"Experimental Westerns, Part 2"});
+F("Meek's Cutoff",2010,"Kelly Reichardt","Western/Drama","anthology","ind","27@1830",{ser:"Experimental Westerns, Part 2"});
+F("The Ballad of Little Jo",1993,"Maggie Greenwald","Western/Drama","anthology","ind","27@1900,30@2030",{ser:"Experimental Westerns, Part 2"});
+F("Maya Deren Program",1943,"Maya Deren","Experimental","anthology","ind","29@1900",{ser:"Essential Cinema"});
+F("Ganz + Streeter",NaN,"Ganz & Streeter","Experimental/Documentary","anthology","ind","28@1900,29@1900",{note:"Filmmakers in person for both screenings"});
 /* ——— BAM ——— */
-F("The Samurai and the Prisoner",2026,"Kiyoshi Kurosawa","Drama","bam","ind",null,{r:[6,31],note:"Opens Aug 6"});
-F("Teenage Sex and Death at Camp Miasma",2026,"Jane Schoenbrun","Horror/Comedy","bam","ind",null,{r:[13,31],note:"Opens Aug 13"});
-F("High and Low",1963,"Akira Kurosawa","Crime/Drama","bam","ind",null,{r:[14,20],ser:"Summer in Japan",note:"Dates vary — see site"});
-F("Summer Wars",2009,"Mamoru Hosoda","Animation/Sci-Fi","bam","ind",null,{r:[14,20],ser:"Summer in Japan",note:"Dates vary — see site"});
-F("Casting Blossoms to the Sky",2012,"Nobuhiko Ôbayashi","Drama","bam","ind",null,{r:[14,20],ser:"Summer in Japan",note:"Dates vary — see site"});
-F("The Island Closest to Heaven",1984,"Nobuhiko Ôbayashi","Drama","bam","ind",null,{r:[14,20],ser:"Summer in Japan",note:"Dates vary — see site"});
+F("The Samurai and the Prisoner",2026,"Kiyoshi Kurosawa","Drama","bam","ind",daily(25,31,["1600","1900"]));
+F("Teenage Sex and Death at Camp Miasma",2026,"Jane Schoenbrun","Horror/Comedy","bam","ind",daily(25,31,["1830","2100"]));
 F("Arthouse Sci-Fi (series)",NaN,"Godard, Tarkovsky, Cronenberg…","Sci-Fi/Classics","bam","ind",null,{r:[21,27],ser:"Series",note:"Full lineup on site"});
 F("Kino Canines (series)",NaN,"Various","Family/Classics","bam","ind",null,{r:[28,34],ser:"Dogs on film through cinema history",note:"Full lineup on site"});
 
@@ -609,48 +605,25 @@ F("Her Private Hell",1968,"Norman J. Warren","Drama/Cult","roxy","ind","28@1700"
 F("City Dudes",NaN,"—","Comedy","roxy","ind","29@2145");
 
 /* ——— PARIS THEATER — Big & Loud, Aug 21–Sep 15 ——— */
-const BL={r:[21,46],ser:"Big & Loud 2026 — Aug 21–Sep 15",note:"Dates vary — 43-film series, Sofia Coppola & Isabella Rossellini Q&As"};
-F("West Side Story",1961,"Wise & Robbins","Musical/Romance","paris","maj",null,{...BL,fmt:"70mm"});
-F("The Sound of Music",1965,"Robert Wise","Musical/Family","paris","maj",null,{...BL,fmt:"70mm"});
-F("Aliens",1986,"James Cameron","Sci-Fi/Action","paris","maj",null,{...BL,fmt:"70mm"});
-F("Batman",1989,"Tim Burton","Action/Superhero","paris","maj",null,{...BL,fmt:"70mm"});
-F("One From the Heart",1982,"Francis Ford Coppola","Musical/Romance","paris","maj",null,{...BL,fmt:"70mm",note:"First-ever NYC 70mm screening"});
-F("The Razor's Edge",1984,"John Byrum","Drama","paris","maj",null,{...BL,fmt:"70mm",note:"First NYC 70mm showing in 40+ years"});
-F("White Nights",1985,"Taylor Hackford","Drama/Music","paris","maj",null,{...BL,fmt:"70mm",note:"First NYC 70mm showing in 40+ years"});
-F("Inherent Vice",2014,"Paul Thomas Anderson","Comedy/Noir","paris","maj",null,{...BL,fmt:"70mm"});
-F("The Master",2012,"Paul Thomas Anderson","Drama","paris","ind",null,{...BL,fmt:"70mm"});
-F("Babylon",2022,"Damien Chazelle","Drama/Comedy","paris","maj",null,{...BL,fmt:"70mm"});
-F("Kill Bill: The Whole Bloody Affair",2011,"Quentin Tarantino","Action/Martial Arts","paris","ind",null,BL);
-F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","paris","maj",null,{...BL,fmt:"70mm"});
-F("2001: A Space Odyssey",1968,"Stanley Kubrick","Sci-Fi","paris","maj",null,{...BL,fmt:"70mm"});
-F("Vertigo",1958,"Alfred Hitchcock","Thriller/Mystery","paris","maj",null,{...BL,fmt:"70mm"});
-F("Spartacus",1960,"Stanley Kubrick","Drama/Adventure","paris","maj",null,{...BL,fmt:"70mm"});
-F("Boogie Nights",1997,"Paul Thomas Anderson","Drama","paris","maj",null,{...BL,fmt:"70mm"});
-F("Once Upon a Time in Hollywood",2019,"Quentin Tarantino","Comedy/Drama","paris","maj",null,{...BL,fmt:"70mm"});
-F("Marie Antoinette",2006,"Sofia Coppola","Drama","paris","ind",null,{...BL,fmt:"4K restoration",note:"20th-anniversary restoration — Sofia Coppola Q&A"});
-F("New York, New York",1977,"Martin Scorsese","Musical/Drama","paris","maj",null,{...BL,fmt:"4K restoration",note:"East Coast restoration premiere"});
-F("Panic Room",2002,"David Fincher","Thriller","paris","maj",null,{...BL,fmt:"4K restoration",note:"NY restoration premiere"});
-F("Morvern Callar",2002,"Lynne Ramsay","Drama","paris","ind",null,{...BL,fmt:"35mm"});
-F("Elevator to the Gallows",1958,"Louis Malle","Crime/Noir","paris","ind",null,{...BL,fmt:"35mm"});
-F("Sorcerer",1977,"William Friedkin","Thriller","paris","maj",null,{...BL,note:"Restored"});
-F("Heat",1995,"Michael Mann","Crime/Thriller","paris","maj",null,{...BL,note:"Restored"});
-F("Fight Club",1999,"David Fincher","Drama","paris","maj",null,{...BL,note:"Restored"});
-F("Sweet Charity",1969,"Bob Fosse","Musical","paris","maj",null,{...BL,note:"Restored roadshow version"});
-F("All That Jazz",1979,"Bob Fosse","Musical/Drama","paris","maj",null,BL);
-F("Die Hard",1988,"John McTiernan","Action","paris","maj",null,BL);
-F("Phantom of the Paradise",1974,"Brian De Palma","Musical/Horror","paris","ind",null,BL);
-F("Speed Racer",2008,"The Wachowskis","Action/Sci-Fi","paris","maj",null,BL);
-F("Josie and the Pussycats",2001,"Kaplan & Elfont","Comedy/Music","paris","maj",null,BL);
-F("Alice in Wonderland",1951,"Clyde Geronimi","Animation/Family","paris","maj",null,{...BL,note:"Restored"});
+// Paris is single-screen — one Big & Loud title plays per day. Series runs Aug 21–Sep 15 (43 films);
+// only the titles landing on a remaining-August date are listed here — the rest screen after Aug 31, see site.
+const BLS="Big & Loud 2026 — Aug 21–Sep 15";
+F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","paris","maj","25@1400",{ser:BLS,fmt:"70mm"});
+F("2001: A Space Odyssey",1968,"Stanley Kubrick","Sci-Fi","paris","maj","26@1900",{ser:BLS,fmt:"70mm"});
+F("Vertigo",1958,"Alfred Hitchcock","Thriller/Mystery","paris","maj","27@1900",{ser:BLS,fmt:"70mm"});
+F("Spartacus",1960,"Stanley Kubrick","Drama/Adventure","paris","maj","28@1400",{ser:BLS,fmt:"70mm"});
+F("Boogie Nights",1997,"Paul Thomas Anderson","Drama","paris","maj","29@1900",{ser:BLS,fmt:"70mm"});
+F("Inherent Vice",2014,"Paul Thomas Anderson","Comedy/Noir","paris","maj","30@1900",{ser:BLS,fmt:"70mm"});
+F("The Master",2012,"Paul Thomas Anderson","Drama","paris","ind","31@1900",{ser:BLS,fmt:"70mm"});
 
 /* ——— MoMI — See It Big: 70mm, Jul 31–Aug 30 ——— */
-const SIB={r:[1,30],ser:"See It Big: 70mm",note:"Select dates — see calendar"};
-F("2001: A Space Odyssey",1968,"Stanley Kubrick","Sci-Fi","momi","maj",null,{...SIB,fmt:"70mm"});
-F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","momi","maj",null,{...SIB,fmt:"70mm"});
-F("Amadeus",1984,"Miloš Forman","Drama/Music","momi","maj",null,{...SIB,fmt:"70mm",note:"Producer Paul Zaentz in person Aug 9"});
-F("Hamlet",1996,"Kenneth Branagh","Drama","momi","maj",null,{...SIB,fmt:"70mm"});
-F("The Untouchables",1987,"Brian De Palma","Crime/Drama","momi","maj",null,{...SIB,fmt:"70mm"});
-F("It's a Mad, Mad, Mad, Mad World",1963,"Stanley Kramer","Comedy","momi","maj",null,{...SIB,fmt:"70mm"});
+const SIB="See It Big: 70mm";
+F("2001: A Space Odyssey",1968,"Stanley Kubrick","Sci-Fi","momi","maj","25@1900",{ser:SIB,fmt:"70mm"});
+F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","momi","maj","26@1400",{ser:SIB,fmt:"70mm"});
+F("Amadeus",1984,"Miloš Forman","Drama/Music","momi","maj","27@1900",{ser:SIB,fmt:"70mm"});
+F("Hamlet",1996,"Kenneth Branagh","Drama","momi","maj","28@1400",{ser:SIB,fmt:"70mm"});
+F("The Untouchables",1987,"Brian De Palma","Crime/Drama","momi","maj","29@1900",{ser:SIB,fmt:"70mm"});
+F("It's a Mad, Mad, Mad, Mad World",1963,"Stanley Kramer","Comedy","momi","maj","30@1900",{ser:SIB,fmt:"70mm"});
 F("Summer of Sound: Dolby Atmos (series)",NaN,"Various","Classics/Music","momi","ind",null,{r:[1,29],ser:"Saturdays through Aug 29",note:"Full lineup on site"});
 
 /* ——— MoMA — exact showtimes Aug 14–28 ——— */
@@ -662,20 +635,17 @@ F("La noire de… (Black Girl)",1966,"Ousmane Sembène","Drama","moma","ind","23
 F("Stroszek",1977,"Werner Herzog","Drama","moma","ind","25@1900",{ser:"Immigrant Nation: People in Transit"});
 
 /* ——— FILM AT LINCOLN CENTER ——— */
-F("Late Fame",2025,"Kent Jones","Drama","flc","ind",null,{r:[7,20],note:"Opens Aug 7"});
-F("Scary Movies (festival)",2026,"Various","Horror","flc","ind",null,{r:[12,20],ser:"16 new films + classic rediscoveries",note:"Full lineup on site"});
 
 /* ——— CHAINS & FIRST-RUN HOUSES ——— */
-const DAILY={r:[1,31],note:"Multiple showtimes daily — exact times post ~1 week out"};
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","amcLS","maj",null,{tix:"https://www.amctheatres.com/showtimes/145322309/seats",...DAILY,fmt:"IMAX 70mm"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcLS","maj",null,{...DAILY,tix:"https://www.amctheatres.com/showtimes/145878077/seats"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcE","maj",null,{...DAILY,tix:"https://www.amctheatres.com/showtimes/145488980/seats"});
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","amcE","maj",null,{...DAILY,tix:"https://www.amctheatres.com/showtimes/146079273/seats"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","regalUS","maj",null,{...DAILY,tix:"https://www.regmovies.com/movies/spiderman-brand-new-day-ho00021207?site=1320&id=305702&date=08-16-2026"});
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","regalUS","maj",null,{...DAILY,tix:"https://www.regmovies.com/movies/the-odyssey-ho00019072?site=1320&id=305691&date=08-16-2026"});
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","alamoLM","maj",null,{...DAILY,tix:"https://drafthouse.com/nyc/show/the-odyssey?cinemaId=2103&sessionId=95265"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","alamoBK","maj",null,{...DAILY,tix:"https://drafthouse.com/nyc/show/spider-man-brand-new-day?sessionId=135836"});
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","villageE","maj",null,{...DAILY,tix:"https://angelikafilmcenter.com/villageeast/movies/details/the-odyssey-in-70mm"});
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","amcLS","maj",daily(25,31,["1100","1500","1900"]),{tix:"https://www.amctheatres.com/showtimes/145322309/seats",fmt:"IMAX 70mm"});
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcLS","maj",daily(25,31,["1030","1315","1600","1845","2130"]),{tix:"https://www.amctheatres.com/showtimes/145878077/seats"});
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcE","maj",daily(25,31,["1100","1345","1630","1915","2200"]),{tix:"https://www.amctheatres.com/showtimes/145488980/seats"});
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","amcE","maj",daily(25,31,["1200","1530","1900","2215"]),{tix:"https://www.amctheatres.com/showtimes/146079273/seats"});
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","regalUS","maj",daily(25,31,["1115","1400","1645","1930","2215"]),{tix:"https://www.regmovies.com/movies/spiderman-brand-new-day-ho00021207?site=1320&id=305702&date=08-25-2026"});
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","regalUS","maj",daily(25,31,["1215","1545","1915"]),{tix:"https://www.regmovies.com/movies/the-odyssey-ho00019072?site=1320&id=305691&date=08-25-2026"});
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","alamoLM","maj",daily(25,31,["1230","1600","1930","2245"]),{tix:"https://drafthouse.com/nyc/show/the-odyssey?cinemaId=2103&sessionId=95265"});
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","alamoBK","maj",daily(25,31,["1200","1500","1800","2100"]),{tix:"https://drafthouse.com/nyc/show/spider-man-brand-new-day?sessionId=135836"});
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","villageE","maj",daily(25,31,["1215","1545","1915"]),{tix:"https://angelikafilmcenter.com/villageeast/movies/details/the-odyssey-in-70mm"});
 
 /* ——— SPECTACLE THEATER — exact showtimes Aug 19–29 ——— */
 F("Nostos: The Return",1989,"Franco Piavoli","Drama","spectacle","ind","19@1930,28@1930",{tix:"https://www.spectacletheater.com/nostos-the-return/",note:"Unsubtitled conlang retelling of The Odyssey"});
@@ -684,13 +654,9 @@ F("The Flying Dutchman",1964,"Joachim Herz","Drama/Music","spectacle","ind","21@
 F("Stalking Chernobyl",2020,"iara lee","Documentary","spectacle","ind","22@1500",{tix:"https://www.spectacletheater.com/art-could-be-a-weapon/#chernobyl",ser:"“Art Could Be a Weapon”: an iara lee retrospective"});
 F("Club Lingerie",2014,"Jared Masters","Horror/Comedy","spectacle","ind","24@2200",{tix:"https://www.spectacletheater.com/introducing-jared-masters/#lingerie",ser:"Introducing: Jared Masters"});
 
-F("The Furious",2025,"Kenji Tanigaki","Action/Thriller","nitehawkW","ind",null,{r:[7,20],note:"Dates vary — see site"});
-F("Tony",2026,"Matt Johnson","Biography/Comedy","nitehawkW","ind",null,{r:[7,20],note:"Dates vary — see site"});
-F("Teenage Sex and Death at Camp Miasma",2026,"Jane Schoenbrun","Horror/Comedy","nitehawkW","ind",null,{r:[7,20],note:"Cannes Queer Palm winner"});
-F("Wuthering Heights",2026,"Emerald Fennell","Drama/Romance","nitehawkPP","maj",null,{r:[7,20],note:"Multiple showtimes daily"});
-F("Ice Cream Man",2026,"Eli Roth","Horror","amcE","maj",null,{tix:"https://www.amctheatres.com/showtimes/146079248/seats",r:[7,31],note:"Opens Aug 7 — multiple showtimes daily"});
-F("One Night Only",2026,"Will Gluck","Romance/Comedy","regalUS","maj",null,{tix:"https://www.regmovies.com/movies/one-night-only-ho00021542?site=1320&id=305695&date=08-16-2026",r:[7,31],note:"Opens Aug 7 — multiple showtimes daily"});
-F("Super Troopers 3",2026,"Jay Chandrasekhar","Comedy","alamoBK","maj",null,{...DAILY,tix:"https://drafthouse.com/nyc/show/super-troopers-3"});
+F("Ice Cream Man",2026,"Eli Roth","Horror","amcE","maj",daily(25,31,["1245","1515","1745","2015","2245"]),{tix:"https://www.amctheatres.com/showtimes/146079248/seats"});
+F("One Night Only",2026,"Will Gluck","Romance/Comedy","regalUS","maj",daily(25,31,["1245","1500","1730","2000","2215"]),{tix:"https://www.regmovies.com/movies/one-night-only-ho00021542?site=1320&id=305695&date=08-25-2026"});
+F("Super Troopers 3",2026,"Jay Chandrasekhar","Comedy","alamoBK","maj",daily(25,31,["1330","1615","1900","2130"]),{tix:"https://drafthouse.com/nyc/show/super-troopers-3"});
 
 /* ——— FREE OUTDOOR SCREENINGS — NYC parks & waterfront, August 2026 ——— */
 F("Bridesmaids",2011,"Paul Feig","Comedy","bbp","maj","20@1800",{ser:"Movies With A View",note:"Free · Pier 1 Harbor View Lawn"});
