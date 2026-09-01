@@ -263,7 +263,7 @@
 <header>
   <div class="head-in">
     <div>
-      <div class="eyebrow cond">Now Showing · New York City · August 2026</div>
+      <div class="eyebrow cond" id="eyebrow">Now Showing · New York City · August 2026</div>
       <h1 class="cond">WHATSPLAYING<span class="hl">.NYC</span></h1>
       <div class="sub cond">One City. <span class="hl">Every Screen.</span> Thousands of Stories.</div>
     </div>
@@ -330,7 +330,7 @@
     <div id="schedule"></div>
     <div class="grid" id="grid"></div>
     <div id="ongoing"></div>
-    <div class="empty" id="empty" hidden><b>Nothing matches those filters.</b>Loosen one and the marquee lights back up.</div>
+    <div class="empty" id="empty" hidden></div>
   </main>
 </div>
 
@@ -386,9 +386,9 @@
 <div id="toast"></div>
 
 <footer>
-  Listings compiled Aug 13, 2026 from each theater's published August calendar. Chain multiplexes post exact showtimes about
-  a week out — those entries link straight to the box office. Repertory series marked "dates vary" have
-  day-by-day schedules on the theater's own site. Always confirm before heading out.
+  September listings are being refreshed — check back shortly. Once live, chain multiplexes post exact
+  showtimes about a week out — those entries link straight to the box office. Repertory series marked
+  "dates vary" have day-by-day schedules on the theater's own site. Always confirm before heading out.
 </footer>
 
 <script>
@@ -435,259 +435,22 @@ const THEATERS = {
 // F(title, year, director, genres, theaterKey, dist, showings, opts)
 // showings: "day@HHMM,day@HHMM" (24h, Aug 2026) — null when the run has no published times
 // opts: {r:[startDay,endDay(>31 = runs into Sep)], fmt, ser, note}
+const MON_ABBR=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MON_FULL=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const _now=new Date();
+const CUR_Y=_now.getFullYear(), CUR_M=_now.getMonth(), TD=_now.getDate();
+const DAYS_IN_MONTH=new Date(CUR_Y,CUR_M+1,0).getDate();
+const THIS_MON=MON_ABBR[CUR_M], THIS_MON_FULL=MON_FULL[CUR_M], NEXT_MON=MON_ABBR[(CUR_M+1)%12];
+
 const D=[]; function F(t,y,d,g,th,dist,s,o){D.push({t,y,d,g:g.split("/"),th,dist,s,o:o||{}});}
 // daily(startDay,endDay,["HHMM",...]) — build a repeating "day@time" string for a run with known daily showtimes
-function daily(a,b,times){ const out=[]; for(let d=a;d<=Math.min(b,31);d++) times.forEach(t=>out.push(d+"@"+t)); return out.join(","); }
-
-/* ——— METROGRAPH — exact showtimes Aug 17–30 (31–Sep 6 unannounced; closed Aug 25 for private event) ——— */
-F("2046",2004,"Wong Kar-wai","Sci-Fi/Romance","metrograph","ind","29@1740,30@1900",{tix:"https://metrograph.com/film/?vista_film_id=9999004396",ser:"Like the Wind: Lensed by Christopher Doyle"});
-F("3 Women",1977,"Robert Altman","Drama","metrograph","ind","17@1500,27@1630",{tix:"https://metrograph.com/film/?vista_film_id=9999000915",ser:"Among Friends"});
-F("After Hours",1985,"Martin Scorsese","Comedy/Thriller","metrograph","maj","23@2120,30@2140",{tix:"https://metrograph.com/film/?vista_film_id=9999000970",ser:"This Night Has Opened My Eyes"});
-F("And Then There Was Light",1989,"Otar Iosseliani","Drama","metrograph","ind","26@1820",{tix:"https://metrograph.com/film/?vista_film_id=9999004956",ser:"Otar Iosseliani: Fables of Modern Life"});
-F("Before Sunrise",1995,"Richard Linklater","Romance/Drama","metrograph","ind","18@1500,26@1630",{tix:"https://metrograph.com/film/?vista_film_id=9999002387",ser:"This Night Has Opened My Eyes"});
-F("Bram Stoker's Dracula",1992,"Francis Ford Coppola","Horror/Romance","metrograph","maj","22@1945,23@1840,30@1325",{tix:"https://metrograph.com/film/?vista_film_id=9999004970",ser:"Gary Oldman: The Protean Man"});
-F("Bride of the Earth",1968,"Yılmaz Güney","Drama","metrograph","ind","20@2010",{tix:"https://metrograph.com/film/?vista_film_id=9999004927",ser:"The Worldwide West"});
-F("Chasing Butterflies",1992,"Otar Iosseliani","Comedy/Drama","metrograph","ind","23@1845",{tix:"https://metrograph.com/film/?vista_film_id=9999004972",ser:"Otar Iosseliani: Fables of Modern Life"});
-F("Chocolat",1988,"Claire Denis","Drama","metrograph","ind","27@1425",{tix:"https://metrograph.com/film/?vista_film_id=9999003839",ser:"Jean-Louis Ughetto: The Sound of Things"});
-F("Chungking Express",1994,"Wong Kar-wai","Romance/Drama","metrograph","ind","21@1245,29@1330",{tix:"https://metrograph.com/film/?vista_film_id=9999000735",ser:"Like the Wind: Lensed by Christopher Doyle"});
-F("Claire's Knee",1970,"Éric Rohmer","Drama","metrograph","ind","18@1500",{tix:"https://metrograph.com/film/?vista_film_id=9999000660",ser:"Rohmer's Élisabeth & His Six Moral Tales"});
-F("Collateral",2004,"Michael Mann","Thriller/Crime","metrograph","maj","20@1600,27@1900",{tix:"https://metrograph.com/film/?vista_film_id=9999004937",fmt:"35mm",ser:"This Night Has Opened My Eyes"});
-F("Conversation Piece",1974,"Luchino Visconti","Drama","metrograph","ind","27@1645",{tix:"https://metrograph.com/film/?vista_film_id=9999004912",ser:"Dressed by Yves Saint Laurent"});
-F("Days and Nights in the Forest",1970,"Satyajit Ray","Drama","metrograph","ind","22@1430,28@1600",{tix:"https://metrograph.com/film/?vista_film_id=9999004969",ser:"Going Up the Country"});
-F("Deliverance",1972,"John Boorman","Thriller/Adventure","metrograph","maj","27@1415",{tix:"https://metrograph.com/film/?vista_film_id=9999001370",fmt:"35mm",ser:"Going Up the Country"});
-F("Der Fan",1982,"Eckhart Schmidt","Horror/Drama","metrograph","ind","28@2030,29@2030,30@1515",{tix:"https://metrograph.com/film/?vista_film_id=9999004975",ser:"That Most Taboo of Red Meats"});
-F("Drunken Master II",1994,"Lau Kar-leung","Action/Comedy","metrograph","ind","19@1600,27@2130",{tix:"https://metrograph.com/film/?vista_film_id=9999004940",fmt:"35mm",ser:"The Sifu: Lau Kar-leung"});
-F("Dumplings",2004,"Fruit Chan","Horror","metrograph","ind","17@2145",{tix:"https://metrograph.com/film/?vista_film_id=9999004945",ser:"Like the Wind: Lensed by Christopher Doyle"});
-F("E.T. the Extra-Terrestrial",1982,"Steven Spielberg","Sci-Fi/Family","metrograph","maj","23@1100,30@1100",{tix:"https://metrograph.com/film/?vista_film_id=9999000571",ser:"Screen Time at Metrograph"});
-F("Eve's Bayou",1997,"Kasi Lemmons","Drama","metrograph","ind","28@2025,30@1715",{tix:"https://metrograph.com/film/?vista_film_id=9999001795",ser:"In Her Shadow"});
-F("Fallen Angels",1995,"Wong Kar-wai","Crime/Drama","metrograph","ind","18@2145,24@2145",{tix:"https://metrograph.com/film/?vista_film_id=9999003325",ser:"The Last Dreamers"});
-F("Falling Leaves",1966,"Otar Iosseliani","Comedy/Drama","metrograph","ind","24@1745",{tix:"https://metrograph.com/film/?vista_film_id=9999004963",ser:"Otar Iosseliani: Fables of Modern Life"});
-F("Favorites of the Moon",1984,"Otar Iosseliani","Comedy/Drama","metrograph","ind","18@1715",{tix:"https://metrograph.com/film/?vista_film_id=9999004953",ser:"Otar Iosseliani: Fables of Modern Life"});
-F("First Blood",1982,"Ted Kotcheff","Action","metrograph","ind","18@2150",{tix:"https://metrograph.com/film/?vista_film_id=9999004944",fmt:"35mm",ser:"When Carolco Was King"});
-F("Girlhood",2014,"Céline Sciamma","Drama","metrograph","ind","26@1400",{tix:"https://metrograph.com/film/?vista_film_id=9999004954"});
-F("Good Morning",1959,"Yasujirô Ozu","Comedy/Drama","metrograph","ind","17@1730",{tix:"https://metrograph.com/film/?vista_film_id=9999004946",fmt:"35mm",ser:"Screen Time at Metrograph"});
-F("Goodbye, Dragon Inn",2003,"Tsai Ming-liang","Drama","metrograph","ind","30@1115",{tix:"https://metrograph.com/film/?vista_film_id=9999000006"});
-F("Happy Hour",2015,"Ryusuke Hamaguchi","Drama","metrograph","ind","22@1410",{tix:"https://metrograph.com/film/?vista_film_id=9999001933",ser:"Among Friends"});
-F("Happy Together",1997,"Wong Kar-wai","Drama/Romance","metrograph","ind","17@2150",{tix:"https://metrograph.com/film/?vista_film_id=9999000497",ser:"Like the Wind: Lensed by Christopher Doyle"});
-F("House (Hausu)",1977,"Nobuhiko Ôbayashi","Horror/Comedy","metrograph","ind","21@2300,24@1945,28@2230",{tix:"https://metrograph.com/film/?vista_film_id=9999003307",fmt:"35mm",ser:"That Most Taboo of Red Meats"});
-F("In My Skin",2002,"Marina de Van","Horror/Drama","metrograph","ind","23@2115,29@1550,30@2145",{tix:"https://metrograph.com/film/?vista_film_id=9999004973",ser:"That Most Taboo of Red Meats"});
-F("In the Mood for Love",2000,"Wong Kar-wai","Romance/Drama","metrograph","ind","21@1500",{tix:"https://metrograph.com/film/?vista_film_id=9999000517",fmt:"35mm",ser:"Like the Wind: Lensed by Christopher Doyle"});
-F("Jacob's Ladder",1990,"Adrian Lyne","Horror/Thriller","metrograph","ind","17@1925",{tix:"https://metrograph.com/film/?vista_film_id=9999004924",fmt:"35mm",ser:"When Carolco Was King"});
-F("Je Tu Il Elle",1975,"Chantal Akerman","Drama","metrograph","ind","26@2030",{tix:"https://metrograph.com/film/?vista_film_id=9999002615"});
-F("Jennifer's Body",2009,"Karyn Kusama","Horror/Comedy","metrograph","maj","28@1815,30@1930",{tix:"https://metrograph.com/film/?vista_film_id=9999004974",ser:"That Most Taboo of Red Meats"});
-F("JFK",1991,"Oliver Stone","Drama/Thriller","metrograph","maj","19@1815",{tix:"https://metrograph.com/film/?vista_film_id=9999004941",ser:"Gary Oldman: The Protean Man"});
-F("La Haine",1995,"Mathieu Kassovitz","Drama","metrograph","ind","19@2200,24@1740",{tix:"https://metrograph.com/film/?vista_film_id=9999003673",ser:"This Night Has Opened My Eyes"});
-F("La Notte",1962,"Michelangelo Antonioni","Drama","metrograph","ind","21@1745,26@1400",{tix:"https://metrograph.com/film/?vista_film_id=9999004957",ser:"This Night Has Opened My Eyes"});
-F("Lady in the Water",2006,"M. Night Shyamalan","Fantasy","metrograph","maj","29@1800,30@1300",{tix:"https://metrograph.com/film/?vista_film_id=9999004976",fmt:"35mm",ser:"Like the Wind: Lensed by Christopher Doyle"});
-F("L'Argent",1983,"Robert Bresson","Drama","metrograph","ind","17@1735",{tix:"https://metrograph.com/film/?vista_film_id=9999004934",ser:"Jean-Louis Ughetto: The Sound of Things"});
-F("Les Bonnes Femmes",1960,"Claude Chabrol","Drama","metrograph","ind","26@1615",{tix:"https://metrograph.com/film/?vista_film_id=9999002290",fmt:"35mm"});
-F("Love in the Afternoon",1972,"Éric Rohmer","Drama/Romance","metrograph","ind","27@2135",{tix:"https://metrograph.com/film/?vista_film_id=9999004921",ser:"Rohmer's Élisabeth & His Six Moral Tales"});
-F("Mississippi Mermaid",1969,"François Truffaut","Thriller/Romance","metrograph","ind","29@1320",{tix:"https://metrograph.com/film/?vista_film_id=9999001549",fmt:"35mm",ser:"Dressed by Yves Saint Laurent"});
-F("Mulholland Drive",2001,"David Lynch","Mystery/Thriller","metrograph","ind","29@2230,30@1600",{tix:"https://metrograph.com/film/?vista_film_id=9999002169",fmt:"35mm",ser:"In Her Shadow"});
-F("My Heart Is That Eternal Rose",1989,"Patrick Tam","Crime/Drama","metrograph","ind","19@2210",{tix:"https://metrograph.com/film/?vista_film_id=9999003698",ser:"Like the Wind: Lensed by Christopher Doyle"});
-F("My Little Loves",1974,"Jean Eustache","Drama","metrograph","ind","17@1510",{tix:"https://metrograph.com/film/?vista_film_id=9999000051",ser:"Jean-Louis Ughetto: The Sound of Things"});
-F("My Night at Maud's",1969,"Éric Rohmer","Drama/Romance","metrograph","ind","27@1915",{tix:"https://metrograph.com/film/?vista_film_id=9999003055",ser:"Rohmer's Élisabeth & His Six Moral Tales"});
-F("Nenette and Boni",1996,"Claire Denis","Drama","metrograph","ind","29@2015",{tix:"https://metrograph.com/film/?vista_film_id=9999004977",fmt:"35mm",ser:"Jean-Louis Ughetto: The Sound of Things"});
-F("Obsession",1976,"Brian De Palma","Thriller/Romance","metrograph","ind","26@2220",{tix:"https://metrograph.com/film/?vista_film_id=9999000197",ser:"In Her Shadow"});
-F("Old Joy",2006,"Kelly Reichardt","Drama","metrograph","ind","29@1130",{tix:"https://metrograph.com/film/?vista_film_id=9999003764",fmt:"35mm",ser:"Going Up the Country"});
-F("Paranoid Park",2007,"Gus Van Sant","Drama","metrograph","ind","20@1820",{tix:"https://metrograph.com/film/?vista_film_id=9999001512",ser:"Like the Wind: Lensed by Christopher Doyle"});
-F("Pastorale",1975,"Otar Iosseliani","Drama","metrograph","ind","23@1630",{tix:"https://metrograph.com/film/?vista_film_id=9999004971",ser:"Otar Iosseliani: Fables of Modern Life"});
-F("Petite Maman",2021,"Céline Sciamma","Drama/Fantasy","metrograph","ind","23@1445,29@1145",{tix:"https://metrograph.com/film/?vista_film_id=9999004050",ser:"In Her Shadow"});
-F("Possession",1981,"Andrzej Żuławski","Horror/Drama","metrograph","ind","20@2150",{tix:"https://metrograph.com/film/?vista_film_id=9999001205"});
-F("Raw",2016,"Julia Ducournau","Horror","metrograph","ind","21@2250,28@2235",{tix:"https://metrograph.com/film/?vista_film_id=9999003304",ser:"That Most Taboo of Red Meats"});
-F("Rebecca",1940,"Alfred Hitchcock","Thriller/Romance","metrograph","ind","20@1915",{tix:"https://metrograph.com/film/?vista_film_id=9999000678",ser:"In Her Shadow"});
-F("Saturday Afternoon Cartoons",1950,"Various","Animation","metrograph","ind","22@1215",{tix:"https://metrograph.com/film/?vista_film_id=9999004979",fmt:"16mm",ser:"Screen Time at Metrograph"});
-F("Sholay",1975,"Ramesh Sippy","Action/Adventure","metrograph","ind","19@1810",{tix:"https://metrograph.com/film/?vista_film_id=9999004947",ser:"The Worldwide West"});
-F("Solaris",1972,"Andrei Tarkovsky","Sci-Fi","metrograph","ind","20@1600,26@2100",{tix:"https://metrograph.com/film/?vista_film_id=9999002965",ser:"New Museum Presents New Humans"});
-F("Spider Baby",1967,"Jack Hill","Horror/Comedy","metrograph","ind","22@2235",{tix:"https://metrograph.com/film/?vista_film_id=9999001189",ser:"That Most Taboo of Red Meats"});
-F("Stand By Me",1986,"Rob Reiner","Drama/Adventure","metrograph","maj","29@1545",{tix:"https://metrograph.com/film/?vista_film_id=9999001076",ser:"Going Up the Country"});
-F("Stavisky",1974,"Alain Resnais","Drama","metrograph","ind","18@1925",{tix:"https://metrograph.com/film/?vista_film_id=9999002634",ser:"Dressed by Yves Saint Laurent"});
-F("Tampopo",1985,"Juzo Itami","Comedy","metrograph","ind","17@1930",{tix:"https://metrograph.com/film/?vista_film_id=9999002885",ser:"Natasha Pickowicz Selects"});
-F("The Chaser",2008,"Na Hong-jin","Thriller","metrograph","ind","20@2150",{tix:"https://metrograph.com/film/?vista_film_id=9999004951",fmt:"35mm",ser:"This Night Has Opened My Eyes"});
-F("The Dark Knight",2008,"Christopher Nolan","Action/Crime","metrograph","maj","21@1715,23@1330,28@1525",{tix:"https://metrograph.com/film/?vista_film_id=9999003615",fmt:"35mm",ser:"Gary Oldman: The Protean Man"});
-F("The Great Silence",1968,"Sergio Corbucci","Western","metrograph","ind","24@1530",{tix:"https://metrograph.com/film/?vista_film_id=9999003062",ser:"The Worldwide West"});
-F("The Hunger",1983,"Tony Scott","Horror","metrograph","ind","26@1845",{tix:"https://metrograph.com/film/?vista_film_id=9999001195",fmt:"35mm"});
-F("The Jungle Book",1967,"Wolfgang Reitherman","Animation/Family","metrograph","maj","23@1100",{tix:"https://metrograph.com/film/?vista_film_id=9999004962",fmt:"35mm",ser:"It Started With a Mouse: Hand-Drawn Classics on 35mm"});
-F("The Night is Short, Walk on Girl",2019,"Masaaki Yuasa","Animation/Comedy","metrograph","ind","18@1710",{tix:"https://metrograph.com/film/?vista_film_id=9999001554",ser:"This Night Has Opened My Eyes"});
-F("The Others",2001,"Alejandro Amenábar","Horror","metrograph","ind","21@1530",{tix:"https://metrograph.com/film/?vista_film_id=9999004961",ser:"In Her Shadow"});
-F("There Once Was a Singing Blackbird",1969,"Otar Iosseliani","Comedy/Drama","metrograph","ind","24@1940",{tix:"https://metrograph.com/film/?vista_film_id=9999004964",ser:"Otar Iosseliani: Fables of Modern Life"});
-F("True Romance",1993,"Tony Scott","Crime/Romance","metrograph","maj","21@2030,22@1700,29@2245",{tix:"https://metrograph.com/film/?vista_film_id=9999003371",ser:"Gary Oldman: The Protean Man"});
-F("Vertigo",1958,"Alfred Hitchcock","Thriller","metrograph","maj","18@1910,24@1500",{tix:"https://metrograph.com/film/?vista_film_id=9999000090",fmt:"35mm",ser:"In Her Shadow"});
-F("Wake in Fright",1971,"Ted Kotcheff","Thriller/Drama","metrograph","ind","24@2140",{tix:"https://metrograph.com/film/?vista_film_id=9999004939",ser:"The Worldwide West"});
-F("What Lies Beneath",2000,"Robert Zemeckis","Thriller/Horror","metrograph","maj","21@2015,22@1950",{tix:"https://metrograph.com/film/?vista_film_id=9999004967",fmt:"35mm",ser:"In Her Shadow"});
-F("When Marnie Was There",2014,"Hiromasa Yonebayashi","Animation/Drama","metrograph","ind","22@1200,23@1240",{tix:"https://metrograph.com/film/?vista_film_id=9999004968",ser:"In Her Shadow"});
-F("White Material",2009,"Claire Denis","Drama","metrograph","ind","19@1600",{tix:"https://metrograph.com/film/?vista_film_id=9999000557"});
-F("Withnail and I",1987,"Bruce Robinson","Comedy","metrograph","ind","21@1315,23@1625",{tix:"https://metrograph.com/film/?vista_film_id=9999004966",ser:"Going Up the Country"});
-F("Women on the Verge of a Nervous Breakdown",1988,"Pedro Almodóvar","Comedy/Drama","metrograph","ind","22@2230,28@1830",{tix:"https://metrograph.com/film/?vista_film_id=9999003126",fmt:"35mm",ser:"Among Friends"});
-
-/* ——— FILM FORUM — exact showtimes Aug 13–19 ——— */
-F("Late Fame",2025,"Kent Jones","Drama","filmforum","ind","13@1215,13@1425,13@1640,13@1850,13@2100,14@1215,14@1425,14@1640,14@1850,14@2100,15@1215,15@1425,15@1640,15@1850,15@2100,16@1215,16@1425,16@1640,16@1850,16@2100,17@1215,17@1425,17@1640,17@1850,17@2100,18@1215,18@1425,18@1640,18@1850,18@2100,19@1215,19@1425,19@1640,19@1850,19@2100",{tix:"https://filmforum.org/film/late-fame",note:"Q&As with Kent Jones, Willem Dafoe & Edmund Donovan"});
-F("Center Stage",1991,"Stanley Kwan","Drama","filmforum","ind","13@1300,13@1610,13@1920,14@1300,14@1610,14@1920,15@1300,15@1610,15@1920,16@1300,16@1610,16@1920,17@1300,17@1610,17@1920,18@1300,18@1610,18@1920,19@1300,19@1610,19@1920",{tix:"https://filmforum.org/film/center-stage",note:"New restoration"});
-F("The Bend in the River",2025,"—","Drama","filmforum","ind","13@1220,13@1415,13@1610,13@1810,13@2010,14@1220,14@1415,14@1610,14@1810,14@2010,15@1220,15@1415,15@1610,15@1810,15@2010,16@1220,16@1415,16@1610,16@1810,16@2010,17@1220,17@1415,17@1610,17@1810,17@2010,18@1220,18@1415,18@1610,18@1810,18@2010",{tix:"https://filmforum.org/film/the-bend-in-the-river",note:"Opens Aug 13"});
-F("Billy Liar",1963,"John Schlesinger","Comedy/Drama","filmforum","ind","13@1230,13@1440,13@1650,13@1900,13@2110,14@1230,14@1440,14@1650,14@1900,14@2110,15@1230,15@1440,15@1650,15@1900,15@2110,16@1230,16@1440,16@1650,16@1900,16@2110,17@1230,17@1440,17@1650,17@1900,17@2110,18@1230,18@1440,18@1650,18@1900,18@2110,19@1300,19@1530,19@1800",{tix:"https://filmforum.org/film/billy-liar",note:"New restoration"});
-F("The Taking of Pelham One Two Three",1974,"Joseph Sargent","Crime/Thriller","filmforum","maj","18@2010",{tix:"https://filmforum.org/film/the-taking-of-pelham-123-nyc-in-transit",fmt:"35mm",ser:"NYC In Transit"});
-F("The Son of the Sheik",1926,"George Fitzmaurice","Silent/Romance","filmforum","ind","23@1900",{tix:"https://filmforum.org/film/the-son-of-the-sheik",fmt:"35mm",note:"Rudolph Valentino centennial"});
-F("The Godfather",1972,"Francis Ford Coppola","Crime/Drama","filmforum","maj","25@1900,29@1500",{tix:"https://filmforum.org/film/the-godfather-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
-F("The Godfather Part II",1974,"Francis Ford Coppola","Crime/Drama","filmforum","maj","25@2215",{tix:"https://filmforum.org/film/the-godfather-part-ii-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
-F("The Conversation",1974,"Francis Ford Coppola","Thriller/Mystery","filmforum","maj","26@1900",{tix:"https://filmforum.org/film/the-conversation-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
-F("Apocalypse Now",1979,"Francis Ford Coppola","War/Drama","filmforum","maj","26@2130",{tix:"https://filmforum.org/film/apocalypse-now-final-cut-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
-F("The Rain People",1969,"Francis Ford Coppola","Drama","filmforum","maj","27@1700",{tix:"https://filmforum.org/film/the-rain-people-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
-F("The Outsiders",1983,"Francis Ford Coppola","Drama","filmforum","maj","27@1930",{tix:"https://filmforum.org/film/the-outsiders-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
-F("Rumble Fish",1983,"Francis Ford Coppola","Drama","filmforum","maj","28@1700",{tix:"https://filmforum.org/film/rumble-fish-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
-F("One From the Heart",1982,"Francis Ford Coppola","Musical/Romance","filmforum","maj","28@1930",{tix:"https://filmforum.org/film/one-from-the-heart-reprise-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
-F("Megalopolis",2024,"Francis Ford Coppola","Sci-Fi/Drama","filmforum","ind","30@1900,31@1500",{tix:"https://filmforum.org/film/megalopolis-coppola",ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Series continues through Sep 10 — later dates on site"});
-
-/* ——— IFC CENTER — exact showtimes Aug 13–19 ——— */
-F("Union County",2026,"—","Drama","ifc","ind","13@1900,14@1130,14@1430,14@1630,14@1900,14@2130,15@1430,15@1635,15@1900,15@2130,16@1400,16@1630,16@1900,16@2130,17@1130,17@1430,17@1645,17@1910,17@2135,18@1130,18@1430,18@1645,18@1910,18@2135,19@1145,19@1430,19@1645,19@1910,19@2135",{tix:"https://www.ifccenter.com/films/union-county/",note:"Opens Aug 14 after sneak preview"});
-F("The Samurai and the Prisoner",2026,"Kiyoshi Kurosawa","Drama","ifc","ind","13@1535,13@1840,13@2120,14@1035,14@1245,14@1630,14@2040,15@1035,15@1245,15@1630,15@2040,16@1035,16@1245,16@1630,16@2040,17@1035,17@1245,17@1630,17@2120,18@1035,18@1245,18@1630,18@2105,19@1035,19@1245,19@1630",{tix:"https://www.ifccenter.com/films/the-samurai-and-the-prisoner/"});
-F("Mysterious Skin",2004,"Gregg Araki","Drama","ifc","ind","14@1405,14@1640,14@1915,14@2150,15@1405,15@1915,15@2145,16@1430,16@1655,16@1920,16@2145,17@1405,17@1640,17@1915,17@2145,18@1405,18@1640,18@1915,18@2145,19@1405,19@1640,19@1915,19@2150",{tix:"https://www.ifccenter.com/films/mysterious-skin/",note:"Revival run"});
-F("Train to Busan",2016,"Yeon Sang-ho","Horror/Action","ifc","ind","14@1315,14@1850,14@2140,15@1600,15@1850,15@2140,16@1315,16@1600,16@1850,17@1600,17@1850,17@2140,18@1315,18@1850,18@2140,19@1315,19@1805,19@2140",{tix:"https://www.ifccenter.com/films/train-to-busan-2/",note:"10th-anniversary revival"});
-F("Manhunter: The Final Cut",1986,"Michael Mann","Thriller/Crime","ifc","ind","13@1545,13@2140,14@1545,14@2340,15@1545,15@2340,16@1545,16@2140,17@1545,18@1545,19@1530",{tix:"https://www.ifccenter.com/films/michael-manns-manhunter-the-final-cut/",note:"40th-anniversary restoration"});
-F("Wild Inside",2026,"Penny Lane","Documentary","ifc","ind","13@1435,13@1650,13@1905,14@1045,14@1420,14@1825,15@1045,15@1335,15@1420,15@1825,16@1045,16@1420,16@1825,17@1045,17@1420,18@1040,18@1420,18@1930,19@1040,19@1420",{tix:"https://www.ifccenter.com/films/wild-inside/",note:"Flaco the owl documentary"});
-F("Freefall: A Reckoning for Boeing",2026,"—","Documentary","ifc","ind","14@1035,14@1225,14@1925,15@1035,15@1925,16@1035,16@1225,17@1035,17@1225,18@1035,18@1830,19@1035,19@1225,19@1925",{tix:"https://www.ifccenter.com/films/freefall-a-reckoning-for-boeing/",note:"Opens Aug 14"});
-F("The Big Cheese",2025,"—","Comedy","ifc","ind","13@1040,13@1330,13@1725,13@1935,14@1240,14@2135,15@1240,15@2135,16@1240,16@2130,17@1240,17@2130,18@1240,18@2130,19@1240,19@2130",{tix:"https://www.ifccenter.com/films/the-big-cheese/"});
-F("Maddie's Secret",2025,"John Early","Comedy","ifc","ind","13@1110,13@1500,13@2130,14@1045,14@1605,17@1045,17@1330,18@1605,19@1045,19@1545",{tix:"https://www.ifccenter.com/films/maddies-secret/"});
-F("National Theatre Live: All My Sons",2026,"—","Drama","ifc","ind","15@1100,16@1100,17@1830",{tix:"https://www.ifccenter.com/films/national-theatre-live-all-my-sons-2026/",note:"Filmed stage production"});
-F("CatVideoFest 2026",2026,"Will Braden","Documentary/Family","ifc","ind","15@1105,16@1105",{tix:"https://www.ifccenter.com/films/catvideofest-2026/",note:"Benefit for cat charities"});
-F("Boyhood",2014,"Richard Linklater","Drama","ifc","ind","19@1815",{tix:"https://www.ifccenter.com/films/boyhood/"});
-F("It Ends",2025,"Alexander Ullom","Horror/Thriller","ifc","ind",daily(25,31,["1245","1500","1730","2000","2230"]),{tix:"https://www.ifccenter.com/films/it-ends/"});
-F("How to Divorce During the War",2026,"—","Documentary","ifc","ind",daily(25,31,["1300","1545","1815","2045"]),{tix:"https://www.ifccenter.com/films/how-to-divorce-during-the-war/"});
-F("Crows Are White",2022,"—","Documentary","ifc","ind",daily(26,31,["1400","1630","1900","2130"]),{tix:"https://www.ifccenter.com/films/crows-are-white-2/",note:"Opens Aug 26"});
-F("Gandahar",1987,"René Laloux","Animation/Sci-Fi","ifc","ind","28@2359,29@2359",{tix:"https://www.ifccenter.com/films/gandahar/",ser:"Waverly Midnights"});
-F("Colony",2026,"—","Documentary","ifc","ind",daily(28,31,["1300","1545","1815","2045"]),{tix:"https://www.ifccenter.com/films/colony-3/",note:"Opens Aug 28"});
-
-/* ——— QUAD — exact showtimes Aug 13 ——— */
-F("The Asphalt Jungle",1950,"John Huston","Noir/Crime","quad","maj","26@1830,27@1600",{ser:"John Huston: Hollywood Maverick"});
-F("The Rocky Horror Picture Show",1975,"Jim Sharman","Musical/Cult","quad","ind","28@2359,29@2359",{note:"Weekend late-night participation screenings"});
-
-/* ——— ANTHOLOGY FILM ARCHIVES — exact showtimes Aug 7–20 ——— */
-F("Time to Die",1966,"Arturo Ripstein","Western/Drama","anthology","ind","7@2100,11@1845,16@2000",{ser:"Experimental Westerns, Part 2"});
-F("Soda Pop Joe",1964,"Oldřich Lipský","Comedy/Western","anthology","ind","10@2100,16@1745",{ser:"Experimental Westerns, Part 2"});
-F("The Wind Blows Under Your Feet",1976,"György Szomjas","Western/Drama","anthology","ind","16@1530,20@1845",{ser:"Experimental Westerns, Part 2"});
-F("Behind My Eyes",2021,"—","Documentary","anthology","ind","16@1700");
-F("Comandante Fritz",2025,"—","Documentary","anthology","ind","16@1900");
-F("White Sun of the Desert",1970,"Vladimir Motyl","Western/Action","anthology","ind","18@1845",{ser:"Experimental Westerns, Part 2"});
-F("Zachariah",1971,"George Englund","Western/Musical","anthology","ind","18@2100",{ser:"Experimental Westerns, Part 2"});
-F("A Girl Is a Gun",1971,"Luc Moullet","Western","anthology","ind","19@1830",{ser:"Experimental Westerns, Part 2"});
-F("Future Future",NaN,"—","Experimental","anthology","ind","19@1900");
-F("Deadlock",1970,"Roland Klick","Western/Thriller","anthology","ind","19@2100",{ser:"Experimental Westerns, Part 2"});
-F("Joseph Cornell",1936,"Joseph Cornell","Experimental","anthology","ind","20@1815",{ser:"Essential Cinema"});
-F("Conner / Conrad",NaN,"Bruce Conner & Tony Conrad","Experimental","anthology","ind","20@2030",{ser:"Essential Cinema"});
-F("Mad Dog Morgan",1976,"Philippe Mora","Western/Drama","anthology","ind","20@2100",{ser:"Experimental Westerns, Part 2"});
-F("Dead Man",1995,"Jim Jarmusch","Western/Drama","anthology","ind","29@2100,30@1900",{ser:"Experimental Westerns, Part 2"});
-F("Meek's Cutoff",2010,"Kelly Reichardt","Western/Drama","anthology","ind","27@1830",{ser:"Experimental Westerns, Part 2"});
-F("The Ballad of Little Jo",1993,"Maggie Greenwald","Western/Drama","anthology","ind","27@1900,30@2030",{ser:"Experimental Westerns, Part 2"});
-F("Maya Deren Program",1943,"Maya Deren","Experimental","anthology","ind","29@1900",{ser:"Essential Cinema"});
-F("Ganz + Streeter",NaN,"Ganz & Streeter","Experimental/Documentary","anthology","ind","28@1900,29@1900",{note:"Filmmakers in person for both screenings"});
-/* ——— BAM ——— */
-F("The Samurai and the Prisoner",2026,"Kiyoshi Kurosawa","Drama","bam","ind",daily(25,31,["1600","1900"]));
-F("Teenage Sex and Death at Camp Miasma",2026,"Jane Schoenbrun","Horror/Comedy","bam","ind",daily(25,31,["1830","2100"]));
-F("Arthouse Sci-Fi (series)",NaN,"Godard, Tarkovsky, Cronenberg…","Sci-Fi/Classics","bam","ind",null,{r:[21,27],ser:"Series",note:"Full lineup on site"});
-F("Kino Canines (series)",NaN,"Various","Family/Classics","bam","ind",null,{r:[28,34],ser:"Dogs on film through cinema history",note:"Full lineup on site"});
-
-/* ——— ROXY ——— */
-F("A. Rimbaud",2026,"—","Documentary","roxy","ind","2@1930,30@1330");
-F("Characters Disappearing",2025,"—","Drama","roxy","ind","5@1900,19@1900");
-F("The Fountain",2006,"Darren Aronofsky","Sci-Fi/Romance","roxy","maj","7@1900,16@1715",{fmt:"35mm"});
-F("Gail Daughtry and the Celebrity Sex Pass",2026,"—","Comedy","roxy","ind","14@1900,15@1930,18@2130,20@1630,21@1700");
-F("Dead Souls",2025,"—","Drama","roxy","ind","14@2100,17@2100,19@2115,20@1900");
-F("54: The Director's Cut",1998,"Mark Christopher","Drama/Music","roxy","ind","16@1500,20@2100,23@1900",{note:"With Q&A"});
-F("Incorrectional: A Memorial Service",2018,"—","Documentary","roxy","ind","16@1930");
-F("Crank",2006,"Neveldine/Taylor","Action","roxy","ind","17@1900,21@2130,22@1630,23@1700",{fmt:"35mm"});
-F("Click",2006,"Frank Coraci","Comedy","roxy","maj","18@1900,22@1400,23@1445",{fmt:"35mm"});
-F("Lockjaw",2025,"—","Horror","roxy","ind","21@1900,22@2130",{note:"With Q&A"});
-F("In the Hand of Dante",2025,"Julian Schnabel","Drama","roxy","ind","22@1830,28@1615");
-F("The Wind That Shakes the Barley",2006,"Ken Loach","War/Drama","roxy","ind","24@1900,29@1430",{fmt:"35mm"});
-F("Maddie's Secret",2025,"John Early","Comedy","roxy","ind","24@2130,26@2145,27@1900");
-F("When We Saw Each Other More Often",2025,"—","Drama","roxy","ind","25@1900,30@1700",{note:"With Q&A"});
-F("The Black Dahlia",2006,"Brian De Palma","Noir/Crime","roxy","maj","25@2130,28@1915",{fmt:"35mm"});
-F("In the Family",2011,"Patrick Wang","Drama","roxy","ind","26@1800",{fmt:"35mm",note:"With Q&A"});
-F("I Want Your Sex",2026,"Gregg Araki","Comedy/Thriller","roxy","ind","28@2145,29@1945,30@2000");
-F("The Lake House",2006,"Alejandro Agresti","Romance/Fantasy","roxy","maj","31@1900",{fmt:"35mm"});
-F("The Straight Story",1999,"David Lynch","Drama","roxy","ind","31@2100",{fmt:"35mm"});
-F("Her Private Hell",1968,"Norman J. Warren","Drama/Cult","roxy","ind","28@1700");
-F("City Dudes",NaN,"—","Comedy","roxy","ind","29@2145");
-
-/* ——— PARIS THEATER — Big & Loud, Aug 21–Sep 15 ——— */
-// Paris is single-screen — one Big & Loud title plays per day. Series runs Aug 21–Sep 15 (43 films);
-// only the titles landing on a remaining-August date are listed here — the rest screen after Aug 31, see site.
-const BLS="Big & Loud 2026 — Aug 21–Sep 15";
-F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","paris","maj","25@1400",{ser:BLS,fmt:"70mm"});
-F("2001: A Space Odyssey",1968,"Stanley Kubrick","Sci-Fi","paris","maj","26@1900",{ser:BLS,fmt:"70mm"});
-F("Vertigo",1958,"Alfred Hitchcock","Thriller/Mystery","paris","maj","27@1900",{ser:BLS,fmt:"70mm"});
-F("Spartacus",1960,"Stanley Kubrick","Drama/Adventure","paris","maj","28@1400",{ser:BLS,fmt:"70mm"});
-F("Boogie Nights",1997,"Paul Thomas Anderson","Drama","paris","maj","29@1900",{ser:BLS,fmt:"70mm"});
-F("Inherent Vice",2014,"Paul Thomas Anderson","Comedy/Noir","paris","maj","30@1900",{ser:BLS,fmt:"70mm"});
-F("The Master",2012,"Paul Thomas Anderson","Drama","paris","ind","31@1900",{ser:BLS,fmt:"70mm"});
-
-/* ——— MoMI — See It Big: 70mm, Jul 31–Aug 30 ——— */
-const SIB="See It Big: 70mm";
-F("2001: A Space Odyssey",1968,"Stanley Kubrick","Sci-Fi","momi","maj","25@1900",{ser:SIB,fmt:"70mm"});
-F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","momi","maj","26@1400",{ser:SIB,fmt:"70mm"});
-F("Amadeus",1984,"Miloš Forman","Drama/Music","momi","maj","27@1900",{ser:SIB,fmt:"70mm"});
-F("Hamlet",1996,"Kenneth Branagh","Drama","momi","maj","28@1400",{ser:SIB,fmt:"70mm"});
-F("The Untouchables",1987,"Brian De Palma","Crime/Drama","momi","maj","29@1900",{ser:SIB,fmt:"70mm"});
-F("It's a Mad, Mad, Mad, Mad World",1963,"Stanley Kramer","Comedy","momi","maj","30@1900",{ser:SIB,fmt:"70mm"});
-F("Summer of Sound: Dolby Atmos (series)",NaN,"Various","Classics/Music","momi","ind",null,{r:[1,29],ser:"Saturdays through Aug 29",note:"Full lineup on site"});
-
-/* ——— MoMA — exact showtimes Aug 14–28 ——— */
-F("FAST",2026,"Rob Tregenza","Drama/Experimental","moma","ind","14@1830,15@1800,16@1400,17@1830,18@1830",{ser:"MoMA Presents"});
-F("In Jackson Heights",2015,"Frederick Wiseman","Documentary","moma","ind","16@1600,18@1530",{ser:"Immigrant Nation: People in Transit"});
-F("Entre les murs (The Class)",2008,"Laurent Cantet","Drama","moma","ind","20@1930,22@1600",{ser:"Immigrant Nation: People in Transit"});
-F("My Beautiful Laundrette",1985,"Stephen Frears","Comedy/Drama","moma","ind","24@1900",{ser:"Immigrant Nation: People in Transit",note:"Paired with Solitaire à micro ouvert, 1983"});
-F("La noire de… (Black Girl)",1966,"Ousmane Sembène","Drama","moma","ind","23@1630,25@1630",{ser:"Immigrant Nation: People in Transit",note:"Paired with My Life Is Wind (A Letter), 2024"});
-F("Stroszek",1977,"Werner Herzog","Drama","moma","ind","25@1900",{ser:"Immigrant Nation: People in Transit"});
-
-/* ——— FILM AT LINCOLN CENTER ——— */
-
-/* ——— CHAINS & FIRST-RUN HOUSES ——— */
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","amcLS","maj",daily(25,31,["1100","1500","1900"]),{tix:"https://www.amctheatres.com/showtimes/145322309/seats",fmt:"IMAX 70mm"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcLS","maj",daily(25,31,["1030","1315","1600","1845","2130"]),{tix:"https://www.amctheatres.com/showtimes/145878077/seats"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcE","maj",daily(25,31,["1100","1345","1630","1915","2200"]),{tix:"https://www.amctheatres.com/showtimes/145488980/seats"});
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","amcE","maj",daily(25,31,["1200","1530","1900","2215"]),{tix:"https://www.amctheatres.com/showtimes/146079273/seats"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","regalUS","maj",daily(25,31,["1115","1400","1645","1930","2215"]),{tix:"https://www.regmovies.com/movies/spiderman-brand-new-day-ho00021207?site=1320&id=305702&date=08-25-2026"});
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","regalUS","maj",daily(25,31,["1215","1545","1915"]),{tix:"https://www.regmovies.com/movies/the-odyssey-ho00019072?site=1320&id=305691&date=08-25-2026"});
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","alamoLM","maj",daily(25,31,["1230","1600","1930","2245"]),{tix:"https://drafthouse.com/nyc/show/the-odyssey?cinemaId=2103&sessionId=95265"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","alamoBK","maj",daily(25,31,["1200","1500","1800","2100"]),{tix:"https://drafthouse.com/nyc/show/spider-man-brand-new-day?sessionId=135836"});
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","villageE","maj",daily(25,31,["1215","1545","1915"]),{tix:"https://angelikafilmcenter.com/villageeast/movies/details/the-odyssey-in-70mm"});
-
-/* ——— SPECTACLE THEATER — exact showtimes Aug 19–29 ——— */
-F("Nostos: The Return",1989,"Franco Piavoli","Drama","spectacle","ind","19@1930,28@1930",{tix:"https://www.spectacletheater.com/nostos-the-return/",note:"Unsubtitled conlang retelling of The Odyssey"});
-F("Satan's Menagerie",2001,"Gary Griffith","Horror/Comedy","spectacle","ind","19@2200,24@1930",{tix:"https://www.spectacletheater.com/satans-menagerie/"});
-F("The Flying Dutchman",1964,"Joachim Herz","Drama/Music","spectacle","ind","21@1930,29@2200",{tix:"https://www.spectacletheater.com/musik-kino-drama/#dutchman",ser:"Musik-Kino-Drama: Richard Wagner x2"});
-F("Stalking Chernobyl",2020,"iara lee","Documentary","spectacle","ind","22@1500",{tix:"https://www.spectacletheater.com/art-could-be-a-weapon/#chernobyl",ser:"“Art Could Be a Weapon”: an iara lee retrospective"});
-F("Club Lingerie",2014,"Jared Masters","Horror/Comedy","spectacle","ind","24@2200",{tix:"https://www.spectacletheater.com/introducing-jared-masters/#lingerie",ser:"Introducing: Jared Masters"});
-
-F("Ice Cream Man",2026,"Eli Roth","Horror","amcE","maj",daily(25,31,["1245","1515","1745","2015","2245"]),{tix:"https://www.amctheatres.com/showtimes/146079248/seats"});
-F("One Night Only",2026,"Will Gluck","Romance/Comedy","regalUS","maj",daily(25,31,["1245","1500","1730","2000","2215"]),{tix:"https://www.regmovies.com/movies/one-night-only-ho00021542?site=1320&id=305695&date=08-25-2026"});
-F("Super Troopers 3",2026,"Jay Chandrasekhar","Comedy","alamoBK","maj",daily(25,31,["1330","1615","1900","2130"]),{tix:"https://drafthouse.com/nyc/show/super-troopers-3"});
-
-/* ——— FREE OUTDOOR SCREENINGS — NYC parks & waterfront, August 2026 ——— */
-F("Bridesmaids",2011,"Paul Feig","Comedy","bbp","maj","20@1800",{ser:"Movies With A View",note:"Free · Pier 1 Harbor View Lawn"});
-F("Public Choice",NaN,"—","Drama","bbp","ind","27@1800",{ser:"Movies With A View",note:"Free · Pier 1 Harbor View Lawn"});
-F("City of God",2002,"Fernando Meirelles","Crime/Drama","bryant","ind","17@2000",{ser:"Bryant Park Movie Nights",note:"Free · lawn opens 5:00 PM"});
-F("King Creole",1958,"Michael Curtiz","Drama/Music","bryant","maj","24@2000",{ser:"Bryant Park Movie Nights",note:"Free · lawn opens 5:00 PM"});
-F("No Country for Old Men",2007,"Joel & Ethan Coen","Thriller/Crime","bryant","ind","31@2000",{ser:"Bryant Park Movie Nights",note:"Free · lawn opens 5:00 PM"});
-F("Honey, I Shrunk the Kids",1989,"Joe Johnston","Family/Comedy","domino","maj","18@1600",{ser:"Movies in the Square",note:"Free · Domino Square"});
-F("Before Sunrise",1995,"Richard Linklater","Romance/Drama","domino","ind","18@1900",{ser:"Movies in the Square",note:"Free · Domino Square"});
-F("King Richard",2021,"Reinaldo Marcus Green","Drama/Sport","seaport","maj","18@2000",{ser:"Seaport Cinema",note:"Free · Heineken Riverdeck, at sunset"});
-F("Hitch",2005,"Andy Tennant","Romance/Comedy","seaport","maj","25@2000",{ser:"Seaport Cinema",note:"Free · Heineken Riverdeck, at sunset"});
-F("Hamilton",2020,"Thomas Kail","Musical/Drama","astoria","maj","17@2000",{ser:"Free Movie on the Waterfront",note:"Free · Astoria Park Great Lawn — confirm time on site"});
-F("Mamma Mia!",2008,"Phyllida Lloyd","Musical/Comedy","uws","maj","22@1900",{ser:"Tales of Summer",note:"Free · outdoor screening"});
-F("Space Jam",1996,"Joe Pytka","Family/Comedy","fortgreene","maj","26@2000",{ser:"Summer Movies in the Park",note:"Free · at dusk"});
-F("An American Tail: Fievel Goes West",1991,"Nichols & Kuenster","Animation/Family","intrepid","maj","28@2000",{ser:"Intrepid Movie Night",note:"Free · on the flight deck, at dusk"});
-F("Socrates Outdoor Cinema (international series)",NaN,"Programmed by Film Forum & Rooftop Films","Drama/World",'socrates',"ind",null,{r:[19,27],ser:"Wednesdays through Aug 27",note:"Free · live performance 7:00 PM, film at sundown"});
-F("Movies Under the Stars (150+ screenings)",NaN,"NYC Parks & Mayor's Office of Media","Family/Classics","nycparks","ind",null,{r:[13,31],ser:"Citywide, all five boroughs",note:"Free · nightly at dusk — pick a park on the Parks calendar"});
-F("SummerScreen at McCarren Park",NaN,"—","Comedy/Classics","mccarren","ind",null,{r:[13,26],ser:"Wednesdays",note:"Free · live music 6:00 PM, film at dusk"});
-F("Flicks on the Beach",NaN,"—","Family/Classics","coney","ind",null,{r:[13,31],ser:"Mondays on the sand",note:"Free · West 12th St beach, at dusk"});
-F("RiverFlicks",NaN,"—","Family/Classics","hudson","ind",null,{r:[13,31],ser:"Wednesdays & Fridays",note:"Free · Piers 46 & 63, at dusk"});
-F("Rooftop Films Summer Series",NaN,"—","Documentary/Experimental","rooftop","ind",null,{r:[13,31],ser:"Citywide rooftops & yards",note:"Outdoor screenings with live music — see schedule"});
+function daily(a,b,times){ const out=[]; for(let d=a;d<=Math.min(b,DAYS_IN_MONTH);d++) times.forEach(t=>out.push(d+"@"+t)); return out.join(","); }
 
 /* ————— app ————— */
-const DOWS=["Sat","Sun","Mon","Tue","Wed","Thu","Fri"];
-const DOWL=["Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"];
-function dow(d){return DOWS[(d-1)%7];}
-function dowFull(d){return DOWL[(d-1)%7];}
+const DOWS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const DOWL=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+function dow(d){return DOWS[new Date(CUR_Y,CUR_M,d).getDay()];}
+function dowFull(d){return DOWL[new Date(CUR_Y,CUR_M,d).getDay()];}
 function parseShow(s){ if(!s) return [];
   return s.split(",").map(x=>{const[d,t]=x.split("@");
     return {d:+d,t:t?(+t.slice(0,-2)*60 + +t.slice(-2)):null};});}
@@ -701,9 +464,6 @@ function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
 D.forEach((f,i)=>{ f.i=i; f.shows=parseShow(f.s); f.r=f.o.r||null;
   f.tr="https://www.youtube.com/results?search_query="+encodeURIComponent(f.t+" "+(f.y<2025?f.y+" ":"")+"trailer");
   f.tk=f.o.tix||THEATERS[f.th].u;});
-
-const _now=new Date();
-const TD=(_now.getFullYear()===2026&&_now.getMonth()===7)?_now.getDate():(_now<new Date(2026,7,1)?1:31);
 
 const $=id=>document.getElementById(id);
 const state={q:"",theater:"",genre:"",time:"",dist:"",sort:"time",
@@ -747,7 +507,7 @@ function rowsFor(day,base){
   return rows;
 }
 function runsFor(day,base){
-  return base.filter(f=>f.r&&f.r[0]<=day&&Math.min(f.r[1],31)>=day&&!f.shows.length).sort(sorts.yearAsc);
+  return base.filter(f=>f.r&&f.r[0]<=day&&Math.min(f.r[1],DAYS_IN_MONTH)>=day&&!f.shows.length).sort(sorts.yearAsc);
 }
 function activeFilters(){
   return [state.q,state.theater,state.genre,state.time,state.dist].filter(Boolean).length
@@ -756,8 +516,8 @@ function activeFilters(){
 
 /* ——— add to calendar / share ——— */
 function pad2(n){return String(n).padStart(2,"0");}
-function toUTCStamp(day,mins){ // Aug 2026, NYC is EDT (UTC-4) all month
-  const dt=new Date(Date.UTC(2026,7,day,Math.floor(mins/60)+4,mins%60));
+function toUTCStamp(day,mins){ // constructs in the viewer's local time zone, so this is only exact for viewers on NYC time
+  const dt=new Date(CUR_Y,CUR_M,day,Math.floor(mins/60),mins%60);
   return dt.getUTCFullYear()+pad2(dt.getUTCMonth()+1)+pad2(dt.getUTCDate())+"T"+pad2(dt.getUTCHours())+pad2(dt.getUTCMinutes())+"00Z";
 }
 function calEvent(f,day,mins){
@@ -776,8 +536,8 @@ function gcalUrl(ev){
 function eventText(ev){ return ev.title+"\n"+ev.loc+"\n"+ev.details; }
 function shareText(f,day,mins){
   const th=THEATERS[f.th];
-  const when=(mins!=null&&day!=null)?dowFull(day)+", Aug "+day+" at "+fmtT(mins):
-    (f.r?("Aug "+f.r[0]+(f.r[1]>31?"– into Sep":f.r[0]===f.r[1]?"":"–"+Math.min(f.r[1],31))):"this August");
+  const when=(mins!=null&&day!=null)?dowFull(day)+", "+THIS_MON+" "+day+" at "+fmtT(mins):
+    (f.r?(THIS_MON+" "+f.r[0]+(f.r[1]>DAYS_IN_MONTH?"– into "+NEXT_MON:f.r[0]===f.r[1]?"":"–"+Math.min(f.r[1],DAYS_IN_MONTH))):"this "+THIS_MON_FULL);
   return f.t+(f.y?" ("+f.y+")":"")+" — "+when+" at "+th.n+". "+f.tk;
 }
 let toastT=null;
@@ -845,7 +605,7 @@ function actBtnsBig(f,d,t){ return calBtn(f,d,t,"btn")+shrBtn(f,d,t,"btn"); }
 function buildPicker(){
   const base=D.filter(matchesBase);
   const el=$("days"); el.innerHTML="";
-  for(let d=TD;d<=31;d++){
+  for(let d=TD;d<=DAYS_IN_MONTH;d++){
     const rows=rowsFor(d,base), runs=runsFor(d,base);
     const old=new Set(rows.filter(r=>r.f.y<1990).map(r=>r.f.t)).size;
     const b=document.createElement("button");
@@ -914,12 +674,12 @@ function rowHtml(f,t,d){
 }
 function runCard(f){
   const th=THEATERS[f.th];
-  const end=f.r[1]>31?"– into Sep":(f.r[0]===f.r[1]?"":"–"+Math.min(f.r[1],31));
+  const end=f.r[1]>DAYS_IN_MONTH?"– into "+NEXT_MON:(f.r[0]===f.r[1]?"":"–"+Math.min(f.r[1],DAYS_IN_MONTH));
   return '<div class="rcard '+vclass(f)+'">'+
     '<div><span class="rtitle cond">'+esc(f.t)+'</span><span class="ryear mono">'+(f.y||"")+"</span>"+
       (f.o.fmt?'<span class="rfmt">'+esc(f.o.fmt)+"</span>":"")+"</div>"+
     '<div class="rsub"><b>'+esc(th.n)+"</b> · "+esc(th.a)+(f.o.ser?" · <i>"+esc(f.o.ser)+"</i>":"")+"</div>"+
-    '<span class="runlbl mono">Aug '+f.r[0]+(end?" "+end:"")+" · "+esc(f.o.note||"see site for times")+"</span>"+
+    '<span class="runlbl mono">'+THIS_MON+' '+f.r[0]+(end?" "+end:"")+" · "+esc(f.o.note||"see site for times")+"</span>"+
     '<div class="racts"><a class="bsm tix" href="'+f.tk+'" target="_blank" rel="noopener">'+(isPark(f)?"Details":"Tickets")+'</a>'+
     '<a class="bsm tr" href="'+f.tr+'" target="_blank" rel="noopener">&#9654; Trailer</a>'+
     shrBtn(f,null,null,"bsm")+'</div></div>';
@@ -928,14 +688,14 @@ function card(f){
   const th=THEATERS[f.th];
   let times="";
   if(f.shows.length){
-    const chips=f.shows.map(s=>'<span class="st mono"><b>Aug '+s.d+"</b> "+
+    const chips=f.shows.map(s=>'<span class="st mono"><b>'+THIS_MON+' '+s.d+"</b> "+
       (s.t!=null?'<span class="h">'+fmtT(s.t)+"</span>":'<span class="h">see site</span>')+"</span>");
     times='<div class="times">'+chips.slice(0,6).join("")+
       (chips.length>6?'<button class="more" data-rest="'+encodeURIComponent(chips.slice(6).join(""))+
       '">+'+(chips.length-6)+" more</button>":"")+"</div>";
   }else if(f.r){
-    const end=f.r[1]>31?"– into Sep":(f.r[0]===f.r[1]?"":"–"+Math.min(f.r[1],31));
-    times='<div class="times"><span class="runlbl mono">Aug '+f.r[0]+(end?" "+end:"")+" · "+
+    const end=f.r[1]>DAYS_IN_MONTH?"– into "+NEXT_MON:(f.r[0]===f.r[1]?"":"–"+Math.min(f.r[1],DAYS_IN_MONTH));
+    times='<div class="times"><span class="runlbl mono">'+THIS_MON+' '+f.r[0]+(end?" "+end:"")+" · "+
       esc(f.o.note||"see site for times")+"</span></div>";
   }
   const rep=f.shows[0];
@@ -953,8 +713,13 @@ function card(f){
 }
 
 /* ——— render ——— */
+const EMPTY_HTML=D.length?
+  '<b>Nothing matches those filters.</b>Loosen one and the marquee lights back up.':
+  '<b>'+THIS_MON_FULL+' listings are being refreshed.</b>Check back shortly — the old '+
+  (CUR_M?MON_FULL[CUR_M-1]:MON_FULL[11])+' schedule has already come down.';
 function render(){
   closeCalMenu();
+  $("empty").innerHTML=EMPTY_HTML;
   const base=D.filter(matchesBase);
   buildPicker();
   const n=activeFilters();
@@ -971,7 +736,7 @@ function render(){
     $("picks").innerHTML=""; $("schedule").innerHTML=""; $("ongoing").innerHTML="";
     $("grid").innerHTML=list.map(card).join("");
     $("empty").hidden=list.length>0;
-    $("ptip").textContent="Every August listing — "+list.length+" in all.";
+    $("ptip").textContent="Every "+THIS_MON_FULL+" listing — "+list.length+" in all.";
   }else{
     const d=state.day, rows=rowsFor(d,base), runs=state.time?[]:runsFor(d,base);
     $("grid").innerHTML="";
@@ -979,7 +744,7 @@ function render(){
     $("picks").innerHTML=pickCandidates.length>2?pickFor(sortRows(pickCandidates)).map(p=>pickHtml(p,d)).join(""):"";
     let html="";
     if(rows.length){
-      const label=d===TD?"Today, "+dowFull(d)+" Aug "+d:dowFull(d)+", Aug "+d;
+      const label=d===TD?"Today, "+dowFull(d)+" "+THIS_MON+" "+d:dowFull(d)+", "+THIS_MON+" "+d;
       html+='<div class="slot"><span class="sn cond">'+esc(label)+'</span>'+
         '<span class="sc">'+rows.length+" showtime"+(rows.length===1?"":"s")+"</span>"+
         '<div class="rule"></div></div>';
@@ -1000,13 +765,13 @@ function render(){
     }
     $("schedule").innerHTML=html;
     $("ongoing").innerHTML=runs.length?
-      '<details class="ongwrap" open><summary><span>Also playing Aug '+d+
+      '<details class="ongwrap" open><summary><span>Also playing '+THIS_MON+' '+d+
       ' — '+runs.length+' run'+(runs.length===1?"":"s")+' &amp; series without set times</span><span class="caret">▼</span></summary>'+
       '<div class="onggrid">'+runs.map(runCard).join("")+"</div></details>":"";
     $("empty").hidden=(rows.length+runs.length)>0;
     $("ptip").textContent=rows.length?
-      (d===TD?"Tonight's repertory, revivals and 70mm — all in one place.":"What's on "+dowFull(d)+", August "+d+".")
-      :"No exact showtimes posted for Aug "+d+" yet.";
+      (d===TD?"Tonight's repertory, revivals and 70mm — all in one place.":"What's on "+dowFull(d)+", "+THIS_MON_FULL+" "+d+".")
+      :"No exact showtimes posted for "+THIS_MON+" "+d+" yet.";
   }
   document.querySelectorAll(".more").forEach(x=>x.onclick=()=>{
     x.insertAdjacentHTML("beforebegin",decodeURIComponent(x.dataset.rest)); x.remove();});
@@ -1035,6 +800,7 @@ const allFilms=new Set(D.map(f=>f.t)).size;
 const pre90=new Set(D.filter(f=>f.y<1990).map(f=>f.t)).size;
 $("headstat").innerHTML="<b>"+allFilms+"</b> films · <b>"+tKeys.length+"</b> theaters<br>"+
   "<b>"+pre90+"</b> of them made before 1990";
+$("eyebrow").textContent="Now Showing · New York City · "+THIS_MON_FULL+" "+CUR_Y;
 render();
 
 const visitCount=(()=>{const n=(+(localStorage.getItem("wpVisitCount")||0))+1;
