@@ -38,6 +38,11 @@ F(title, year, director, "Genre/Genre", theaterKey, "ind"|"maj", showtimes, opts
 carries the run's date range instead. Showtimes are never invented: anything without a
 published time is shown as a date range that links to the theater's own calendar.
 
+Each record's "Tickets" button links to `opts.tix` when present — a direct link to that
+film's own ticket page (or, where the booking system supports it, the exact showtime) —
+falling back to the theater's general site otherwise. Ticket links are never guessed:
+`opts.tix` is only set when it's been verified to point at that specific film.
+
 ## Deploying
 
 The page is static and self-contained; no build step and no external requests.

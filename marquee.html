@@ -104,6 +104,22 @@
   .preset[aria-pressed=true]{background:var(--yellow);border-color:var(--yellow);color:#13275c}
   .preset.clear{background:transparent;border-style:dashed;color:var(--muted)}
 
+  /* ——— hero ——— */
+  .hero{background:var(--panel);border:1px solid var(--line);border-top:6px solid var(--orange);
+    border-radius:6px;margin:20px 0 26px;padding:20px 22px;box-shadow:0 3px 8px var(--shadow)}
+  .hero-badge{display:inline-block;background:var(--yellow);color:#13275c;font-size:10.5px;font-weight:800;
+    letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:2px;margin-bottom:10px}
+  .hero-title{font-size:clamp(26px,5vw,36px);font-weight:800;text-transform:uppercase;line-height:1.03;
+    color:var(--ink);margin:0 0 8px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+  .hero-dir{font-size:13px;color:var(--muted);font-weight:700}
+  .hero-sub{font-size:14.5px;line-height:1.55;max-width:680px;margin:0 0 12px;color:var(--ink)}
+  .hero-events{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;font-size:13px;color:var(--muted);max-width:680px}
+  .hero-events b{color:var(--orange-ink)}
+  .hero-times{font-size:13.5px;font-weight:800;color:var(--blue-ink);margin-bottom:14px}
+  .hero-acts{display:flex;flex-wrap:wrap;gap:10px}
+  @media (max-width:620px){ .hero{padding:16px} }
+
   /* ——— picks ——— */
   .picks{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:30px}
   .pick{background:var(--panel);border:1px solid var(--line);border-top:5px solid var(--yellow);
@@ -268,6 +284,26 @@
 </header>
 
 <div class="wrap">
+  <section class="hero" id="heroFeature">
+    <span class="hero-badge cond">★ Editors' Pick</span>
+    <div class="hero-title cond">The History of Concrete</div>
+    <div class="hero-meta">
+      <span class="tag fmt">Documentary</span>
+      <span class="tag dist-ind">Independent</span>
+      <span class="hero-dir">John Wilson · 2026 · IFC Center exclusive</span>
+    </div>
+    <p class="hero-sub">The director of HBO's <i>How To with John Wilson</i> turns his eye on concrete itself — Sundance-premiered, and now the second-biggest opening weekend in IFC Center's 21-year history ($90K, trailing only <i>Parasite</i>). Playing daily through at least Sept 30.</p>
+    <div class="hero-events">
+      <div><b>Special event —</b> Magnolia Pictures and the NYC Dept. of Education are hosting a free screening at IFC Center for high school architecture, construction and film students later this month.</div>
+      <div><b>Opening weekend —</b> Director John Wilson appeared in person for Q&amp;As after multiple Sept 18–21 shows — watch IFC Center's site for any newly added encore dates.</div>
+    </div>
+    <div class="hero-times" id="heroTimes"></div>
+    <div class="hero-acts">
+      <a class="bsm tix" id="heroTix" href="https://www.ifccenter.com/films/the-history-of-concrete/" target="_blank" rel="noopener">Get Tickets — IFC Center</a>
+      <button class="bsm tr" id="heroSee" type="button">See today's showtimes</button>
+    </div>
+  </section>
+
   <section class="picker">
     <div class="ptitle">
       <h2 class="cond">Pick a day</h2>
@@ -382,7 +418,7 @@
 <div id="toast"></div>
 
 <footer>
-  Listings compiled Sep 3, 2026 from each theater's published September calendar. Chain multiplexes post exact
+  Listings compiled Sep 23, 2026 from each theater's published September calendar. Chain multiplexes post exact
   showtimes about a week out — those entries link straight to the box office. Repertory series marked
   "dates vary" have day-by-day schedules on the theater's own site. Always confirm before heading out.
 </footer>
@@ -441,306 +477,119 @@ const THIS_MON=MON_ABBR[CUR_M], THIS_MON_FULL=MON_FULL[CUR_M], NEXT_MON=MON_ABBR
 const D=[]; function F(t,y,d,g,th,dist,s,o){D.push({t,y,d,g:g.split("/"),th,dist,s,o:o||{}});}
 // daily(startDay,endDay,["HHMM",...]) — build a repeating "day@time" string for a run with known daily showtimes
 function daily(a,b,times){ const out=[]; for(let d=a;d<=Math.min(b,DAYS_IN_MONTH);d++) times.forEach(t=>out.push(d+"@"+t)); return out.join(","); }
-/* ——— FILM FORUM — exact/researched Sept 1-25 ——— */
-F("Filipiñana",2026,"—","Drama","filmforum","ind","1@1220,1@1430,1@1645,1@1900,1@2110,2@1220,2@1430,2@1645,2@1900,2@2110,3@1220,3@1430,3@1645,3@1900,3@2110",{note:"Daily showtimes; end date unconfirmed — check site past Sept 3"});
-F("Late Fame",2025,"Kent Jones","Drama","filmforum","ind","1@1215,1@1425,1@1640,1@1850,1@2100,2@1215,2@1425,2@1640,2@1850,2@2100,3@1215,3@1425,3@1640,3@1850,3@2100",{note:"Post-film conversation Sept 2"});
-F("Billy Liar",1963,"John Schlesinger","Comedy/Drama","filmforum","ind","1@1220,1@1745,2@1220,2@1745,3@1220,3@1745",{fmt:"4K restoration",note:"Final day Sept 3"});
-F("Center Stage",1991,"Stanley Kwan","Biography/Drama","filmforum","ind","1@1435,2@1435,3@1435",{note:"Final day Sept 3"});
-F("Barbara Forever",2026,"Brydie O'Connor","Documentary","filmforum","ind","4@1245,4@1510,4@1745,4@2000",{note:"Opens Sept 4 — Q&A with director Brydie O'Connor, 7:45pm show"});
-F("Kwaidan",1964,"Masaki Kobayashi","Horror/Anthology","filmforum","ind",null,{r:[11,17],note:"Runs Sept 11-17 — exact daily times not yet posted"});
-F("My Brother's Wedding",1983,"Charles Burnett","Drama","filmforum","ind",null,{r:[18,24],note:"Runs Sept 18-24 — exact daily times not yet posted"});
-F("You Had to Be There: How the Toronto Godspell Ignited the Comedy Revolution",2026,"—","Documentary/Comedy","filmforum","ind",null,{r:[18,18],note:"Premiere screening Sept 18 — exact time not yet posted"});
-F("The Scout",2026,"—","Drama","filmforum","ind",null,{r:[25,31],note:"Opens Sept 25 — exact daily times not yet posted"});
-F("Unzipped",1995,"Douglas Keeve","Documentary","filmforum","ind",null,{fmt:"4K restoration",r:[25,31],note:"Opens Sept 25 (Isaac Mizrahi documentary) — exact daily times not yet posted"});
-F("The Godfather",1972,"Francis Ford Coppola","Crime/Drama","filmforum","maj","8@1530,9@1530",{ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Additional screenings possible through Sept 10 — see calendar"});
-F("The Godfather Part II",1974,"Francis Ford Coppola","Crime/Drama","filmforum","maj","8@1900",{ser:"COPPOLA — complete retrospective, Aug 21–Sep 10"});
-F("Apocalypse Now: 1979 Roadshow Version",1979,"Francis Ford Coppola","War/Drama","filmforum","maj","10@2015",{ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Final Cut version also screening — additional dates vary, see calendar"});
-F("The Conversation",1974,"Francis Ford Coppola","Thriller/Drama","filmforum","maj","8@1300",{ser:"COPPOLA — complete retrospective, Aug 21–Sep 10",note:"Additional screenings possible through Sept 10 — see calendar"});
+/* ——— IFC CENTER — exact/researched Sept 23-30 ——— */
+F("The History of Concrete",2026,"John Wilson","Documentary","ifc","ind","23@1045,23@1140,23@1320,23@1410,23@1545,23@1640,23@1815,23@1915,23@2045,23@2120,23@2145,24@1045,24@1140,24@1315,24@1410,24@1545,24@1640,24@1815,24@1915,24@2045,24@2120,24@2145,25@1035,25@1130,25@1300,25@1400,25@1540,25@1630,25@1820,25@1900,25@2050,25@2135,26@1035,26@1130,26@1310,26@1400,26@1540,26@1610,26@1820,26@1900,26@2050,26@2135,27@1035,27@1130,27@1310,27@1400,27@1540,27@1610,27@1820,27@1900,27@2050,27@2135,28@1035,28@1130,28@1300,28@1400,28@1540,28@1610,28@1900,28@2050,28@2135,29@1035,29@1130,29@1300,29@1400,29@1540,29@1600,29@1820,29@2050,29@2135,30@1130,30@1310,30@1400,30@1540,30@1625,30@1820,30@2050,30@2135",{tix:"https://www.ifccenter.com/films/the-history-of-concrete/",note:"IFC Center's 2nd-biggest opening weekend ever ($90K, behind only Parasite). Director John Wilson did Q&As after multiple Sept 18-21 shows. Magnolia + NYC Dept. of Education are hosting a free screening for high school architecture/construction/film students at IFC Center later this month."});
 
-/* ——— IFC CENTER — exact/researched Sept 1-10 ——— */
-F("Colony",2022,"—","Documentary/Sci-Fi","ifc","ind","1@1650,1@1935,2@1320,2@1605,2@1855,2@2140,3@1320,3@1605,3@1855,3@2140,4@2340,5@2340,6@2105,7@2105",{tix:"https://www.ifccenter.com/films/colony-3/",note:"Times shift Sept 4 onward — confirm later dates on site"});
-F("Gandahar",1987,"René Laloux","Animation/Sci-Fi","ifc","ind",null,{tix:"https://www.ifccenter.com/films/gandahar/",fmt:"4K restoration",r:[1,10],note:"Multiple daily showtimes — see site"});
-F("How to Divorce During the War",2025,"—","Documentary","ifc","ind",null,{tix:"https://www.ifccenter.com/films/how-to-divorce-during-the-war/",r:[1,10],note:"Multiple daily showtimes — see site"});
-F("It Ends",2025,"Alexander Ullom","Horror/Thriller","ifc","ind","2@1235,2@1650,2@1820,3@1235",{tix:"https://www.ifccenter.com/films/it-ends/",note:"Final showings — closes Sept 3"});
-F("The Sun Never Sets",2026,"Joe Swanberg","Comedy/Drama","ifc","ind","4@1335,4@1610,4@1845,4@2120,5@1610,5@1845,5@2120,6@1610,6@1845,6@2120,7@1335,7@1610,7@1845,7@2120",{tix:"https://www.ifccenter.com/films/the-sun-never-sets/",note:"6:45pm shows Sept 4/5/7 on 35mm — opens wide Sept 4"});
-F("Heathers",1988,"Michael Lehmann","Comedy/Drama","ifc","maj","4@1400,4@1630,4@1900,4@2130,5@1400,5@1630,5@1900,5@2130,6@1400,6@1630,6@1900,6@2130,7@1400,7@1630,7@1900,7@2130,8@1400,8@1630,8@1900,8@2130,9@1400,9@1630,9@1900,9@2130,10@1400,10@1630,10@1900,10@2130",{tix:"https://www.ifccenter.com/films/heathers/",fmt:"4K restoration"});
-F("Wild Inside",2026,"Penny Lane","Documentary","ifc","ind","1@1330,2@1330,3@1330,4@1105,4@1605,5@1605,6@1605,7@1605",{tix:"https://www.ifccenter.com/films/wild-inside/",note:"Flaco the owl documentary"});
-F("2026 Sundance Film Festival Short Film Tour",2026,"Various","Documentary/Drama","ifc","ind",null,{r:[2,10],note:"Q&As with filmmakers after 6:45pm shows Sept 2-3 — multiple daily showtimes, see site"});
-F("Who Moves America",2026,"Yael Bridge","Documentary","ifc","ind",null,{r:[9,20],note:"Opens Sept 9 — Q&A with director & UPS Teamster Antoine Andrews after 6:30pm opening show"});
-F("Mysterious Skin",2004,"Gregg Araki","Drama","ifc","ind","2@1610,2@2120,3@1610",{note:"Revival run"});
-F("The Samurai and the Prisoner",2026,"Kiyoshi Kurosawa","Drama/Mystery","ifc","ind","2@1305,3@1305,3@2035");
-F("Union County",2026,"Adam Meeks","Drama","ifc","ind","2@1500,2@2030,3@1050,3@1500");
-F("Serpent's Path",2024,"Kiyoshi Kurosawa","Thriller/Drama","ifc","ind",null,{tix:"https://www.ifccenter.com/films/serpents-path/",fmt:"4K restoration",r:[11,20],note:"US theatrical premiere Sept 11 — paired with companion film Chime — exact daily times not yet posted"});
+/* ——— FILM FORUM — exact/researched Sept 23-30 ——— */
+F("You Had to Be There",2026,"—","Comedy","filmforum","ind","23@1215,23@1430,23@1645,23@1900,23@2115,24@1215,24@1430,24@1645,24@1900,24@2115,25@1215,25@1430,25@1645,25@1900,25@2115,26@1215,26@1430,26@1645,26@1900,26@2115,27@1215,27@1430,27@1645,27@1900,27@2115,28@1330,28@1545,28@1800,28@2015,29@1215,29@1430,29@1645,29@1900,29@2115,30@1215,30@1430,30@1645,30@1900,30@2115");
+F("My Brother's Wedding",1983,"Charles Burnett","Drama","filmforum","ind","23@1230,23@1420,23@1610,23@1800,23@1950,24@1230,24@1420,24@1610,24@1800,24@1950,25@1750,26@1750,27@1750,28@1750,29@1750,30@1750");
+F("Kwaidan",1964,"Masaki Kobayashi","Horror/Anthology","filmforum","ind","23@1300,23@1900,24@1250",{fmt:"4K restoration",note:"Final performances Sept 24"});
+F("Barbara Forever",2026,"Brydie O'Connor","Documentary","filmforum","ind","23@1645,24@1640",{note:"Final performances Sept 24"});
+F("Filipiñana",2026,"—","Drama","filmforum","ind","23@1220,23@1430,23@1645,23@1900,24@1220,24@1430,25@1300,25@1515,25@1950,26@1300,26@1515,26@1950,27@1300,27@1515,27@1950,28@1300,28@1515,28@1950,29@1300,29@1515,29@1950,30@1300,30@1515,30@1950");
+F("Late Fame",2025,"Kent Jones","Drama","filmforum","ind","23@2110,24@2030",{note:"Final performances Sept 24"});
+F("The Scout",2026,"Paula González-Nasser","Drama/Comedy","filmforum","ind","24@1945,25@1215,25@1420,25@1625,25@1830,25@2110,26@1215,26@1420,26@1625,26@1830,26@2110,27@1215,27@1420,27@1625,27@1830,27@2110,28@1215,28@1420,28@1625,28@1830,28@2035,29@1215,29@1420,29@1625,29@1830,29@2035,30@1215,30@1420,30@1625,30@1830,30@2035",{note:"Sneak-preview Q&A Sept 24 (7:45pm) and Sept 25 (6:30pm) with director Paula González-Nasser and star Mimi Davila; opens wide Sept 25"});
+F("Unzipped",1995,"Douglas Keeve","Documentary","filmforum","ind","25@1230,25@1415,25@1600,25@1800,25@2000,26@1230,26@1415,26@1600,26@1800,26@2000,27@1230,27@1415,27@1600,27@1800,27@2000,28@1315,28@1500,28@1740,28@1930,29@1230,29@1415,29@1600,29@2130,30@1230,30@1415,30@1600,30@1930,30@2115",{note:"20th-anniversary re-release Q&A Sept 25 (8pm) with subject Isaac Mizrahi, director Douglas Keeve, and producer Nina Santisi"});
+F("Funny Face",1957,"Stanley Donen","Musical/Romance","filmforum","maj","27@1100",{ser:"Film Forum Jr."});
+F("Dutchman",1967,"Anthony Harvey","Drama","filmforum","ind","29@1800",{ser:"NYC in Transit"});
 
-/* ——— METROGRAPH — exact showtimes Sept 1-19 (closes Sept 8 for private event) ——— */
-F("The Dark Knight",2008,"Christopher Nolan","Action/Crime","metrograph","maj","10@1910");
-F("Der Fan",1982,"Eckhart Schmidt","Horror/Drama","metrograph","ind","1@2200,2@2000,3@1930,6@2220");
-F("Jennifer's Body",2009,"Karyn Kusama","Horror/Comedy","metrograph","maj","2@2200,5@2300,10@2215");
-F("Chungking Express",1994,"Wong Kar-wai","Romance/Drama","metrograph","ind","3@1500,10@2220");
-F("Boyfriends and Girlfriends",1987,"Éric Rohmer","Romance/Comedy","metrograph","ind","3@1515");
-F("The Jungle Book",1967,"Wolfgang Reitherman","Animation/Family","metrograph","maj","3@1545");
-F("Fallen Angels",1995,"Wong Kar-wai","Drama/Crime","metrograph","ind","3@1710");
-F("L'Argent",1983,"Robert Bresson","Drama/Crime","metrograph","ind","3@1730");
-F("The Hunger",1983,"Tony Scott","Horror/Drama","metrograph","maj","3@1920,6@1700");
-F("Collateral",2004,"Michael Mann","Thriller/Crime","metrograph","maj","3@2130");
-F("The Others",2001,"Alejandro Amenábar","Horror/Mystery","metrograph","maj","3@2135");
-F("The Apartment",1960,"Billy Wilder","Comedy/Drama","metrograph","maj","4@1425,7@1435");
-F("2046",2004,"Wong Kar-wai","Drama/Sci-Fi","metrograph","ind","4@1430,6@1930,11@2250");
-F("The City of Lost Children",1995,"Jean-Pierre Jeunet & Marc Caro","Fantasy/Adventure","metrograph","ind","4@1700,7@1930");
-F("Daughter of the Nile",1987,"Hou Hsiao-hsien","Drama","metrograph","ind","4@1715,5@2100");
-F("Shanghai Blues",1984,"Tsui Hark","Comedy/Romance","metrograph","ind","4@1920,6@1200");
-F("American Job",1996,"Chris Smith","Comedy/Drama","metrograph","ind","4@1930");
-F("Peking Opera Blues",1986,"Tsui Hark","Action/Comedy","metrograph","ind","4@2130,7@2145,11@1830,13@2115");
-F("Delicatessen",1991,"Jean-Pierre Jeunet & Marc Caro","Comedy/Fantasy","metrograph","ind","4@2135,7@1720");
-F("Playtime",1967,"Jacques Tati","Comedy","metrograph","ind","5@1100,7@1200,9@1615");
-F("E.T. the Extra-Terrestrial",1982,"Steven Spielberg","Family/Sci-Fi","metrograph","maj","5@1110");
-F("Happy Hour",2015,"Ryusuke Hamaguchi","Drama","metrograph","ind","5@1330");
-F("A Brighter Summer Day",1991,"Edward Yang","Drama/Crime","metrograph","ind","5@1335,7@1715");
-F("Model",1981,"Frederick Wiseman","Documentary","metrograph","ind","5@1800",{ser:"Wiseman's NYC"});
-F("Old Joy",2006,"Kelly Reichardt","Drama","metrograph","ind","5@1910");
-F("After Hours",1985,"Martin Scorsese","Comedy/Thriller","metrograph","maj","5@2040,10@1700");
-F("Mulholland Drive",2001,"David Lynch","Mystery/Drama","metrograph","ind","5@2245",{fmt:"35mm"});
-F("Jason and the Argonauts",1963,"Don Chaffey","Fantasy/Adventure","metrograph","maj","6@1200");
-F("Brazil",1985,"Terry Gilliam","Sci-Fi/Comedy","metrograph","maj","6@1410,7@1430,11@1545");
-F("Clash of the Titans",1981,"Desmond Davis","Fantasy/Adventure","metrograph","maj","6@1430");
-F("The Treasure of Bitch Islands",1990,"F.J. Ossang","Drama","metrograph","ind","6@1700");
-F("Troy",2004,"Wolfgang Petersen","Action/Drama","metrograph","maj","6@1910,11@1520");
-F("Women on the Verge of a Nervous Breakdown",1988,"Pedro Almodóvar","Comedy/Drama","metrograph","ind","6@2225,10@1500");
-F("Millennium Mambo",2001,"Hou Hsiao-hsien","Drama","metrograph","ind","7@1215");
-F("Raw",2016,"Julia Ducournau","Horror/Drama","metrograph","ind","7@2150");
-F("Nenette and Boni",1996,"Claire Denis","Drama","metrograph","ind","9@1600");
-F("Falling Leaves",1966,"Otar Iosseliani","Comedy/Drama","metrograph","ind","9@1810");
-F("The Night is Short, Walk on Girl",2019,"Masaaki Yuasa","Animation/Comedy","metrograph","ind","9@2000");
-F("Solaris",1972,"Andrei Tarkovsky","Sci-Fi/Drama","metrograph","ind","9@2200");
-F("Je Tu Il Elle",1975,"Chantal Akerman","Drama","metrograph","ind","10@1440");
-F("There Once Was a Singing Blackbird",1969,"Otar Iosseliani","Comedy/Drama","metrograph","ind","10@1635");
-F("Pastorale",1975,"Otar Iosseliani","Drama/Comedy","metrograph","ind","10@1815");
-F("Wake in Fright",1971,"Ted Kotcheff","Drama/Thriller","metrograph","ind","10@2010");
-F("Wives",1973,"Anja Breien","Comedy/Drama","metrograph","ind","11@1825,16@1500");
-F("Don't Play with Fire",1980,"Tsui Hark","Drama/Crime","metrograph","ind","11@2040,12@1415,13@1845,15@2245");
-F("Office Space",1999,"Mike Judge","Comedy","metrograph","maj","11@2045,12@2300");
-F("Uncut Gems",2019,"Josh Safdie & Benny Safdie","Crime/Drama","metrograph","ind","11@2245,13@2100");
-F("The Sandwich Man",1983,"Hou Hsiao-hsien, Tseng Chuang-hsiang & Wan Jen","Drama","metrograph","ind","12@1200");
-F("Stealing Beauty",1996,"Bernardo Bertolucci","Drama/Romance","metrograph","maj","12@1230,15@2015");
-F("Games of Love and Loneliness",1977,"Anja Breien","Drama","metrograph","ind","12@1500,15@1600");
-F("Orpheus",1950,"Jean Cocteau","Fantasy/Drama","metrograph","ind","12@1620");
-F("Wives: Ten Years After",1985,"Anja Breien","Drama/Comedy","metrograph","ind","12@1710,16@1700");
-F("Black Orpheus",1959,"Marcel Camus","Drama/Romance","metrograph","ind","12@1825");
-F("Wives III",1996,"Anja Breien","Drama/Comedy","metrograph","ind","12@1915,16@1900");
-F("Dust in the Wind",1986,"Hou Hsiao-hsien","Drama","metrograph","ind","12@2040,13@1230");
-F("I Hired a Contract Killer",1990,"Aki Kaurismäki","Comedy/Drama","metrograph","ind","12@2100");
-F("Rebels of the Neon God",1992,"Tsai Ming-liang","Drama","metrograph","ind","12@2300,18@2300");
-F("Evita",1996,"Alan Parker","Musical/Drama","metrograph","maj","13@1200,14@1515");
-F("The Rice Dumpling Vendors",1969,"Hsin Chi","Drama","metrograph","ind","13@1445");
-F("Hercules in the Haunted World",1961,"Mario Bava","Fantasy/Adventure","metrograph","ind","13@1450");
-F("Zu: Warriors from the Magic Mountain",1983,"Tsui Hark","Fantasy/Action","metrograph","ind","13@1640,15@1350");
-F("Next of Kin",1979,"Anja Breien","Drama","metrograph","ind","13@1645,15@1815");
-F("The Witch Hunt",1981,"Anja Breien","Drama","metrograph","ind","13@1900,14@2100");
-F("Yi Yi",2000,"Edward Yang","Drama","metrograph","ind","14@1440,16@1730");
-F("The Left-Handed Girl",2025,"Shih-Ching Tsou","Drama","metrograph","ind","14@1800");
-F("Stray Dogs",2013,"Tsai Ming-liang","Drama","metrograph","ind","14@1810,16@2045");
-F("The Blade",1995,"Tsui Hark","Action/Fantasy","metrograph","ind","14@2050,17@1700,18@1400");
-F("Knock Off",1998,"Tsui Hark","Action/Comedy","metrograph","maj","14@2300,16@1300");
-F("Ghost in the Shell",1995,"Mamoru Oshii","Animation/Sci-Fi","metrograph","ind","14@2300,15@2100,16@1100");
-F("Paprika",2006,"Satoshi Kon","Animation/Sci-Fi","metrograph","ind","15@1145,18@2320,19@2215");
-F("Oedipus Rex",1967,"Pier Paolo Pasolini","Drama","metrograph","ind","15@1215,19@2200");
-F("Notes Toward an African Orestes",1970,"Pier Paolo Pasolini","Documentary","metrograph","ind","15@1430");
-F("Pumping Iron",1977,"George Butler & Robert Fiore","Documentary/Sports","metrograph","ind","15@1600",{ser:"ACE Presents",fmt:"16mm"});
-F("Zidane: A 21st Century Portrait",2006,"Douglas Gordon & Philippe Parreno","Documentary/Sports","metrograph","ind","15@1830");
-F("The Warriors",1979,"Walter Hill","Action/Crime","metrograph","maj","15@2250,18@1200");
-F("Medea",1969,"Pier Paolo Pasolini","Drama","metrograph","ind","16@1250");
-F("Time and Tide",2000,"Tsui Hark","Action/Thriller","metrograph","ind","16@1510,18@1820");
-F("Se7en",1995,"David Fincher","Crime/Thriller","metrograph","maj","16@2050,17@1910");
-F("Four Adventures of Reinette and Mirabelle",1987,"Éric Rohmer","Drama/Comedy","metrograph","ind","17@1435");
-F("The Wedding Banquet",1993,"Ang Lee","Comedy/Drama","metrograph","ind","17@1445,19@1500");
-F("Daughter's Daughter",2024,"Huang Xi","Drama","metrograph","ind","17@1640");
-F("Salomé Lamas",2016,"Salomé Lamas","Documentary","metrograph","ind","17@1915",{ser:"This Long Century"});
-F("The Ninth Gate",1999,"Roman Polanski","Mystery/Thriller","metrograph","ind","17@2145");
-F("A Better Tomorrow III: Love and Death in Saigon",1989,"Tsui Hark","Action/Drama","metrograph","ind","17@2200,19@1245");
-F("The Double",2013,"Richard Ayoade","Comedy/Drama","metrograph","ind","18@1215");
-F("Iphigenia",1977,"Michael Cacoyannis","Drama/War","metrograph","ind","18@1415",{fmt:"16mm"});
-F("Tokyo Melody",1985,"Elizabeth Lennard","Documentary/Music","metrograph","ind","18@1610");
-F("Electra, My Love",1974,"Miklós Jancsó","Drama","metrograph","ind","18@1645");
-F("Ryuichi Sakamoto: Diaries",2025,"Takeo Omori","Documentary/Music","metrograph","ind","18@1745");
-F("Eddington",2025,"Ari Aster","Drama/Thriller","metrograph","ind","18@1950");
-F("Alien: Resurrection",1997,"Jean-Pierre Jeunet","Sci-Fi/Horror","metrograph","maj","18@2045");
-F("The Little Mermaid",1989,"Ron Clements & John Musker","Animation/Family","metrograph","maj","16@1100,19@1100");
-F("Goodbye, Dragon Inn",2003,"Tsai Ming-liang","Drama","metrograph","ind","19@1100");
-F("Pushing Hands",1991,"Ang Lee","Comedy/Drama","metrograph","ind","19@1250");
-F("Faat Kiné",2001,"Ousmane Sembène","Drama","metrograph","ind","19@1500",{ser:"Jollof Films"});
-F("Ryuichi Sakamoto | Opus",2023,"Neo Sora","Documentary/Music","metrograph","ind","19@1715");
-F("Story of Mother",1973,"Sung Tsun-Shou","Drama","metrograph","ind","19@1800");
-F("Ryuichi Sakamoto: Coda",2017,"Stephen Nomura Schible","Documentary/Music","metrograph","ind","19@2000");
-F("Morvern Callar",2002,"Lynne Ramsay","Drama","metrograph","ind","19@2000",{ser:"Fireflies Press"});
-/* ——— ANTHOLOGY FILM ARCHIVES — exact times Sept 1-13 ——— */
-F("Early Interiority: Vintage Trans Cinema",2026,"—","Experimental/Documentary","anthology","ind","3@1930,3@2130",{ser:"MIX NYC Presents"});
-F("What Godmilow Taught",2026,"—","Documentary","anthology","ind","4@1845,5@1800");
-F("What Farocki Taught + Scum Manifesto",2026,"—","Documentary","anthology","ind","4@2045");
-F("Roy Cohn/Jack Smith",1994,"Jill Godmilow","Documentary","anthology","ind","5@2000");
-F("The Little Deaths / Las Muertas Chiquitas",2026,"—","Drama","anthology","ind","6@1600");
-F("Zvenigora",1928,"Alexander Dovzhenko","Drama/Silent","anthology","ind","6@1715",{ser:"Essential Cinema"});
-F("Arsenal",1929,"Alexander Dovzhenko","War/Silent","anthology","ind","6@1930",{ser:"Essential Cinema"});
-F("True North",2026,"—","Documentary","anthology","ind","8@1900");
-F("Teach Our Children + Inside Women Inside",2026,"—","Documentary","anthology","ind","9@1845,11@2100");
-F("Earth",1930,"Alexander Dovzhenko","Drama/Silent","anthology","ind","9@1915",{ser:"Essential Cinema"});
-F("From Spikes to Spindles + Fei Tien, Goddess in Flight",2026,"—","Documentary","anthology","ind","9@2030,13@1830");
-F("The Parson's Widow",1920,"Carl Theodor Dreyer","Comedy/Silent","anthology","ind","10@1830",{ser:"Essential Cinema"});
-F("To Love, Honor, and Obey",2026,"—","Documentary","anthology","ind","10@1845");
-F("Namibia, Independence Now + Reorienting Africa",2026,"—","Documentary","anthology","ind","10@2030,12@1645");
-F("Michael",1924,"Carl Theodor Dreyer","Drama/Silent","anthology","ind","10@2045",{ser:"Essential Cinema"});
-F("Who Killed Vincent Chin?",1987,"Christine Choy & Renee Tajima-Peña","Documentary","anthology","ind","11@1845,13@2030");
-F("The Passion of Joan of Arc",1928,"Carl Theodor Dreyer","Drama/Silent","anthology","ind","11@1930",{ser:"Essential Cinema"});
-F("Ha Ha Shanghai",2026,"—","Documentary","anthology","ind","12@1900");
-F("Vampyr",1932,"Carl Theodor Dreyer","Horror","anthology","ind","12@1800",{ser:"Essential Cinema"});
-F("Day of Wrath",1943,"Carl Theodor Dreyer","Drama","anthology","ind","12@2000",{ser:"Essential Cinema"});
-F("Ordet",1955,"Carl Theodor Dreyer","Drama","anthology","ind","13@1700",{ser:"Essential Cinema"});
-F("Gertrud",1964,"Carl Theodor Dreyer","Drama","anthology","ind","13@2000",{ser:"Essential Cinema"});
-F("Deux Fois",1968,"Jackie Raynal","Experimental","anthology","ind","14@1900");
-F("Screamplay / Still Life / In Vanda's Room / Demolition / No Other Land — retrospectives",2026,"—","Drama/Documentary","anthology","ind",null,{r:[15,30],note:"Multiple concurrent series (Sept 15–30) — full lineup on site"});
+/* ——— METROGRAPH — day-by-day, verified titles Sept 23-30 ——— */
+F("La Haine",1995,"Mathieu Kassovitz","Drama","metrograph","ind","23@1415,30@2215",{fmt:"DCP"});
+F("Orpheus",1950,"Jean Cocteau","Fantasy/Drama","metrograph","ind","23@1620",{fmt:"35mm"});
+F("Wake in Fright",1971,"Ted Kotcheff","Drama/Thriller","metrograph","ind","23@1730",{fmt:"4K restoration"});
+F("The City of Lost Children",1995,"Jean-Pierre Jeunet & Marc Caro","Fantasy/Adventure","metrograph","ind","23@1940",{fmt:"35mm"});
+F("Office Space",1999,"Mike Judge","Comedy","metrograph","maj","23@2200",{fmt:"35mm"});
+F("Happy Together",1997,"Wong Kar-wai","Drama/Romance","metrograph","ind","24@1400",{fmt:"DCP"});
+F("The Apartment",1960,"Billy Wilder","Comedy/Drama","metrograph","maj","24@1900",{fmt:"35mm"});
+F("Hercules in the Haunted World",1961,"Mario Bava","Fantasy/Adventure","metrograph","ind","24@2200",{fmt:"35mm"});
+F("Brazil",1985,"Terry Gilliam","Sci-Fi/Fantasy","metrograph","ind","25@1900,29@1600",{fmt:"4K restoration"});
+F("True Romance",1993,"Tony Scott","Crime/Romance","metrograph","maj","25@2150",{fmt:"DCP"});
+F("Eve's Bayou",1997,"Kasi Lemmons","Drama","metrograph","ind","25@2200",{fmt:"DCP"});
+F("The Wedding Banquet",1993,"Ang Lee","Comedy/Drama","metrograph","ind","26@1445,28@1500",{fmt:"35mm"});
+F("Se7en",1995,"David Fincher","Crime/Thriller","metrograph","maj","26@1910",{fmt:"35mm"});
+F("The Ninth Gate",1999,"Roman Polanski","Mystery/Thriller","metrograph","maj","26@2145",{fmt:"35mm"});
+F("The Warriors",1979,"Walter Hill","Action/Crime","metrograph","maj","27@1200,29@2000",{fmt:"35mm"});
+F("Alien: Resurrection",1997,"Jean-Pierre Jeunet","Sci-Fi/Horror","metrograph","maj","27@2045",{fmt:"35mm"});
+F("Paprika",2006,"Satoshi Kon","Animation/Sci-Fi","metrograph","ind","27@2320,28@2215",{fmt:"35mm"});
+F("Goodbye, Dragon Inn",2003,"Tsai Ming-liang","Drama","metrograph","ind","28@1100",{fmt:"DCP"});
+F("Women on the Verge of a Nervous Breakdown",1988,"Pedro Almodóvar","Comedy/Drama","metrograph","ind","29@1800",{fmt:"35mm"});
+F("A Brighter Summer Day",1991,"Edward Yang","Drama","metrograph","ind","30@1545",{fmt:"DCP"});
+F("Stealing Beauty",1996,"Bernardo Bertolucci","Drama/Romance","metrograph","ind","30@1630",{fmt:"35mm"});
+F("Ryuichi Sakamoto: Diaries",2026,"Neo Sora","Documentary","metrograph","ind","27@1745,30@2010",{fmt:"4K DCP",note:"U.S. premiere run"});
 
-/* ——— BAM ROSE CINEMAS — date ranges, exact times not posted ——— */
-F("Sweat! 2: The Dampening",2026,"Various","Documentary","bam","ind",null,{r:[4,10],ser:"Series",note:"Full lineup on site"});
-F("Hope",2026,"Na Hong-jin","Horror/Thriller","bam","ind",null,{r:[9,30],note:"Opens Sep 9 — exact times not yet posted"});
-F("Red Card + Sunrise/Sunset",2026,"Ougie Pak","Drama","bam","ind",null,{r:[9,9],note:"Single screening Sep 9 — time not posted"});
-F("Powwow People",2025,"Sky Hopinka","Documentary","bam","ind","11@1900,12@1900",{note:"Opens Sept 11 — director Q&A after both shows; continues later in the month, see site"});
-F("Fantastical Felines",2026,"Various","Fantasy/Classics","bam","ind",null,{r:[11,17],ser:"Series",note:"Full lineup on site"});
-F("A Pure Person: The Sonic Landscape of Lim Giong",2026,"Various","Documentary/Music","bam","ind",null,{r:[18,24],ser:"Series",note:"Full lineup on site"});
-F("The American Cinema Under George W. Bush",2026,"Various","Drama/Classics","bam","ind",null,{r:[25,31],ser:"Series",note:"Runs Sep 25–Oct 1 — full lineup on site"});
-F("Wild Things",1998,"John McNaughton","Thriller/Crime","bam","maj",null,{r:[4,10],ser:"SWEAT! 2: The Dampening",note:"Dates vary — see site"});
+/* ——— NITEHAWK WILLIAMSBURG — current run, Sept 23-25 confirmed ——— */
+F("City Wide Fever",2026,"Josh Heaps","Horror/Mystery","nitehawkW","ind","23@1900",{ser:"Local Color",note:"Q&A with director Josh Heaps"});
+F("Zoolander",2001,"Ben Stiller","Comedy","nitehawkW","maj","23@2100",{ser:"MASC at the Movies",note:"Live pre-show drag performance"});
+F("Resident Evil",2026,"Zach Cregger","Horror/Action","nitehawkW","maj","23@1545,23@1925,23@2145",null);
+F("Practical Magic 2",2026,"—","Fantasy/Comedy","nitehawkW","maj","23@1600,23@1830,23@2130",null);
+F("Hope",2026,"—","Thriller/Horror","nitehawkW","ind","23@1600,23@1805,23@2115",null);
+F("Silent Hill",2006,"Christophe Gans","Horror","nitehawkW","maj",null,{r:[25,30],note:"Opens Sept 25 — exact daily times not yet posted, see site"});
+F("Primetime",2026,"—","Thriller","nitehawkW","ind",null,{r:[25,30],note:"Opens Sept 25 — exact daily times not yet posted, see site"});
+F("Romancing the Stone",1984,"Robert Zemeckis","Action/Comedy","nitehawkW","maj",null,{r:[26,27],note:"Weekend engagement — exact times not yet posted, see site"});
 
-/* ——— QUAD CINEMA — date ranges, exact times not posted ——— */
-F("A Sad and Beautiful World",2025,"Cyril Aris","Drama","quad","ind","3@1220,3@1440,3@1700,3@1920",{r:[4,7],note:"Sept 3 times shown — later dates vary, see site"});
-F("Boorman and the Devil",2025,"David Kittredge","Documentary","quad","ind","3@1210,3@1430,3@1650,3@1910",{note:"About the making of Exorcist II: The Heretic"});
-F("Franz",2024,"—","Drama","quad","ind","3@1155,3@1425,3@1655,3@1930",{r:[4,7],note:"Sept 3 times shown — later dates vary, see site"});
-F("Mary Oliver: Saved by the Beauty of the World",2024,"—","Documentary","quad","ind","3@1200,3@1400,3@1600,3@1800");
-F("Brailled It",2026,"—","Documentary","quad","ind",null,{r:[4,7],note:"Q&A with filmmakers David Grabias & Brendon Schulze"});
-F("Virginia Woolf's Night & Day",2026,"—","Drama","quad","ind","4@1240,4@1445,4@1650,4@1920,4@2130",{r:[5,7],note:"Sept 4 times shown — later dates vary, see site"});
-F("The Work in Progress",2026,"—","Documentary","quad","ind","4@1245,4@1455,4@1705,4@1900,4@2120",{r:[5,7],note:"Q&A with director Ian Cheney, opening night"});
-F("Teenage Malady",2026,"Various","Drama","quad","ind",null,{r:[1,24],ser:"Series",note:"Full lineup on site"});
+/* ——— NITEHAWK PROSPECT PARK — current run, Sept 23-25 confirmed ——— */
+F("The Uprising",2026,"—","Drama","nitehawkPP","ind","23@1830",null);
+F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","nitehawkPP","maj","23@1815,23@2145",{fmt:"IMAX"});
+F("Teenage Sex and Death at Camp Miasma",2026,"—","Horror/Comedy","nitehawkPP","ind","23@2100",null);
+F("Tony",2026,"—","Biography/Drama","nitehawkPP","ind","23@1730,23@2000",{note:"Young Anthony Bourdain's entry into professional cooking"});
+F("Perfume: The Story of a Murderer",2006,"Tom Tykwer","Drama/Fantasy","nitehawkPP","ind","24@1930",null);
+F("Forgotten Island",2026,"Rodrigo Blaas","Animation/Family","nitehawkPP","maj",null,{r:[25,30],note:"Opens Sept 25 — exact daily times not yet posted, see site"});
 
-/* ——— ROXY CINEMA — day-by-day through Sep 30 ——— */
-F("Castration Movie Chapter iii. Junior Ghosts",2026,"—","Experimental","roxy","ind","3@1900",{ser:"Musclefest",note:"Q&A"});
-F("Crocodile Dose",2026,"—","Experimental","roxy","ind","3@2200",{ser:"Musclefest",note:"Q&A"});
-F("The Lake House",2006,"Alejandro Agresti","Romance/Fantasy","roxy","maj","4@1700,6@1445",{fmt:"35mm",ser:"2006 Movies"});
-F("Dildo Heaven",2026,"—","Experimental","roxy","ind","4@1900",{ser:"Musclefest",note:"Q&A"});
-F("A Night with Alterotics",2026,"—","Experimental","roxy","ind","4@2100",{ser:"Musclefest"});
-F("The Straight Story",1999,"David Lynch","Drama","roxy","ind","5@1415",{fmt:"35mm"});
-F("The Wind That Shakes the Barley",2006,"Ken Loach","War/Drama","roxy","ind","5@1630",{fmt:"35mm",ser:"2006 Movies"});
-F("Secret Screening",2026,"—","—","roxy","ind","5@1900",{ser:"Musclefest"});
-F("Night of the Vamp-Friars",2026,"—","Horror/Comedy","roxy","ind","5@2130",{fmt:"35mm",note:"Q&A"});
-F("Dog Movie & Puppygirl",2026,"—","Experimental","roxy","ind","6@1700",{ser:"Musclefest",note:"Shorts pairing, Q&A"});
-F("Drinking and Driving",2026,"—","Comedy","roxy","ind","6@1945",{ser:"Musclefest",note:"Q&A"});
-F("A Scanner Darkly",2006,"Richard Linklater","Sci-Fi/Animation","roxy","ind","7@1900,10@1700,16@2100",{fmt:"35mm",ser:"2006 Movies"});
-F("Tony",2026,"Matt Johnson","Biography/Comedy","roxy","ind","7@2115");
-F("The Departed",2006,"Martin Scorsese","Crime/Thriller","roxy","maj","7@2115,10@2130,13@1700",{fmt:"35mm",ser:"2006 Movies"});
-F("Showgirls",1995,"Paul Verhoeven","Drama","roxy","maj","8@1945",{fmt:"35mm",note:"Also screening Sept 12 — time TBA, see site"});
-F("Out of the Blue",1980,"Dennis Hopper","Drama","roxy","ind","10@1900,11@1700,11@2130,12@1500,12@1945");
-F("Viva Las Vegas",1964,"George Sidney","Musical/Comedy","roxy","maj","12@1700,19@1700",{fmt:"35mm",note:"Paired with Learning from Learning from Las Vegas"});
-F("Dreams in Nightmares",2026,"—","Drama/Experimental","roxy","ind","13@1430,15@2145");
-F("Crash",1996,"David Cronenberg","Drama/Thriller","roxy","ind","14@1900,22@2115,25@2145",{fmt:"35mm",ser:"Sex, Death, Cars!"});
-F("Who's Watching",2026,"—","Documentary/Thriller","roxy","ind","18@2130,19@2115",{note:"Q&A"});
-F("Hell's Highway: The True Story of Highway Safety Films",2003,"Bret Wood","Documentary","roxy","ind","19@1500",{ser:"Sex, Death, Cars!"});
-F("Titane",2021,"Julia Ducournau","Horror/Drama","roxy","ind","19@1900",{ser:"Sex, Death, Cars!"});
-F("Tony",2026,"Matt Johnson","Biography/Comedy","roxy","ind","20@1245,21@2130,24@1700,26@1700");
-F("Leonora in the Morning Light",2024,"—","Biography/Drama","roxy","ind","20@1500",{note:"Q&A"});
-F("Paint Me a Road Out of Here",2024,"Catherine Gund","Documentary","roxy","ind","20@1730",{note:"Presented by Miss Video 4 U, Q&A"});
-F("Outfitumentary",2023,"Sam Bailey","Documentary","roxy","ind","20@2000",{note:"Q&A"});
-F("Day Night Day Night",2006,"Julia Loktev","Drama/Thriller","roxy","ind","21@1900,26@1500",{fmt:"35mm",ser:"2006 Movies"});
-F("Wings of Desire",1987,"Wim Wenders","Fantasy/Drama","roxy","ind","23@1900",{note:"Paired with Hidden in Pieces"});
-F("Fat Girl",2001,"Catherine Breillat","Drama","roxy","ind","25@1700,27@2000",{fmt:"35mm"});
-F("Situations",2026,"—","Drama","roxy","ind","25@1900,26@1900",{note:"Q&A"});
-F("Matador Bolero",2026,"—","—","roxy","ind","26@2145",{note:"Q&A"});
-F("A. Rimbaud",2025,"—","Documentary","roxy","ind","27@1330",{note:"Q&A"});
-F("Idlewild",2006,"Bryan Barber","Musical/Crime","roxy","maj","28@1900",{fmt:"35mm",ser:"2006 Movies"});
-F("Lost Landscapes of New York",2026,"Rick Prelinger","Documentary","roxy","ind","30@1900",{note:"Presented live by Rick Prelinger"});
-F("The Misconceived",2026,"James N. Kienitz Wilkins","Experimental","roxy","ind","30@2130",{fmt:"35mm",ser:"Four by James N. Kienitz Wilkins"});
+/* ——— ANTHOLOGY FILM ARCHIVES — day-by-day Sept 23-30 ——— */
+F("No Other Land",2024,"Basel Adra, Yuval Abraham, Hamdan Ballal & Rachel Szor","Documentary","anthology","ind","23@1830",null);
+F("Valentin Noujaïm: Re-Telling",NaN,"Valentin Noujaïm","Shorts","anthology","ind","23@1900",{ser:"Valentin Noujaïm — Program 2"});
+F("Still Life",2006,"Jia Zhangke","Drama","anthology","ind","23@2100",{note:"三峡好人"});
+F("In Vanda's Room",2000,"Pedro Costa","Documentary/Drama","anthology","ind","24@1900",{fmt:"DCP"});
+F("Narrow Rooms: Jerker",1991,"James Carrington","Drama","anthology","ind","24@1930",{ser:"Narrow Rooms"});
+F("Screamplay",1985,"Rufus Butler Seder","Horror","anthology","ind",daily(25,30,["1845","2100"])+",26@1630",{fmt:"35mm"});
+F("Toney W. Merritt — Psychodramas",NaN,"Toney W. Merritt","Experimental","anthology","ind","25@1830,27@1900",{ser:"Toney W. Merritt Retrospective — Program 1"});
+F("Toney W. Merritt — Vignettes / Miniatures",NaN,"Toney W. Merritt","Experimental","anthology","ind","25@2030,26@1800",{ser:"Toney W. Merritt Retrospective — Program 2"});
+F("Toney W. Merritt — Later Work",NaN,"Toney W. Merritt","Experimental","anthology","ind","26@1600",{ser:"Toney W. Merritt Retrospective — Program 3"});
+F("The Killing of a Chinese Bookie",1976,"John Cassavetes","Crime/Drama","anthology","ind","27@1545",{note:"Bo Harwood record-release event — composer Bo Harwood in person"});
+F("A Heart as Willing",NaN,"—","Drama","anthology","ind","30@1900",{note:"La Corazonada — special screening"});
 
-/* ——— PARIS THEATER — single-screen; per-day PDF schedule not accessible ——— */
-F("The Master",2012,"Paul Thomas Anderson","Drama","paris","ind","3@1845",{fmt:"70mm",ser:"Big & Loud 2026"});
-F("Batman",1989,"Tim Burton","Action/Superhero","paris","maj","4@1845",{fmt:"70mm",ser:"Big & Loud 2026"});
-F("Once Upon a Time... in Hollywood",2019,"Quentin Tarantino","Comedy/Drama","paris","maj",null,{r:[7,7],fmt:"70mm",ser:"Big & Loud 2026",note:"Exact time not yet posted"});
-F("Star Trek: The Motion Picture (Director's Edition) + Star Trek II: The Wrath of Khan (Director's Cut)",1979,"Robert Wise & Nicholas Meyer","Sci-Fi/Adventure","paris","maj",null,{r:[8,8],ser:"Big & Loud 2026 — Star Trek Day double feature",note:"Exact time not yet posted"});
-F("Marie Antoinette",2006,"Sofia Coppola","Drama","paris","maj","10@1800",{fmt:"4K restoration",ser:"Big & Loud 2026",note:"20th-anniversary restoration — Q&A with Sofia Coppola"});
-F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","paris","maj","12@1100",{fmt:"70mm",ser:"Big & Loud 2026"});
-F("Big & Loud 2026 (44-film series)",2026,"—","Repertory/Classics","paris","ind",null,{r:[5,15],ser:"Big & Loud 2026 — 70mm & 35mm classics through Sep 15",note:"One film per day — see site for today's title"});
+/* ——— PARIS THEATER — Big & Loud 70mm series, extended through Sept 29 ——— */
+F("The Razor's Edge",1984,"John Byrum","Drama","paris","maj",null,{r:[23,29],fmt:"70mm",ser:"Big & Loud 2026",note:"Rare 70mm print — see site for daily showtimes"});
+F("White Nights",1985,"Taylor Hackford","Drama/Thriller","paris","maj",null,{r:[23,29],fmt:"70mm",ser:"Big & Loud 2026",note:"Rare 70mm print — see site for daily showtimes"});
+F("Lawrence of Arabia",1962,"David Lean","Adventure/Drama","paris","ind",null,{r:[23,29],ser:"Big & Loud 2026",note:"See site for daily showtimes"});
+F("2001: A Space Odyssey",1968,"Stanley Kubrick","Sci-Fi","paris","maj",null,{r:[23,29],ser:"Big & Loud 2026",note:"See site for daily showtimes"});
+F("Vertigo",1958,"Alfred Hitchcock","Mystery/Thriller","paris","maj",null,{r:[23,29],ser:"Big & Loud 2026",note:"See site for daily showtimes"});
+F("Once Upon a Time... in Hollywood",2019,"Quentin Tarantino","Drama/Comedy","paris","ind",null,{r:[23,29],ser:"Big & Loud 2026",note:"See site for daily showtimes"});
+F("Boogie Nights",1997,"Paul Thomas Anderson","Drama","paris","ind",null,{r:[23,29],ser:"Big & Loud 2026",note:"See site for daily showtimes"});
+F("Spartacus",1960,"Stanley Kubrick","Historical/Drama","paris","maj",null,{r:[23,29],ser:"Big & Loud 2026",note:"See site for daily showtimes"});
+F("Peppermint Candy",1999,"Lee Chang-dong","Drama","paris","ind",null,{r:[26,32],ser:"The Films of Lee Chang-dong",note:"Opens Sept 26 with Q&A — see site for daily showtimes"});
 
-/* ——— MoMI ——— */
-F("Casino",1995,"Martin Scorsese","Crime/Drama","momi","maj","4@1830,6@1300",{ser:"Song & Dance"});
-F("The Umbrellas of Cherbourg",1964,"Jacques Demy","Musical/Romance","momi","ind","6@1330",{ser:"Song & Dance"});
-F("Love Me Tonight",1932,"Rouben Mamoulian","Musical/Comedy","momi","maj","5@1300");
-F("Wet Hot American Summer",2001,"David Wain","Comedy","momi","ind","7@1300",{note:"25th-anniversary Labor Day screening"});
-F("Junk Dump Film Festival 2026: Day One",2026,"—","Documentary/Experimental","momi","ind","12@1230",{note:"Shorts program — emerging & underrepresented filmmakers"});
+/* ——— QUAD CINEMA — confirmed running, exact times not posted ——— */
+F("Bad Apples",2026,"—","Drama","quad","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("Black Zombie",2026,"—","Horror","quad","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("Checkout",2026,"—","Thriller","quad","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("The Fisherman",2026,"—","Drama","quad","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("Franz",2026,"—","Biography/Drama","quad","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("American Doctor",2026,"—","Documentary","quad","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("The Marching Band",2026,"Emmanuel Courcol","Comedy/Drama","quad","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("The Rocky Horror Picture Show",1975,"Jim Sharman","Musical/Cult","quad","ind","26@2359",{note:"Live shadow-cast performance"});
 
-/* ——— MoMA ——— */
-F("To a Land Unknown",2024,"Mahdi Fleifel","Drama","moma","ind","8@1900,9@1600",{ser:"Immigrant Nation: People in Transit",note:"Series runs through Sept 10"});
-F("Matches and Days",2026,"Andrei Ujică","Documentary","moma","ind","11@1900",{ser:"Andrei Ujică retrospective",note:"Work-in-progress excerpt; filmmaker in person"});
+/* ——— BAM ROSE CINEMAS — series, exact times not posted ——— */
+F("Teenage Sex and Death at Camp Miasma",2026,"—","Horror/Comedy","bam","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("Tony",2026,"—","Biography/Drama","bam","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("Coyote vs Acme",2026,"Dave Green","Animation/Comedy","bam","maj",null,{r:[23,30],note:"See site for daily showtimes"});
+F("Hope",2026,"—","Thriller/Horror","bam","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("Chronovisor",2026,"—","Sci-Fi/Mystery","bam","ind",null,{r:[23,30],note:"See site for daily showtimes"});
+F("Resident Evil",2026,"Zach Cregger","Horror/Action","bam","maj",null,{r:[23,30],note:"See site for daily showtimes"});
+F("A Pure Person: The Sonic Landscape of Lim Giong",NaN,"—","Documentary/Music","bam","ind",null,{r:[18,24],ser:"A Pure Person",note:"Composer Lim Giong series — see site for daily showtimes"});
 
-/* ——— FILM AT LINCOLN CENTER ——— */
-F("The Bone Collector",1999,"Phillip Noyce","Thriller/Crime","flc","maj","3@1300");
-F("Curse of the Demon",1957,"Jacques Tourneur","Horror","flc","ind","3@1800");
-F("Copycat",1995,"Jon Amiel","Thriller/Crime","flc","maj","3@2000");
-F("Chronovisor",2026,"Kevin Walker & Jack Auen","Sci-Fi/Drama","flc","ind",null,{r:[4,7],note:"Opens Sept 4, Walter Reade Theater — directors present, Q&As through Sunday Sept 6; exact daily times not found, see site"});
-F("Marketa Lazarová",1967,"František Vláčil","Drama/Classics","flc","ind","7@1530,7@1900,8@1215,8@1530,8@1900",{fmt:"4K restoration",r:[9,13],note:"Repertory run continues through Sept 13 at the Walter Reade Theater — later dates vary, see site"});
-F("Thesis",1996,"Alejandro Amenábar","Thriller","flc","ind","3@2000",{ser:"Bibliomania: A Preface to Chronovisor",note:"Spanish w/ English subtitles"});
-F("64th New York Film Festival",2026,"—","Festival","flc","ind",null,{r:[25,42],ser:"NYFF 2026 — Sep 25-Oct 12, 43+ films",note:"Full lineup and showtimes on site; tickets on sale Sep 15"});
+/* ——— FILM AT LINCOLN CENTER — NYFF64 ——— */
+F("64th New York Film Festival",NaN,"—","Festival","flc","ind",null,{r:[25,42],ser:"New York Film Festival",note:"Runs Sept 25-Oct 12 — see filmlinc.org for the full lineup and showtimes"});
+F("You Can See Everything",2026,"Nathan Fielder & Lance Oppenheim","Comedy/Drama","flc","ind","30@1900",{note:"NYC premiere at Alice Tully Hall — filmmakers in attendance"});
 
-/* ——— NITEHAWK WILLIAMSBURG ——— */
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","nitehawkW","maj","2@1600,2@2100,3@1550,3@1805");
-F("Tony",2026,"Matt Johnson","Biography/Comedy","nitehawkW","ind","2@1615,2@1915,2@2145,3@1535,3@1850,3@2115");
-F("Drive",2011,"Nicolas Winding Refn","Action/Crime","nitehawkW","maj","3@2130,4@2130");
-F("From Dusk Till Dawn",1996,"Robert Rodriguez","Horror/Action","nitehawkW","maj","4@2355",{note:"Midnite series"});
-F("The Last Picture Show",1971,"Peter Bogdanovich","Drama","nitehawkW","ind","5@1115",{note:"Brunch screening"});
-F("Metropolis",1927,"Fritz Lang","Sci-Fi/Drama","nitehawkW","ind","8@2130",{note:"Restoration screening"});
-F("Etheria Film Festival Short Film Showcase 2026",2026,"Various","Horror/Sci-Fi","nitehawkW","ind","9@1900",{ser:"Etheria Film Festival",note:"Q&A with filmmakers; co-presented w/ Brooklyn Horror Film Fest"});
-F("Manhunter: The Final Cut",1986,"Michael Mann","Crime/Thriller","nitehawkW","ind","11@2355,14@2355",{fmt:"35mm",ser:"Fall crime series — midnite"});
-F("Ghost World",2001,"Terry Zwigoff","Comedy/Drama","nitehawkW","ind","12@1100,13@1100",{note:"Repertory"});
-F("Body Heat",1981,"Lawrence Kasdan","Thriller/Drama","nitehawkW","maj","12@1115,13@1115",{note:"Repertory"});
-
-/* ——— NITEHAWK PROSPECT PARK ——— */
-F("Coyote vs. Acme",2026,"Dave Green","Animation/Comedy","nitehawkPP","maj",null,{r:[2,7],note:"Confirmed playing — exact daily times not verified, see site"});
-F("Merrily We Go to Hell",1932,"Dorothy Arzner","Drama/Comedy","nitehawkPP","maj","8@1900",{fmt:"35mm"});
-F("Three Amigos!",1986,"John Landis","Comedy/Western","nitehawkPP","maj","5@1100",{ser:"Brunch Movies"});
-F("Poetic Justice",1993,"John Singleton","Drama/Romance","nitehawkPP","maj","5@1215",{ser:"Brunch Movies"});
-F("Wild Inside",2026,"Penny Lane","Documentary","nitehawkPP","ind","9@1730",{note:"Q&A with director Penny Lane"});
-F("Gang Related",1997,"Jim Kouf","Crime/Drama","nitehawkPP","maj","9@2115");
-F("Sundays on Fire: Secret Hong Kong",2026,"—","Repertory/Classics","nitehawkPP","ind","13@1200",{fmt:"35mm",note:"Brunch screening"});
-
-/* ——— ANGELIKA FILM CENTER (Houston St) ——— */
-F("The Salt Path",2024,"Marianne Elliott","Drama","angelika","ind",null,{r:[1,14],note:"Playing daily — see site for showtimes"});
-F("The Cycle of Love",2025,"Orlando von Einsiedel","Documentary","angelika","ind",null,{r:[1,14],note:"Playing daily — see site for showtimes"});
-
-/* ——— VILLAGE EAST BY ANGELIKA — revival/repertory, only opening dates confirmed ——— */
-F("Akira",1988,"Katsuhiro Otomo","Animation/Sci-Fi","villageE","ind",null,{r:[3,9],note:"Opens Sept 3 — see site for showtimes"});
-F("The Rocky Horror Picture Show",1975,"Jim Sharman","Musical/Cult","villageE","ind",null,{r:[6,12],note:"Opens Sept 6 — see site for showtimes"});
-F("Singin' in the Rain",1952,"Gene Kelly & Stanley Donen","Musical/Comedy","villageE","maj",null,{r:[7,13],note:"Opens Sept 7 — see site for showtimes"});
-F("A Clockwork Orange",1971,"Stanley Kubrick","Crime/Sci-Fi","villageE","maj",null,{r:[19,25],note:"Opens Sept 19 — see site for showtimes"});
-F("The Maltese Falcon",1941,"John Huston","Crime/Noir","villageE","maj",null,{r:[21,27],note:"Opens Sept 21 — see site for showtimes"});
-F("You've Got Mail",1998,"Nora Ephron","Romance/Comedy","villageE","maj",null,{r:[28,30],note:"Opens Sept 28 — see site for showtimes"});
+/* ——— MUSEUM OF THE MOVING IMAGE — Astoria, Queens ——— */
+F("The Muppet Show: The Very Best Episodes",NaN,"Jim Henson","Family/Comedy","momi","ind","24@1430,25@1430",{note:"50th-anniversary fan-voted marathon — free"});
+F("Jim Henson Birthday Celebration",NaN,"Jim Henson","Family","momi","ind",null,{r:[24,27],ser:"Jim Henson Birthday Celebration",note:"See site for daily program"});
 
 /* ——— CHAINS & FIRST-RUN HOUSES ——— */
-F("The Odyssey",2026,"Christopher Nolan","Adventure/Drama","amcLS","maj",daily(1,14,["1130","1530","1930"]),{fmt:"IMAX 70mm"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcE","maj","1@1100,1@1400,1@1700,1@2000,2@1100,2@1400,2@1700,2@2000,3@1100,3@1400,3@1700,3@2000,4@1100,4@1400,4@1700,4@2000,5@1100,5@1400,5@1700,5@2000,6@1100,6@1400,6@1700,6@2000,7@1100,7@1400,7@1700,7@2000");
-F("Coyote vs. Acme",2026,"Dave Green","Animation/Comedy","amcE","maj","1@1210,1@1520,1@1830,1@2140,2@1210,2@1520,2@1830,2@2140,3@1210,3@1520,3@1830,3@2140,4@1210,4@1520,4@1830,4@2140,5@1210,5@1520,5@1830,5@2140,6@1210,6@1520,6@1830,6@2140,7@1210,7@1520,7@1830,7@2140");
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","regalUS","maj","1@1130,1@1430,1@1730,1@2030,2@1130,2@1430,2@1730,2@2030,3@1130,3@1430,3@1730,3@2030,4@1130,4@1430,4@1730,4@2030,5@1130,5@1430,5@1730,5@2030,6@1130,6@1430,6@1730,6@2030,7@1130,7@1430,7@1730,7@2030");
-F("Coyote vs. Acme",2026,"Dave Green","Animation/Comedy","regalUS","maj",daily(1,17,["1310","1630","2000","2320"]),{note:"4DX/3D showtimes for Sep 18-19 confirmed separately at 1:10/4:30/8:00/11:20 PM"});
-F("Coyote vs. Acme",2026,"Dave Green","Animation/Comedy","alamoLM","maj",daily(1,20,["1200","1500","1800","2100"]),{tix:"https://drafthouse.com/nyc"});
-F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","alamoBK","maj",daily(1,20,["1130","1430","1730","2030"]));
-F("Coyote vs. Acme",2026,"Dave Green","Animation/Comedy","alamoBK","maj",daily(1,20,["1215","1515","1815","2115"]),{tix:"https://drafthouse.com/ticketing/2103/94186"});
-F("By Any Means",2026,"Elegance Bratton","Crime/Thriller","amcE","maj",null,{r:[4,14],note:"Opens Sept 4 — wide release, check site for showtimes"});
-F("Onslaught",2026,"Adam Wingard","Action/Sci-Fi","amcE","ind",null,{r:[4,14],note:"Opens Sept 4 — wide release, check site for showtimes"});
-F("Practical Magic 2",2026,"—","Fantasy/Comedy","regalUS","maj",null,{r:[11,14],note:"Opens Sept 11 — wide release, check site for showtimes"});
-
-/* ——— FREE OUTDOOR SCREENINGS — confirmed dates past Labor Day ——— */
-F("Galaxy Quest",1999,"Dean Parisot","Sci-Fi/Comedy","bryant","maj","7@2000",{note:"Paramount+ Movie Nights — free, lawn opens 5pm"});
-F("Shakespeare in Love",1998,"John Madden","Romance/Comedy","bryant","maj","14@2000",{note:"Paramount+ Movie Nights — final screening of the season, free, lawn opens 5pm"});
-F("When Harry Met Sally",1989,"Rob Reiner","Romance/Comedy","bbp","maj","3@1930",{note:"Movies with a View — added due to summer rain-outs, free, lawn opens 6pm, film at sunset"});
-F("How to Train Your Dragon",2010,"Dean DeBlois & Chris Sanders","Animation/Family","bbp","maj","18@1930",{note:"Movies with a View — free, lawn opens 6pm, film at sunset"});
-F("Everything Everywhere All at Once",2022,"Daniels","Sci-Fi/Comedy","mccarren","ind","6@2015",{note:"SummerScreen — free, live music before film"});
-F("The Big Lebowski",1998,"Coen Brothers","Comedy/Crime","mccarren","maj","13@2015",{note:"SummerScreen — free, live music before film"});
-F("Bouchra",2026,"—","Documentary/International","socrates","ind","12@2000",{ser:"Film Forum Outdoor Cinema at Socrates",note:"Free · live performance, film at sundown"});
-F("The Namesake",2006,"Mira Nair","Drama","fortgreene","ind","9@1930",{ser:"Summer Movies in the Park",note:"Free · at dusk"});
-F("In the Heights",2021,"Jon M. Chu","Musical/Drama","nycparks","maj","3@1915",{ser:"Movies Under the Stars",note:"Free · Madison Square Park, Manhattan"});
-F("National Treasure",2004,"Jon Turteltaub","Action/Adventure","seaport","maj","8@2000",{ser:"Seaport Cinema",note:"Free · Heineken Riverdeck, Pier 17"});
+F("Forgotten Island",2026,"Rodrigo Blaas","Animation/Family","amcLS","maj",null,{r:[25,30],note:"Opens Sept 25 — wide release, check site for showtimes"});
+F("Forgotten Island",2026,"Rodrigo Blaas","Animation/Family","regalUS","maj",null,{r:[25,30],note:"Opens Sept 25 — wide release, check site for showtimes"});
+F("Spider-Man: Brand New Day",2026,"Destin Daniel Cretton","Action/Superhero","amcE","maj",null,{r:[23,30],note:"Check site for daily showtimes"});
+F("Coyote vs. Acme",2026,"Dave Green","Animation/Comedy","alamoBK","maj",null,{r:[23,30],note:"Check site for daily showtimes",tix:"https://drafthouse.com/nyc"});
 
 /* ————— app ————— */
 const DOWS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -1098,6 +947,23 @@ $("headstat").innerHTML="<b>"+allFilms+"</b> films · <b>"+tKeys.length+"</b> th
   "<b>"+pre90+"</b> of them made before 1990";
 $("eyebrow").textContent="Now Showing · New York City · "+THIS_MON_FULL+" "+CUR_Y;
 render();
+
+(function(){
+  const hero=D.find(f=>f.t==="The History of Concrete");
+  if(!hero) return;
+  const todays=hero.shows.filter(s=>s.d===TD).map(s=>fmtT(s.t));
+  const timesEl=$("heroTimes");
+  if(timesEl) timesEl.textContent=todays.length?("Today at IFC Center: "+todays.join(" · ")):"See IFC Center for today's showtimes";
+  const tixBtn=$("heroTix");
+  if(tixBtn&&hero.tk) tixBtn.href=hero.tk;
+  const seeBtn=$("heroSee");
+  if(seeBtn) seeBtn.onclick=()=>{
+    $("q").value="History of Concrete"; state.q="History of Concrete";
+    state.view="day"; state.day=TD;
+    render();
+    document.getElementById("stage").scrollIntoView({behavior:"smooth",block:"start"});
+  };
+})();
 
 const visitCount=(()=>{const n=(+(localStorage.getItem("wpVisitCount")||0))+1;
   localStorage.setItem("wpVisitCount",String(n));return n;})();
